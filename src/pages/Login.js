@@ -17,6 +17,7 @@ const Box = styled.div`
 const Label = styled.label`
   font-size: 16px;
   font-weight: 500;
+  margin-bottom: 15px;
 `;
 
 const Input = styled.input`
@@ -26,6 +27,7 @@ const Input = styled.input`
   font-size: 16px;
   color: #afafb6;
   border: solid 1px #dfdfe5;
+  margin-bottom: 20px;
 `;
 const Button = styled.button`
   width: 515px;
@@ -36,14 +38,18 @@ const Button = styled.button`
   border-radius: 10px;
   font-size: 20px;
   font-weight: 500;
+  margin-top: 8px;
 `;
 const BottomText = styled.div`
   font-size: 16px;
+  margin-top: 20px;
+  font-weight: 500;
 `;
 const SignupText = styled(Link)`
   font-size: 20px;
   color: #463efb;
   text-decoration: none;
+  margin-top: 12px;
 `;
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -88,7 +94,7 @@ export const Login = () => {
         <Button type="submit">로그인</Button>
       </form>
       <BottomText>계정이 없으신가요?</BottomText>
-      <SignupText to="/signup">이메일로 회원가입</SignupText>
+      <SignupText to="/signupagree">이메일로 회원가입</SignupText>
     </Container>
   );
 };
