@@ -7,12 +7,14 @@ const Title = styled.div`
   font-size: 24px;
   display: flex;
   flex-direction: row;
-  font-weight: 400;
+  font-weight: 600;
+  margin-bottom: 45px;
 `;
+
 const Ticle = styled.div`
   color: #463efb;
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 600;
 `;
 const Container = styled.div`
   display: flex;
@@ -28,6 +30,7 @@ const Box = styled.div`
 const Label = styled.label`
   font-size: 16px;
   font-weight: 500;
+  margin-bottom: 15px;
 `;
 
 const Input = styled.input`
@@ -37,6 +40,8 @@ const Input = styled.input`
   font-size: 16px;
   color: #afafb6;
   border: solid 1px #dfdfe5;
+  margin-bottom: 20px;
+  padding-left: 19px;
 `;
 const Button = styled.button`
   width: 515px;
@@ -44,9 +49,10 @@ const Button = styled.button`
   background-color: #e5efff;
   color: #463efb;
   border: none;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 20px;
   font-weight: 500;
+  margin-top: 8px;
 `;
 
 export const Signup = () => {
@@ -62,10 +68,10 @@ export const Signup = () => {
   };
   return (
     <Container>
-      <Title>
-        <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
-      </Title>
       <form onSubmit={handleSubmit}>
+        <Title>
+          <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
+        </Title>
         <Box>
           <Label>이메일</Label>
           <Input
