@@ -28,6 +28,7 @@ const Input = styled.input`
   color: #afafb6;
   border: solid 1px #dfdfe5;
   margin-bottom: 20px;
+  padding-left: 19px;
 `;
 const Button = styled.button`
   width: 515px;
