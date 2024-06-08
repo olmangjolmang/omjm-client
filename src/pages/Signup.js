@@ -146,9 +146,11 @@ export const Signup = () => {
       emailError || nicknameError || passwordError || passwordConfirmError
     );
   }, [email, nickname, password, passwordConfirm]);
+  
   const handleBlur = (field) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -225,9 +227,11 @@ export const Signup = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Button type="submit" disabled={isButtonDisabled}>
-          확인
-        </Button>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Button type="submit" disabled={isButtonDisabled}>
+            확인
+          </Button>
+        </Link>
       </form>
     </Container>
   );
