@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const ModalContainer = styled.div`
-  width: 1216px;
-  height: 970px;
+  width: 1000px;
+  height: 750px;
   border-radius: 40px;
-  border: 1px soild black;
   background: white;
   padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Title = styled.h1`
@@ -19,6 +21,7 @@ const Title = styled.h1`
   color: var(--Blue-300, #463efb);
   font-size: 40px;
   font-weight: 600;
+  margin-top: 30px;
 `;
 
 const StepContainer = styled.div`
@@ -47,6 +50,8 @@ const Question = styled.p`
   font-size: 40px;
   font-weight: bold;
   margin-bottom: 52px;
+  align-self: flex-start;
+  margin-left: 95px;
 `;
 
 const AnswersContainer = styled.div`
@@ -57,8 +62,8 @@ const AnswersContainer = styled.div`
 
 const Answer = styled.div`
   display: flex;
-  width: 992px;
-  padding: 40px 10px 40px 35px;
+  width: 750px;
+  padding: 30px 10px 30px 35px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -67,7 +72,7 @@ const Answer = styled.div`
   cursor: pointer;
   color: var(--Gray-300, #afafb6);
   font-weight: 500;
-  font-size: 28px;
+  font-size: 25px;
 
   ${(props) =>
     props.selected &&
@@ -83,8 +88,8 @@ const Answer = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 40px;
+  right: 40px;
   width: 45px;
   height: 45px;
   background: none;
@@ -92,9 +97,10 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const QuizModal = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+const QuizModal = ({ onClose }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
+
   const correctAnswer = 1; // 임시 정답
 
   const handleAnswerClick = (answerIndex) => {
@@ -103,7 +109,7 @@ const QuizModal = () => {
 
   return (
     <ModalContainer>
-      <CloseButton>
+      <CloseButton onClick={onClose}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="46"

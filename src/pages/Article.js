@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import articleImg from "../assets/article.png";
+import QuizModal from "../components/QuizModal";
 
 const Container = styled.div`
   display: flex;
@@ -90,6 +91,7 @@ const QuizBtn = styled.button`
   align-items: center;
   gap: 10px;
   border-radius: 20px;
+  border: none;
   background-color: #463efb;
   color: white;
   font-size: 20px;
@@ -131,8 +133,20 @@ const GoodArticleAuthor = styled.div`
   line-height: 32px;
   margin-left: 10px;
 `;
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: ${({ isModalOpen }) => (isModalOpen ? "block" : "none")};
+  z-index: 999;
+`;
 
 const Article = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <Container>
       <Category>카테고리</Category>
@@ -175,7 +189,9 @@ const Article = () => {
       <QuizContainer>
         <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
         <QuizTime>소요시간 5분</QuizTime>
-        <QuizBtn>간단 퀴즈 풀러가기</QuizBtn>
+        <QuizBtn onClick={() => setIsModalOpen(true)}>
+          간단 퀴즈 풀러가기
+        </QuizBtn>
       </QuizContainer>
 
       <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
@@ -205,6 +221,13 @@ const Article = () => {
           <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
         </div>
       </GoodArticleContainer>
+      {isModalOpen && (
+        <>
+          <Overlay isModalOpen={isModalOpen}>
+            <QuizModal onClose={() => setIsModalOpen(false)} />
+          </Overlay>
+        </>
+      )}
     </Container>
   );
 };
