@@ -1,12 +1,15 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import Article from "./Article";
 
 const Main = () => {
   return (
     <div>
       <Header />
-      여기는 메인 자리 !!!
+
+      <Article />
+
       <Footer />
     </div>
   );
