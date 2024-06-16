@@ -8,6 +8,31 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  position: relative;
+  overflow: hidden; 
+`;
+const BackgroundCircle = styled.div`
+  position: absolute;
+  width: 775.366px;
+  height: 775.366px;
+  border-radius: 775.366px;
+  background: rgba(40, 54, 252, 0.3);
+  filter: blur(100px);
+  left: -200px;
+  top: 0px; 
+  z-index: 1;
+`;
+
+const BackgroundCircleRight = styled.div`
+  position: absolute;
+  width: 775.366px;
+  height: 775.366px;
+  border-radius: 775.366px;
+  background: rgba(40, 54, 252, 0.3);
+  filter: blur(100px);
+  right: -200px;
+  bottom: -200px;
+  z-index: 1;
 `;
 
 const FormContainer = styled.div`
@@ -20,6 +45,7 @@ const FormContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 80px;
+  z-index: 2;
 `;
 
 const Box = styled.div`
@@ -41,13 +67,15 @@ const Input = styled.input`
 const Button = styled.button`
   width: 519px;
   height: 55px;
-  background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")};
+  /* background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
+  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")}; */
   border: none;
   border-radius: 9px;
   font-size: 18px;
   font-weight: 500;
   margin-top: 32px;
+  background-color: #2836fc;
+  color: #fff;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
@@ -72,6 +100,7 @@ const RightContainer = styled.div`
   flex-direction: column;
   align-items: center;
   white-space: nowrap;
+  z-index: 2;
 `;
 
 const RightTitle = styled.div`
@@ -94,13 +123,14 @@ const SignupBtn = styled(Link)`
   font-weight: 600;
   line-height: 26px;
   margin-top: 86px;
+  position: relative;
+  z-index: 2;
 `;
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
 
   useEffect(() => {
     setIsButtonDisabled(!(email && password));
@@ -113,6 +143,8 @@ export const Login = () => {
   };
   return (
     <Container>
+      <BackgroundCircle />
+      <BackgroundCircleRight />
       <FormContainer onSubmit={handleSubmit}>
         <Icon>icon</Icon>
 
@@ -146,7 +178,7 @@ export const Login = () => {
           회원가입하고 원하는 요일에 <br />
           00의 아티클을 받아보세요
         </RightTitle>
-        <SignupBtn>회원가입하기</SignupBtn>
+        <SignupBtn to="/signup">회원가입하기</SignupBtn>
       </RightContainer>
     </Container>
   );
