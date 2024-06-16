@@ -1,154 +1,153 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
+  background-color: #161620;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;
+
+const FormContainer = styled.div`
+  background-color: #fff;
+  width: 650px;
+  height: 699.117px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  margin-right: 80px;
 `;
+
 const Box = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const Label = styled.label`
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 15px;
-`;
 
 const Input = styled.input`
-  width: 515px;
-  height: 60px;
+  width: 500px;
+  height: 55px;
   border-radius: 10px;
   font-size: 16px;
-  color: #afafb6;
+  color: #000000;
   border: solid 1px ${(props) => (props.hasError ? "red" : "#dfdfe5")};
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding-left: 19px;
 `;
+
 const Button = styled.button`
-  width: 534px;
-  height: 65px;
+  width: 519px;
+  height: 55px;
   background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
   color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")};
   border: none;
-  border-radius: 10px;
-  font-size: 20px;
+  border-radius: 9px;
+  font-size: 18px;
   font-weight: 500;
-  margin-top: 8px;
+  margin-top: 32px;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
-const BottomText = styled.div`
-  font-size: 16px;
-  margin-top: 20px;
-  font-weight: 500;
-`;
-const SignupText = styled(Link)`
-  font-size: 20px;
-  color: #463efb;
-  text-decoration: none;
-  margin-top: 12px;
+
+const FindContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 45px;
 `;
 
-const ErrorMessage = styled.div`
-  color: #f44;
-  font-size: 14px;
-  margin-bottom: 20px;
+const Divider = styled.span`
+  margin: 0 45px;
 `;
+
+const Icon = styled.div`
+  font-size: 70px;
+  font-weight: 400;
+  margin-bottom: 56px;
+`;
+const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  white-space: nowrap;
+`;
+
+const RightTitle = styled.div`
+  color: #fff;
+  font-size: 50px;
+  font-weight: 700;
+`;
+
+const SignupBtn = styled(Link)`
+  display: inline-flex;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 14px 158px;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  gap: 10px;
+  color: #2836fc;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  margin-top: 86px;
+`;
+
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false,
-  });
+
 
   useEffect(() => {
-    const validateEmail = () => {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!email) {
-        return "이메일을 입력해 주세요.";
-      } else if (!re.test(email)) {
-        return "올바르지 않은 이메일 형식입니다.";
-      }
-      return "";
-    };
-    const validatePassword = () => {
-      if (!password) {
-        return "비밀번호를 입력해 주세요.";
-      }
-
-      return "";
-    };
-
-    const emailError = validateEmail();
-    const passwordError = validatePassword();
-
-    setErrors({
-      email: emailError,
-      password: passwordError,
-    });
-    setIsButtonDisabled(emailError || passwordError);
+    setIsButtonDisabled(!(email && password));
   }, [email, password]);
-
-  const handleBlur = (field) => () => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!errors.email && !errors.password) {
-      // 회원가입 로직 추가
-      console.log("회원가입 성공!");
-    }
+
+    // 로그인 로직 추가
   };
   return (
     <Container>
-      <form onSubmit={handleSubmit}>
+      <FormContainer onSubmit={handleSubmit}>
+        <Icon>icon</Icon>
+
         <Box>
-          <Label>이메일</Label>
           <Input
             type="email"
-            placeholder="amjm@naver.com"
+            placeholder="이메일을 입력해 주세요."
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onBlur={handleBlur("email")}
-            hasError={touched.email && !!errors.email}
           />
-          {touched.email && errors.email && (
-            <ErrorMessage>{errors.email}</ErrorMessage>
-          )}
         </Box>
         <Box>
-          <Label>비밀번호</Label>
           <Input
             type="password"
-            placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
+            placeholder="비밀번호를 입력해 주세요."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onBlur={handleBlur("password")}
-            hasError={touched.password && !!errors.password}
           />
-          {touched.password && errors.password && (
-            <ErrorMessage>{errors.password}</ErrorMessage>
-          )}
         </Box>
         <Button type="submit" disabled={isButtonDisabled}>
           로그인
         </Button>
-      </form>
-      <BottomText>계정이 없으신가요?</BottomText>
-      <SignupText to="/signupagree">이메일로 회원가입</SignupText>
+        <FindContainer>
+          <div>아이디 찾기</div>
+          <Divider>|</Divider>
+          <div>비밀번호 찾기</div>
+        </FindContainer>
+      </FormContainer>
+      <RightContainer>
+        <RightTitle>
+          회원가입하고 원하는 요일에 <br />
+          00의 아티클을 받아보세요
+        </RightTitle>
+        <SignupBtn>회원가입하기</SignupBtn>
+      </RightContainer>
     </Container>
   );
 };

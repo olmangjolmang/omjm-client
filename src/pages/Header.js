@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 const Container = styled.div`
   height: 120px;
   display: flex;
@@ -65,7 +65,7 @@ const SearchInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Button = styled.button`
+const Button = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,6 +78,7 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
   white-space: nowrap;
+  text-decoration: none;
 `;
 
 const Header = () => {
@@ -112,7 +113,7 @@ const Header = () => {
             />
           </SearchIcon>
         </SearchContainer>
-        <Button>로그인</Button>
+        <Button to="/login">로그인</Button>
       </Container>
     </>
   );
