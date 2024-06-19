@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import articleImg from "../assets/article.png";
 import QuizModal from "../components/QuizModal";
-
+import FloatingButtons from "../components/FloatingButtons";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,7 +99,7 @@ const QuizBtn = styled.button`
 `;
 const BottomArticleTitle = styled.div`
   font-weight: 600;
-  font-size: 48px;
+  font-size: 32px;
   margin-bottom: 40px;
   align-self: flex-start;
 `;
@@ -190,37 +190,38 @@ const Article = () => {
         <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
         <QuizTime>소요시간 5분</QuizTime>
         <QuizBtn onClick={() => setIsModalOpen(true)}>
-          간단 퀴즈 풀러가기
+          간단 퀴즈 풀어보기
         </QuizBtn>
       </QuizContainer>
-
-      <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
-      <GoodArticleContainer>
-        <div>
-          <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
-          <GoodArticleCategory>카테고리</GoodArticleCategory>
-          <GoodArticleTitle>
-            AI 시대에 필요한 개발자, 프로덕트 엔지니어
-          </GoodArticleTitle>
-          <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
-        </div>
-        <div>
-          <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
-          <GoodArticleCategory>카테고리</GoodArticleCategory>
-          <GoodArticleTitle>
-            AI 시대에 필요한 개발자, 프로덕트 엔지니어
-          </GoodArticleTitle>
-          <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
-        </div>
-        <div>
-          <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
-          <GoodArticleCategory>카테고리</GoodArticleCategory>
-          <GoodArticleTitle>
-            AI 시대에 필요한 개발자, 프로덕트 엔지니어
-          </GoodArticleTitle>
-          <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
-        </div>
-      </GoodArticleContainer>
+      <div>
+        <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
+        <GoodArticleContainer>
+          <div>
+            <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
+            <GoodArticleCategory>카테고리</GoodArticleCategory>
+            <GoodArticleTitle>
+              AI 시대에 필요한 개발자, 프로덕트 엔지니어
+            </GoodArticleTitle>
+            <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
+          </div>
+          <div>
+            <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
+            <GoodArticleCategory>카테고리</GoodArticleCategory>
+            <GoodArticleTitle>
+              AI 시대에 필요한 개발자, 프로덕트 엔지니어
+            </GoodArticleTitle>
+            <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
+          </div>
+          <div>
+            <GoodArticleImg src={articleImg} alt="함께 읽으면 좋은 아티클" />
+            <GoodArticleCategory>카테고리</GoodArticleCategory>
+            <GoodArticleTitle>
+              AI 시대에 필요한 개발자, 프로덕트 엔지니어
+            </GoodArticleTitle>
+            <GoodArticleAuthor>글쓴이 | 2024-05-11</GoodArticleAuthor>
+          </div>
+        </GoodArticleContainer>
+      </div>
       {isModalOpen && (
         <>
           <Overlay isModalOpen={isModalOpen}>
@@ -228,6 +229,7 @@ const Article = () => {
           </Overlay>
         </>
       )}
+      <FloatingButtons />
     </Container>
   );
 };
