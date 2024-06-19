@@ -23,7 +23,6 @@ const Icon = styled.img`
   transition: background-color 0.3s;
   background: white;
   border-radius: 50%;
-  
 
   &:hover {
     background-color: #f0f0f0;
@@ -31,9 +30,13 @@ const Icon = styled.img`
 `;
 
 const FloatingButtons = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <FixedButtons>
-      <Icon src={upArrowIcon} alt="Scroll to top" />
+      <Icon src={upArrowIcon} alt="Scroll to top" onClick={scrollToTop} />
       <Icon src={pencilIcon} alt="Edit" />
       <Icon src={bookmarkIcon} alt="Bookmark" />
     </FixedButtons>
