@@ -3,6 +3,7 @@ import styled from "styled-components";
 import articleImg from "../assets/article.png";
 import QuizModal from "../components/QuizModal";
 import FloatingButtons from "../components/FloatingButtons";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,6 +11,7 @@ const Container = styled.div`
   align-items: center;
   padding: 160px 180px;
 `;
+
 const Category = styled.div`
   display: inline-flex;
   padding: 15px 40px;
@@ -23,29 +25,35 @@ const Category = styled.div`
   border: 2px solid var(--Blue-300, #463efb);
   margin-bottom: 39px;
 `;
+
 const Title = styled.div`
   font-weight: 600;
   font-size: 48px;
   margin-bottom: 18px;
 `;
+
 const AuthorBox = styled.div`
   display: flex;
   gap: 16px;
   margin-bottom: 94px;
 `;
+
 const Author = styled.div`
   font-size: 16px;
   font-weight: 500;
 `;
+
 const Date = styled.div`
   font-weight: 500;
   font-size: 16px;
 `;
+
 const Img = styled.img`
   width: 1080px;
   height: 590.625px;
   margin-bottom: 94px;
 `;
+
 const Content = styled.div`
   font-size: 16px;
   font-weight: 500;
@@ -53,6 +61,7 @@ const Content = styled.div`
   white-space: pre-wrap;
   margin-bottom: 94px;
 `;
+
 const Line = styled.div`
   height: 1px;
   width: 1080px;
@@ -72,18 +81,21 @@ const QuizContainer = styled.div`
   flex-direction: column;
   margin-bottom: 94px;
 `;
+
 const QuizTitle = styled.div`
   color: white;
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 38px;
 `;
+
 const QuizTime = styled.div`
   color: white;
   font-size: 28px;
   font-weight: 500;
   margin-bottom: 34px;
 `;
+
 const QuizBtn = styled.button`
   display: inline-flex;
   padding: 21px 176px;
@@ -97,28 +109,33 @@ const QuizBtn = styled.button`
   font-size: 20px;
   font-weight: 600;
 `;
+
 const BottomArticleTitle = styled.div`
   font-weight: 600;
   font-size: 32px;
   margin-bottom: 40px;
   align-self: flex-start;
 `;
+
 const GoodArticleContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 40px;
 `;
+
 const GoodArticleImg = styled.img`
   width: 379px;
   height: 240px;
   border-radius: 20px;
 `;
+
 const GoodArticleCategory = styled.div`
   color: #463efb;
   font-size: 16px;
   font-weight: 600;
   margin: 20px 0 24px 20px;
 `;
+
 const GoodArticleTitle = styled.div`
   font-size: 24px;
   font-weight: 600;
@@ -126,6 +143,7 @@ const GoodArticleTitle = styled.div`
   margin-left: 10px;
   margin-bottom: 18px;
 `;
+
 const GoodArticleAuthor = styled.div`
   color: #7f7f86;
   font-size: 16px;
@@ -133,7 +151,8 @@ const GoodArticleAuthor = styled.div`
   line-height: 32px;
   margin-left: 10px;
 `;
-const Overlay = styled.div`
+
+const Overlay = styled.div<{ isModalOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -144,8 +163,8 @@ const Overlay = styled.div`
   z-index: 999;
 `;
 
-const Article = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Article: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
     <Container>
@@ -155,7 +174,6 @@ const Article = () => {
         <Author>글쓴이</Author>
         <Date>2024-05-11</Date>
       </AuthorBox>
-
       <Img src={articleImg} alt="기사 이미지" />
       <Content>
         요즘 대학생들이 어디서 공부하는지 아시나요? 도서관, 스터디카페도 아닌

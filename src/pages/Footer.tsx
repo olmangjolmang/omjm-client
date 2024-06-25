@@ -19,7 +19,7 @@ const Company = styled.div`
   margin-bottom: 18px;
   margin-top: 80px;
 `;
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <>
       <Container>

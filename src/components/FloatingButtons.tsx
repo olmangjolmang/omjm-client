@@ -4,6 +4,7 @@ import upArrowIcon from "../assets/up-arrow.png";
 import pencilIcon from "../assets/pencil.png";
 import bookmarkIcon from "../assets/bookmark.png";
 
+// 스타일 컴포넌트 정의
 const FixedButtons = styled.div`
   position: fixed;
   right: 60px;
@@ -29,7 +30,8 @@ const Icon = styled.img`
   }
 `;
 
-const FloatingButtons = () => {
+// 컴포넌트 정의
+const FloatingButtons: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

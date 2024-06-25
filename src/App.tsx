@@ -6,7 +6,8 @@ import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { SignupAgree } from "./pages/SignupAgree";
 
-function App() {
+
+const App: React.FC = () => {
   return (
     <Router>
       <Routes>
@@ -17,6 +18,6 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;

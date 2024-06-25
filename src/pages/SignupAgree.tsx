@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+// 스타일 컴포넌트 정의
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -70,9 +70,19 @@ const Button = styled(Link)`
   align-items: center;
   margin-top: 32px;
 `;
-export const SignupAgree = () => {
+
+// 타입 정의
+interface IndividualAgreements {
+  terms: boolean;
+  privacy: boolean;
+  location: boolean;
+  marketing: boolean;
+}
+
+// 컴포넌트 정의
+export const SignupAgree: React.FC = () => {
   const [allAgreed, setAllAgreed] = useState(false);
-  const [individualAgreements, setIndividualAgreements] = useState({
+  const [individualAgreements, setIndividualAgreements] = useState<IndividualAgreements>({
     terms: false,
     privacy: false,
     location: false,
@@ -80,26 +90,26 @@ export const SignupAgree = () => {
   });
 
   const handleAllAgreeClick = () => {
-    setAllAgreed(!allAgreed);
+    const newAllAgreed = !allAgreed;
+    setAllAgreed(newAllAgreed);
     setIndividualAgreements({
-      terms: !allAgreed,
-      privacy: !allAgreed,
-      location: !allAgreed,
-      marketing: !allAgreed,
+      terms: newAllAgreed,
+      privacy: newAllAgreed,
+      location: newAllAgreed,
+      marketing: newAllAgreed,
     });
   };
 
-  const handleIndividualAgreeClick = (agreement) => {
-    setIndividualAgreements({
+  const handleIndividualAgreeClick = (agreement: keyof IndividualAgreements) => {
+    const newAgreements = {
       ...individualAgreements,
       [agreement]: !individualAgreements[agreement],
-    });
-    const allChecked = Object.values(individualAgreements).every(
-      (value) => value
-    );
-
+    };
+    setIndividualAgreements(newAgreements);
+    const allChecked = Object.values(newAgreements).every(value => value);
     setAllAgreed(allChecked);
   };
+
   return (
     <Container>
       <div>
@@ -119,7 +129,7 @@ export const SignupAgree = () => {
             <circle cx="12.5" cy="12.5" r="11.5" />
             <path
               d="M6.66602 12.4997L10.8327 15.833L16.666 8.33301"
-              stroke-linecap="round"
+              strokeLinecap="round"
             />
           </Svg>
           약관 전체동의
@@ -138,7 +148,7 @@ export const SignupAgree = () => {
               <circle cx="12.5" cy="12.5" r="11.5" />
               <path
                 d="M6.66602 12.4997L10.8327 15.833L16.666 8.33301"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </Svg>
             <AgreeText>
@@ -158,7 +168,7 @@ export const SignupAgree = () => {
               <circle cx="12.5" cy="12.5" r="11.5" />
               <path
                 d="M6.66602 12.4997L10.8327 15.833L16.666 8.33301"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </Svg>
             <AgreeText>
@@ -178,7 +188,7 @@ export const SignupAgree = () => {
               <circle cx="12.5" cy="12.5" r="11.5" />
               <path
                 d="M6.66602 12.4997L10.8327 15.833L16.666 8.33301"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </Svg>
             <AgreeText>
@@ -198,7 +208,7 @@ export const SignupAgree = () => {
               <circle cx="12.5" cy="12.5" r="11.5" />
               <path
                 d="M6.66602 12.4997L10.8327 15.833L16.666 8.33301"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </Svg>
             <AgreeText>
