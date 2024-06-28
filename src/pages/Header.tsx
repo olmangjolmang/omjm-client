@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+
 const Container = styled.div`
   height: 120px;
   display: flex;
@@ -81,7 +82,7 @@ const Button = styled(Link)`
   text-decoration: none;
 `;
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <>
       <Container>

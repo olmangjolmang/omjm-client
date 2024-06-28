@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+// 스타일 컴포넌트 정의
 const ModalContainer = styled.div`
   width: 1000px;
   height: 750px;
@@ -30,7 +31,7 @@ const StepContainer = styled.div`
   margin-bottom: 43px;
 `;
 
-const StepBox = styled.div`
+const StepBox = styled.div<{ active: boolean }>`
   width: 64px;
   height: 64px;
   padding: 4px 16px;
@@ -60,7 +61,7 @@ const AnswersContainer = styled.div`
   gap: 20px;
 `;
 
-const Answer = styled.div`
+const Answer = styled.div<{ selected: boolean; correct: boolean }>`
   display: flex;
   width: 750px;
   padding: 30px 10px 30px 35px;
@@ -97,13 +98,18 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const QuizModal = ({ onClose }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [currentStep, setCurrentStep] = useState(1);
+// 타입 정의
+interface QuizModalProps {
+  onClose: () => void;
+}
+
+const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [currentStep, setCurrentStep] = useState<number>(1);
 
   const correctAnswer = 1; // 임시 정답
 
-  const handleAnswerClick = (answerIndex) => {
+  const handleAnswerClick = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
   };
 

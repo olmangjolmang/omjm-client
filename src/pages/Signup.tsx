@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+// 스타일 컴포넌트 정의
 const Title = styled.div`
   font-size: 24px;
   display: flex;
@@ -36,7 +37,7 @@ const Label = styled.label`
   margin-bottom: 15px;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ hasError: boolean }>`
   width: 515px;
   height: 60px;
   border-radius: 10px;
@@ -47,7 +48,7 @@ const Input = styled.input`
   padding-left: 19px;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ disabled: boolean }>`
   width: 534px;
   height: 65px;
   background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
@@ -66,26 +67,43 @@ const ErrorMessage = styled.div`
   margin-bottom: 20px;
 `;
 
-export const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [errors, setErrors] = useState({
+// 타입 정의
+interface Errors {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirm: string;
+}
+
+interface Touched {
+  email: boolean;
+  nickname: boolean;
+  password: boolean;
+  passwordConfirm: boolean;
+}
+
+// 컴포넌트 정의
+export const Signup: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+  const [errors, setErrors] = useState<Errors>({
     email: "",
     nickname: "",
     password: "",
     passwordConfirm: "",
   });
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [touched, setTouched] = useState({
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+  const [touched, setTouched] = useState<Touched>({
     email: false,
     nickname: false,
     password: false,
     passwordConfirm: false,
   });
+
   useEffect(() => {
-    const validateEmail = () => {
+    const validateEmail = (): string => {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!email) {
         return "이메일을 입력해 주세요.";
@@ -95,14 +113,14 @@ export const Signup = () => {
       return "";
     };
 
-    const validateNickname = () => {
+    const validateNickname = (): string => {
       if (!nickname.trim()) {
         return "닉네임을 입력해 주세요.";
       }
       return "";
     };
 
-    const validatePassword = () => {
+    const validatePassword = (): string => {
       if (!password) {
         return "비밀번호를 입력해 주세요.";
       }
@@ -120,7 +138,8 @@ export const Signup = () => {
 
       return "";
     };
-    const validatePasswordConfirm = () => {
+
+    const validatePasswordConfirm = (): string => {
       if (!passwordConfirm) {
         return "비밀번호 확인을 입력해 주세요.";
       }
@@ -143,15 +162,15 @@ export const Signup = () => {
     });
 
     setIsButtonDisabled(
-      emailError || nicknameError || passwordError || passwordConfirmError
+      !!emailError || !!nicknameError || !!passwordError || !!passwordConfirmError
     );
   }, [email, nickname, password, passwordConfirm]);
 
-  const handleBlur = (field) => () => {
+  const handleBlur = (field: keyof Touched) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
@@ -177,7 +196,7 @@ export const Signup = () => {
             type="email"
             placeholder="amjm@naver.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
           />
@@ -191,7 +210,7 @@ export const Signup = () => {
             type="text"
             placeholder="닉네임을 입력해 주세요."
             value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
             onBlur={handleBlur("nickname")}
             hasError={touched.nickname && !!errors.nickname}
           />
@@ -205,7 +224,7 @@ export const Signup = () => {
             type="password"
             placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
           />
@@ -219,7 +238,7 @@ export const Signup = () => {
             type="password"
             placeholder="동일한 비밀번호를 입력해 주세요."
             value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
             onBlur={handleBlur("passwordConfirm")}
             hasError={touched.passwordConfirm && !!errors.passwordConfirm}
           />

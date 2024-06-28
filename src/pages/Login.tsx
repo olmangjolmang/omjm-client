@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const Container = styled.div`
   justify-content: center;
   height: 100vh;
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 `;
 const BackgroundCircle = styled.div`
   position: absolute;
@@ -19,7 +19,7 @@ const BackgroundCircle = styled.div`
   background: rgba(40, 54, 252, 0.3);
   filter: blur(100px);
   left: -200px;
-  top: 0px; 
+  top: 0px;
   z-index: 1;
 `;
 
@@ -35,7 +35,7 @@ const BackgroundCircleRight = styled.div`
   z-index: 1;
 `;
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   background-color: #fff;
   width: 650px;
   height: 699.117px;
@@ -53,7 +53,7 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ hasError?: boolean }>`
   width: 500px;
   height: 55px;
   border-radius: 10px;
@@ -64,11 +64,9 @@ const Input = styled.input`
   padding-left: 19px;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ disabled: boolean }>`
   width: 519px;
   height: 55px;
-  /* background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")}; */
   border: none;
   border-radius: 9px;
   font-size: 18px;
@@ -95,6 +93,7 @@ const Icon = styled.div`
   font-weight: 400;
   margin-bottom: 56px;
 `;
+
 const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -127,33 +126,34 @@ const SignupBtn = styled(Link)`
   z-index: 2;
 `;
 
-export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+export const Login: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     setIsButtonDisabled(!(email && password));
   }, [email, password]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     // 로그인 로직 추가
   };
+
   return (
     <Container>
       <BackgroundCircle />
       <BackgroundCircleRight />
       <FormContainer onSubmit={handleSubmit}>
         <Icon>icon</Icon>
-
         <Box>
           <Input
             type="email"
             placeholder="이메일을 입력해 주세요."
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
           />
         </Box>
         <Box>
@@ -161,7 +161,9 @@ export const Login = () => {
             type="password"
             placeholder="비밀번호를 입력해 주세요."
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
           />
         </Box>
         <Button type="submit" disabled={isButtonDisabled}>
