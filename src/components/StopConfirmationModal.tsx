@@ -19,7 +19,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px 100px;
-  width: 500px;
+  width: 300px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,35 +30,36 @@ const ModalHeader = styled.div`
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
+  font-weight: 600;
 `;
 
 const ModalMessage = styled.div`
-  font-size: 16px;
-  margin-bottom: 40px;
+  font-size: 20px;
+  margin-bottom: 30px;
   text-align: center;
+  font-weight: 500;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 100%;
+  gap: 10px;
 `;
 
 const Button = styled.button`
-  width: 45%;
-  padding: 10px;
+  padding: 10px 40px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   cursor: pointer;
-  font-size: 16px;
-`;
-
-const CancelButton = styled(Button)`
-  background-color: #e0e0e0;
-  color: #000;
+  font-size: 20px;
+  width: 170px;
 `;
 
 const ConfirmButton = styled(Button)`
+  background-color: #f4f4f7;
+  color: #463efb;
+`;
+
+const CancelButton = styled(Button)`
   background-color: #463efb;
   color: white;
 `;
@@ -68,7 +69,10 @@ interface StopConfirmationModalProps {
   onCancel: () => void;
 }
 
-const StopConfirmationModal: React.FC<StopConfirmationModalProps> = ({ onConfirm, onCancel }) => {
+const StopConfirmationModal: React.FC<StopConfirmationModalProps> = ({
+  onConfirm,
+  onCancel,
+}) => {
   return (
     <ModalOverlay>
       <ModalContainer>
