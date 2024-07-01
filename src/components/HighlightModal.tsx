@@ -1,7 +1,8 @@
+// HighlightModal.tsx
 import React, { useState } from "react";
 import styled from "styled-components";
 import ConfirmationModal from "./ConfirmationModal";
-import StopConfirmationModal from "./StopConfirmationModal"; // 중단 확인 모달 컴포넌트를 임포트합니다.
+import StopConfirmationModal from "./StopConfirmationModal";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -148,6 +149,10 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
         <StopConfirmationModal
           onConfirm={handleConfirmStop}
           onCancel={() => setIsStopConfirmationOpen(false)}
+          headerText="메모를 중단하시겠습니까?"
+          messageText="중단 시 작성 내용이 사라집니다."
+          confirmButtonText="중단하기"
+          cancelButtonText="돌아가기"
         />
       )}
     </ModalOverlay>

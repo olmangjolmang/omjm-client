@@ -1,3 +1,4 @@
+// StopConfirmationModal.tsx
 import React from "react";
 import styled from "styled-components";
 
@@ -66,17 +67,28 @@ const ConfirmButton = styled(Button)`
 interface StopConfirmationModalProps {
   onConfirm: () => void;
   onCancel: () => void;
+  headerText: string;
+  messageText: string;
+  confirmButtonText: string;
+  cancelButtonText: string;
 }
 
-const StopConfirmationModal: React.FC<StopConfirmationModalProps> = ({ onConfirm, onCancel }) => {
+const StopConfirmationModal: React.FC<StopConfirmationModalProps> = ({
+  onConfirm,
+  onCancel,
+  headerText,
+  messageText,
+  confirmButtonText,
+  cancelButtonText,
+}) => {
   return (
     <ModalOverlay>
       <ModalContainer>
-        <ModalHeader>메모를 중단하시겠습니까?</ModalHeader>
-        <ModalMessage>중단 시 작성 내용이 사라집니다.</ModalMessage>
+        <ModalHeader>{headerText}</ModalHeader>
+        <ModalMessage>{messageText}</ModalMessage>
         <ButtonContainer>
-          <ConfirmButton onClick={onConfirm}>중단하기</ConfirmButton>
-          <CancelButton onClick={onCancel}>돌아가기</CancelButton>
+          <ConfirmButton onClick={onConfirm}>{confirmButtonText}</ConfirmButton>
+          <CancelButton onClick={onCancel}>{cancelButtonText}</CancelButton>
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>
