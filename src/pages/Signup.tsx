@@ -6,15 +6,10 @@ import { Link } from "react-router-dom";
 const Title = styled.div`
   font-size: 24px;
   display: flex;
+  justify-content:center;
   flex-direction: row;
   font-weight: 600;
   margin-bottom: 45px;
-`;
-
-const Ticle = styled.div`
-  color: #463efb;
-  font-size: 24px;
-  font-weight: 600;
 `;
 
 const Container = styled.div`
@@ -162,7 +157,10 @@ export const Signup: React.FC = () => {
     });
 
     setIsButtonDisabled(
-      !!emailError || !!nicknameError || !!passwordError || !!passwordConfirmError
+      !!emailError ||
+        !!nicknameError ||
+        !!passwordError ||
+        !!passwordConfirmError
     );
   }, [email, nickname, password, passwordConfirm]);
 
@@ -187,16 +185,16 @@ export const Signup: React.FC = () => {
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Title>
-          <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
-        </Title>
+        <Title>올망졸망 아티클로 취준 준비를 더욱 완벽하게!</Title>
         <Box>
           <Label>이메일</Label>
           <Input
             type="email"
             placeholder="amjm@naver.com"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
           />
@@ -210,7 +208,9 @@ export const Signup: React.FC = () => {
             type="text"
             placeholder="닉네임을 입력해 주세요."
             value={nickname}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setNickname(e.target.value)
+            }
             onBlur={handleBlur("nickname")}
             hasError={touched.nickname && !!errors.nickname}
           />
@@ -224,7 +224,9 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
           />
@@ -238,7 +240,9 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="동일한 비밀번호를 입력해 주세요."
             value={passwordConfirm}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPasswordConfirm(e.target.value)
+            }
             onBlur={handleBlur("passwordConfirm")}
             hasError={touched.passwordConfirm && !!errors.passwordConfirm}
           />

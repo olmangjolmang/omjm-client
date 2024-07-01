@@ -30,8 +30,12 @@ const Icon = styled.img`
   }
 `;
 
+interface FloatingButtonsProps {
+  onMenuClick: () => void;
+}
+
 // 컴포넌트 정의
-const FloatingButtons: React.FC = () => {
+const FloatingButtons: React.FC<FloatingButtonsProps> = ({ onMenuClick }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -39,7 +43,7 @@ const FloatingButtons: React.FC = () => {
   return (
     <FixedButtons>
       <Icon src={upArrowIcon} alt="Scroll to top" onClick={scrollToTop} />
-      <Icon src={pencilIcon} alt="Edit" />
+      <Icon src={pencilIcon} alt="Edit" onClick={onMenuClick}/>
       <Icon src={bookmarkIcon} alt="Bookmark" />
     </FixedButtons>
   );
