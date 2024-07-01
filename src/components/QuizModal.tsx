@@ -4,8 +4,8 @@ import styled from "styled-components";
 import StopConfirmationModal from "./StopConfirmationModal";
 
 const ModalContainer = styled.div`
-  width: 1000px;
-  height: 750px;
+  width: 800px;
+  height: 680px;
   border-radius: 40px;
   background: white;
   padding: 40px;
@@ -21,7 +21,7 @@ const ModalContainer = styled.div`
 const Title = styled.h1`
   margin-bottom: 43px;
   color: var(--Blue-300, #463efb);
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 600;
   margin-top: 30px;
 `;
@@ -49,9 +49,9 @@ const StepBox = styled.div<{ active: boolean }>`
 `;
 
 const Question = styled.p`
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
-  margin-bottom: 52px;
+  margin-bottom: 42px;
   align-self: flex-start;
   margin-left: 95px;
 `;
@@ -64,8 +64,8 @@ const AnswersContainer = styled.div`
 
 const Answer = styled.div<{ selected: boolean; correct: boolean }>`
   display: flex;
-  width: 750px;
-  padding: 30px 10px 30px 35px;
+  width: 650px;
+  padding: 20px 10px 30px 35px;
   justify-content: center;
   align-items: center;
   gap: 10px;
