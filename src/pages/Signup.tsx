@@ -6,8 +6,13 @@ import { Link } from "react-router-dom";
 const Title = styled.div`
   font-size: 24px;
   display: flex;
-  justify-content:center;
   flex-direction: row;
+  font-weight: 600;
+  margin-bottom: 38px;
+`;
+const Ticle = styled.div`
+  color: #463efb;
+  font-size: 24px;
   font-weight: 600;
   margin-bottom: 45px;
 `;
@@ -51,7 +56,7 @@ const Button = styled.button<{ disabled: boolean }>`
   border: none;
   border-radius: 20px;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 8px;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
@@ -185,7 +190,9 @@ export const Signup: React.FC = () => {
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Title>올망졸망 아티클로 취준 준비를 더욱 완벽하게!</Title>
+        <Title>
+          <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
+        </Title>
         <Box>
           <Label>이메일</Label>
           <Input

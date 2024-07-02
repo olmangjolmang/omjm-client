@@ -180,7 +180,7 @@ export const Login: React.FC = () => {
           회원가입하고 원하는 요일에 <br />
           00의 아티클을 받아보세요
         </RightTitle>
-        <SignupBtn to="/signup">회원가입하기</SignupBtn>
+        <SignupBtn to="/signupagree">회원가입하기</SignupBtn>
       </RightContainer>
     </Container>
   );
