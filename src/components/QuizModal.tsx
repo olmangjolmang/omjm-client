@@ -1,4 +1,3 @@
-// QuizModal.tsx
 import React, { useState } from "react";
 import styled from "styled-components";
 import StopConfirmationModal from "./StopConfirmationModal";
@@ -62,7 +61,11 @@ const AnswersContainer = styled.div`
   gap: 20px;
 `;
 
-const Answer = styled.div<{ selected: boolean; correct: boolean }>`
+const Answer = styled.div<{
+  selected: boolean;
+  correct: boolean;
+  isCorrectAnswer: boolean;
+}>`
   display: flex;
   width: 650px;
   padding: 20px 10px 30px 35px;
@@ -86,6 +89,14 @@ const Answer = styled.div<{ selected: boolean; correct: boolean }>`
       props.correct ? "var(--Green-100, #E7FFE8)" : "var(--Red-100, #FFE4E4)"
     };
   `}
+
+  ${(props) =>
+    !props.selected &&
+    props.isCorrectAnswer &&
+    `
+    border: 2px solid var(--Green-200, #09D535);
+    background: var(--Green-100, #E7FFE8);
+  `}
 `;
 
 const CloseButton = styled.button`
@@ -103,15 +114,61 @@ interface QuizModalProps {
   onClose: () => void;
 }
 
+interface QuestionData {
+  question: string;
+  answers: string[];
+  correctAnswer: number;
+}
+
+const quizData: QuestionData[] = [
+  {
+    question: "질문 1",
+    answers: ["답변 1", "답변 2", "답변 3", "답변 4"],
+    correctAnswer: 1,
+  },
+  {
+    question: "질문 2",
+    answers: ["답변 1", "답변 2", "답변 3", "답변 4"],
+    correctAnswer: 2,
+  },
+  {
+    question: "질문 3",
+    answers: ["답변 1", "답변 2", "답변 3", "답변 4"],
+    correctAnswer: 3,
+  },
+  {
+    question: "질문 4",
+    answers: ["답변 1", "답변 2", "답변 3", "답변 4"],
+    correctAnswer: 4,
+  },
+  {
+    question: "질문 5",
+    answers: ["답변 1", "답변 2", "답변 3", "답변 4"],
+    correctAnswer: 1,
+  },
+];
+
 const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [isStopConfirmationOpen, setIsStopConfirmationOpen] = useState<boolean>(false);
+  const [isStopConfirmationOpen, setIsStopConfirmationOpen] =
+    useState<boolean>(false);
+  const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
 
-  const correctAnswer = 1; // 임시 정답
+  const currentQuestion = quizData[currentStep - 1];
 
   const handleAnswerClick = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
+    setShowCorrectAnswer(true);
+    setTimeout(() => {
+      if (currentStep < quizData.length) {
+        setCurrentStep(currentStep + 1);
+        setSelectedAnswer(null);
+        setShowCorrectAnswer(false);
+      } else {
+        onClose(); // 마지막 질문 끝나면 자동 닫기
+      }
+    }, 2000); // 2초 후 다음 질문으로
   };
 
   const handleStop = () => {
@@ -142,22 +199,28 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
         </CloseButton>
         <Title>AI 시대에 화웨이가 주목받는다?</Title>
         <StepContainer>
-          {[1, 2, 3, 4, 5].map((step) => (
-            <StepBox key={step} active={currentStep === step}>
-              {step}
+          {quizData.map((_, index) => (
+            <StepBox key={index + 1} active={currentStep === index + 1}>
+              {index + 1}
             </StepBox>
           ))}
         </StepContainer>
-        <Question>아티클에 관한 질문</Question>
+        <Question>{currentQuestion.question}</Question>
         <AnswersContainer>
-          {[1, 2, 3, 4].map((answer) => (
+          {currentQuestion.answers.map((answer, index) => (
             <Answer
-              key={answer}
-              correct={selectedAnswer === answer && answer === correctAnswer}
-              selected={selectedAnswer === answer}
-              onClick={() => handleAnswerClick(answer)}
+              key={index}
+              correct={
+                selectedAnswer === index + 1 &&
+                index + 1 === currentQuestion.correctAnswer
+              }
+              selected={selectedAnswer === index + 1}
+              isCorrectAnswer={
+                showCorrectAnswer && index + 1 === currentQuestion.correctAnswer
+              }
+              onClick={() => handleAnswerClick(index + 1)}
             >
-              답변 {answer}
+              {answer}
             </Answer>
           ))}
         </AnswersContainer>
