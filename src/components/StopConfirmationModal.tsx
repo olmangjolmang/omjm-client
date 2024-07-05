@@ -19,7 +19,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px 100px;
-  width: 300px;
+  width: 500px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,36 +30,35 @@ const ModalHeader = styled.div`
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  font-weight: 600;
 `;
 
 const ModalMessage = styled.div`
-  font-size: 20px;
-  margin-bottom: 30px;
+  font-size: 16px;
+  margin-bottom: 40px;
   text-align: center;
-  font-weight: 500;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const Button = styled.button`
-  padding: 10px 40px;
+  width: 45%;
+  padding: 10px;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 20px;
-  width: 170px;
-`;
-
-const ConfirmButton = styled(Button)`
-  background-color: #f4f4f7;
-  color: #463efb;
+  font-size: 16px;
 `;
 
 const CancelButton = styled(Button)`
+  background-color: #e0e0e0;
+  color: #000;
+`;
+
+const ConfirmButton = styled(Button)`
   background-color: #463efb;
   color: white;
 `;
@@ -67,20 +66,28 @@ const CancelButton = styled(Button)`
 interface StopConfirmationModalProps {
   onConfirm: () => void;
   onCancel: () => void;
+  headerText: string;
+  messageText: string;
+  confirmButtonText: string;
+  cancelButtonText: string;
 }
 
 const StopConfirmationModal: React.FC<StopConfirmationModalProps> = ({
   onConfirm,
   onCancel,
+  headerText,
+  messageText,
+  confirmButtonText,
+  cancelButtonText,
 }) => {
   return (
     <ModalOverlay>
       <ModalContainer>
-        <ModalHeader>메모를 중단하시겠습니까?</ModalHeader>
-        <ModalMessage>중단 시 작성 내용이 사라집니다.</ModalMessage>
+        <ModalHeader>{headerText}</ModalHeader>
+        <ModalMessage>{messageText}</ModalMessage>
         <ButtonContainer>
-          <ConfirmButton onClick={onConfirm}>중단하기</ConfirmButton>
-          <CancelButton onClick={onCancel}>돌아가기</CancelButton>
+          <ConfirmButton onClick={onConfirm}>{confirmButtonText}</ConfirmButton>
+          <CancelButton onClick={onCancel}>{cancelButtonText}</CancelButton>
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>

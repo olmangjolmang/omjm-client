@@ -19,7 +19,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 50px 100px;
-  width: 300px;
+  width: 500px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -28,28 +28,29 @@ const ModalContainer = styled.div`
 const ModalHeader = styled.div`
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   text-align: center;
-  font-weight: 600;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
 `;
 
 const Button = styled.button`
-  padding: 10px 40px;
+  width: 45%;
+  padding: 10px;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 20px;
-  width: 170px;
+  font-size: 16px;
 `;
 
 const CancelButton = styled(Button)`
-  background-color: #f4f4f7;
-  color: #463efb;
+  background-color: #e0e0e0;
+  color: #000;
 `;
 
 const ConfirmButton = styled(Button)`
@@ -62,10 +63,7 @@ interface ConfirmationModalProps {
   onCancel: () => void;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
-  onConfirm,
-  onCancel,
-}) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onConfirm, onCancel }) => {
   return (
     <ModalOverlay>
       <ModalContainer>
