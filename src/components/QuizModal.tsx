@@ -165,8 +165,6 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
         setCurrentStep(currentStep + 1);
         setSelectedAnswer(null);
         setShowCorrectAnswer(false);
-      } else {
-        onClose(); // 마지막 질문 끝나면 자동 닫기
       }
     }, 2000); // 2초 후 다음 질문으로
   };
