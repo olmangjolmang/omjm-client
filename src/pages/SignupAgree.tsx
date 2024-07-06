@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -31,6 +31,7 @@ const Box = styled.div`
   padding: 25px 0px 25px 40px;
   align-items: center;
   margin-bottom: 32px;
+  cursor: pointer;
 `;
 const Svg = styled.svg`
   margin-right: 16px;
@@ -45,6 +46,7 @@ const AgreeContainer = styled.div`
 const AgreeBox = styled.div`
   display: flex;
   justify-content: center;
+  cursor: pointer;
 `;
 const AgreeText = styled.div`
   font-size: 20px;
@@ -55,11 +57,11 @@ const Span = styled.span`
   font-size: 20px;
   font-weight: 500;
 `;
-const Button = styled(Link)`
+const Button = styled(Link)<{ disabled: boolean }>`
   width: 515px;
   height: 65px;
-  background-color: #e5efff;
-  color: #463efb;
+  background-color: ${(props) => (props.disabled ? "#F4F4F7" : "#e5efff")};
+  color: ${(props) => (props.disabled ? "#AFAFB6" : "#463efb")};
   border: none;
   border-radius: 20px;
   font-size: 20px;
@@ -69,6 +71,7 @@ const Button = styled(Link)`
   justify-content: center;
   align-items: center;
   margin-top: 32px;
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
 `;
 
 // 타입 정의
@@ -109,6 +112,8 @@ export const SignupAgree: React.FC = () => {
     const allChecked = Object.values(newAgreements).every(value => value);
     setAllAgreed(allChecked);
   };
+
+  const isButtonDisabled = !individualAgreements.terms || !individualAgreements.privacy;
 
   return (
     <Container>
@@ -216,7 +221,9 @@ export const SignupAgree: React.FC = () => {
             </AgreeText>
           </AgreeBox>
         </AgreeContainer>
-        <Button to="/signup">다음</Button>
+        <Button to="/signup" disabled={isButtonDisabled}>
+          다음
+        </Button>
       </div>
     </Container>
   );

@@ -1,20 +1,25 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  FocusEvent,
+} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-// 스타일 컴포넌트 정의
 const Title = styled.div`
   font-size: 24px;
   display: flex;
   flex-direction: row;
   font-weight: 600;
-  margin-bottom: 38px;
+  margin-bottom: 45px;
 `;
+
 const Ticle = styled.div`
   color: #463efb;
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 45px;
 `;
 
 const Container = styled.div`
@@ -51,8 +56,8 @@ const Input = styled.input<{ hasError: boolean }>`
 const Button = styled.button<{ disabled: boolean }>`
   width: 534px;
   height: 65px;
-  background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")};
+  background-color: ${(props) => (props.disabled ? "#F4F4F7" : "#e5efff")};
+  color: ${(props) => (props.disabled ? "#AFAFB6" : "#463efb")};
   border: none;
   border-radius: 20px;
   font-size: 20px;
@@ -67,7 +72,6 @@ const ErrorMessage = styled.div`
   margin-bottom: 20px;
 `;
 
-// 타입 정의
 interface Errors {
   email: string;
   nickname: string;
@@ -82,7 +86,6 @@ interface Touched {
   passwordConfirm: boolean;
 }
 
-// 컴포넌트 정의
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
@@ -135,7 +138,6 @@ export const Signup: React.FC = () => {
       if (!re.test(password)) {
         return "영문 대소문자, 숫자, 특수문자로 조합되어야 합니다.";
       }
-
       return "";
     };
 
@@ -257,7 +259,7 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Link to="/login" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
           <Button type="submit" disabled={isButtonDisabled}>
             확인
           </Button>

@@ -1,51 +1,13 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
-  background-color: #161620;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-`;
-const BackgroundCircle = styled.div`
-  position: absolute;
-  width: 775.366px;
-  height: 775.366px;
-  border-radius: 775.366px;
-  background: rgba(40, 54, 252, 0.3);
-  filter: blur(100px);
-  left: -200px;
-  top: 0px;
-  z-index: 1;
-`;
-
-const BackgroundCircleRight = styled.div`
-  position: absolute;
-  width: 775.366px;
-  height: 775.366px;
-  border-radius: 775.366px;
-  background: rgba(40, 54, 252, 0.3);
-  filter: blur(100px);
-  right: -200px;
-  bottom: -200px;
-  z-index: 1;
-`;
-
-const FormContainer = styled.form`
-  background-color: #fff;
-  width: 650px;
-  height: 699.117px;
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 80px;
-  z-index: 2;
+  height: 100vh;
 `;
 
 const Box = styled.div`
@@ -53,77 +15,48 @@ const Box = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input<{ hasError?: boolean }>`
-  width: 500px;
-  height: 55px;
+const Label = styled.label`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+`;
+
+const Input = styled.input`
+  width: 515px;
+  height: 60px;
   border-radius: 10px;
   font-size: 16px;
-  color: #000000;
-  border: solid 1px ${(props) => (props.hasError ? "red" : "#dfdfe5")};
-  margin-bottom: 16px;
+  color: #afafb6;
+  border: solid 1px;
+  margin-bottom: 20px;
   padding-left: 19px;
 `;
 
 const Button = styled.button<{ disabled: boolean }>`
-  width: 519px;
-  height: 55px;
+  width: 534px;
+  height: 65px;
+  background-color: ${(props) => (props.disabled ? "#F4F4F7" : "#e5efff")};
+  color: ${(props) => (props.disabled ? "#AFAFB6" : "#463efb")};
   border: none;
-  border-radius: 9px;
-  font-size: 18px;
-  font-weight: 500;
-  margin-top: 32px;
-  background-color: #2836fc;
-  color: #fff;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 8px;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
-const FindContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 45px;
-`;
-
-const Divider = styled.span`
-  margin: 0 45px;
-`;
-
-const Icon = styled.div`
-  font-size: 70px;
-  font-weight: 400;
-  margin-bottom: 56px;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  white-space: nowrap;
-  z-index: 2;
-`;
-
-const RightTitle = styled.div`
-  color: #fff;
-  font-size: 50px;
-  font-weight: 700;
-`;
-
-const SignupBtn = styled(Link)`
-  display: inline-flex;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 14px 158px;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  gap: 10px;
-  color: #2836fc;
+const BottomText = styled.div`
   font-size: 16px;
+  margin-top: 20px;
+  font-weight: 500;
+`;
+
+const SignupText = styled(Link)`
+  font-size: 20px;
+  color: #463efb;
   font-weight: 600;
-  line-height: 26px;
-  margin-top: 86px;
-  position: relative;
-  z-index: 2;
+  text-decoration: none;
+  margin-top: 12px;
 `;
 
 export const Login: React.FC = () => {
@@ -131,25 +64,28 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsButtonDisabled(!(email && password));
   }, [email, password]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 로그인 로직 추가
+
+    if (!email || !password) {
+    } else {
+      // 로그인 로직 추가
+      console.log("로그인 성공");
+    }
   };
 
   return (
     <Container>
-      <BackgroundCircle />
-      <BackgroundCircleRight />
-      <FormContainer onSubmit={handleSubmit}>
-        <Icon>icon</Icon>
+      <form onSubmit={handleSubmit}>
         <Box>
+          <Label>이메일</Label>
           <Input
             type="email"
-            placeholder="이메일을 입력해 주세요."
+            placeholder="amjm@naver.com"
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
@@ -157,31 +93,23 @@ export const Login: React.FC = () => {
           />
         </Box>
         <Box>
+          <Label>비밀번호</Label>
           <Input
             type="password"
-            placeholder="비밀번호를 입력해 주세요."
+            placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setPassword(e.target.value)
             }
           />
         </Box>
+
         <Button type="submit" disabled={isButtonDisabled}>
           로그인
         </Button>
-        <FindContainer>
-          <div>아이디 찾기</div>
-          <Divider>|</Divider>
-          <div>비밀번호 찾기</div>
-        </FindContainer>
-      </FormContainer>
-      <RightContainer>
-        <RightTitle>
-          회원가입하고 원하는 요일에 <br />
-          00의 아티클을 받아보세요
-        </RightTitle>
-        <SignupBtn to="/signupagree">회원가입하기</SignupBtn>
-      </RightContainer>
+      </form>
+      <BottomText>계정이 없으신가요?</BottomText>
+      <SignupText to="/signupagree">이메일로 회원가입</SignupText>
     </Container>
   );
 };
