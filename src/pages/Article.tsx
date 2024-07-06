@@ -4,6 +4,7 @@ import articleImg from "../assets/article.png";
 import QuizModal from "../components/QuizModal";
 import FloatingButtons from "../components/FloatingButtons";
 import HighlightModal from "../components/HighlightModal";
+import ticlearticle from "../assets/ticlearticle.png";
 
 const Container = styled.div`
   display: flex;
@@ -76,35 +77,48 @@ const Line = styled.div`
 `;
 
 const QuizContainer = styled.div`
-  background-color: #272726;
-  width: 906.578px;
-  height: 339.943px;
+  background-color: #f4f4f7;
+  width: 1080px;
+  height: 320px;
   flex-shrink: 0;
   border-radius: 30px;
   display: flex;
-  justify-content: center;
+
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   margin-bottom: 94px;
+`;
+const QuizContainerRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+const TicleImg = styled.img`
+  width: 269.996px;
+  height: 228px;
+  margin-right: 70px;
+  margin-left: 120px;
 `;
 
 const QuizTitle = styled.div`
-  color: white;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   margin-bottom: 38px;
+  line-height: 150%;
 `;
 
 const QuizTime = styled.div`
-  color: white;
-  font-size: 28px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 34px;
 `;
 
 const QuizBtn = styled.button`
   display: inline-flex;
   padding: 21px 176px;
+  width: 500px;
+  height: 66px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -114,6 +128,8 @@ const QuizBtn = styled.button`
   color: white;
   font-size: 20px;
   font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
 `;
 
 const BottomArticleTitle = styled.div`
@@ -171,9 +187,13 @@ const Overlay = styled.div<{ isModalOpen: boolean }>`
 
 const Article: React.FC = () => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
-  const [isHighlightModalOpen, setIsHighlightModalOpen] = useState<boolean>(false);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] =
+    useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
-  const [highlightedRange, setHighlightedRange] = useState<{ start: number, end: number } | null>(null);
+  const [highlightedRange, setHighlightedRange] = useState<{
+    start: number;
+    end: number;
+  } | null>(null);
 
   const handleTextHighlight = (e: MouseEvent) => {
     const selection = window.getSelection();
@@ -228,11 +248,14 @@ const Article: React.FC = () => {
       </Content>
       <Line />
       <QuizContainer>
-        <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
-        <QuizTime>소요시간 5분</QuizTime>
-        <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
-          간단 퀴즈 풀어보기
-        </QuizBtn>
+        <TicleImg src={ticlearticle} alt="ticleimg" />
+        <QuizContainerRight>
+          <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
+          <QuizTime>소요시간 5분</QuizTime>
+          <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
+            간단 퀴즈 풀어보기
+          </QuizBtn>
+        </QuizContainerRight>
       </QuizContainer>
       <div>
         <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
