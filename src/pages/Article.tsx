@@ -130,6 +130,7 @@ const QuizBtn = styled.button`
   font-weight: 600;
   flex-shrink: 0;
   white-space: nowrap;
+  cursor: pointer;
 `;
 
 const BottomArticleTitle = styled.div`
