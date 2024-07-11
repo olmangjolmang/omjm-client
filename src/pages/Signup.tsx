@@ -1,15 +1,25 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  FocusEvent,
+} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-// 스타일 컴포넌트 정의
 const Title = styled.div`
   font-size: 24px;
   display: flex;
-  justify-content:center;
   flex-direction: row;
   font-weight: 600;
   margin-bottom: 45px;
+`;
+
+const Ticle = styled.div`
+  color: #463efb;
+  font-size: 24px;
+  font-weight: 600;
 `;
 
 const Container = styled.div`
@@ -46,12 +56,12 @@ const Input = styled.input<{ hasError: boolean }>`
 const Button = styled.button<{ disabled: boolean }>`
   width: 534px;
   height: 65px;
-  background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")};
+  background-color: ${(props) => (props.disabled ? "#F4F4F7" : "#e5efff")};
+  color: ${(props) => (props.disabled ? "#AFAFB6" : "#463efb")};
   border: none;
   border-radius: 20px;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 8px;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
@@ -62,7 +72,6 @@ const ErrorMessage = styled.div`
   margin-bottom: 20px;
 `;
 
-// 타입 정의
 interface Errors {
   email: string;
   nickname: string;
@@ -77,7 +86,6 @@ interface Touched {
   passwordConfirm: boolean;
 }
 
-// 컴포넌트 정의
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
@@ -130,7 +138,6 @@ export const Signup: React.FC = () => {
       if (!re.test(password)) {
         return "영문 대소문자, 숫자, 특수문자로 조합되어야 합니다.";
       }
-
       return "";
     };
 
@@ -185,7 +192,9 @@ export const Signup: React.FC = () => {
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <Title>올망졸망 아티클로 취준 준비를 더욱 완벽하게!</Title>
+        <Title>
+          <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
+        </Title>
         <Box>
           <Label>이메일</Label>
           <Input
@@ -250,7 +259,7 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Link to="/login" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
           <Button type="submit" disabled={isButtonDisabled}>
             확인
           </Button>
