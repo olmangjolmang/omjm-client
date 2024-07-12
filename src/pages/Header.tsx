@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import profileImg from "../assets/headerprofile.png";
 
 const Container = styled.div`
   height: 120px;
@@ -8,6 +9,11 @@ const Container = styled.div`
   padding: 0 120px;
   align-items: center;
   justify-content: space-between;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Logo = styled.div`
@@ -36,12 +42,16 @@ const Menu = styled.div`
   }
 `;
 
+const RightContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  margin-right: 18px;
-  margin-left: 124px;
+  margin-right: 20px;
 `;
 
 const SearchIcon = styled.svg`
@@ -66,26 +76,30 @@ const SearchInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Button = styled(Link)`
+const ProfileLink = styled(Link)`
+  width: 52px;
+  height: 52px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-shrink: 0;
-  height: 55px;
-  width: 143px;
-  background-color: #463efb;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  font-weight: 600;
-  white-space: nowrap;
-  text-decoration: none;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+const ProfileImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const Header: React.FC = () => {
   return (
-    <>
-      <Container>
+    <Container>
+      <LeftContainer>
         <Logo>ticle</Logo>
         <MenuContainer>
           <Menu>홈</Menu>
@@ -93,6 +107,8 @@ const Header: React.FC = () => {
           <Menu>물어봥</Menu>
           <Menu>마이페이지</Menu>
         </MenuContainer>
+      </LeftContainer>
+      <RightContainer>
         <SearchContainer>
           <SearchInput placeholder="궁금한 내용을 검색해 보세요!" />
           <SearchIcon
@@ -114,9 +130,11 @@ const Header: React.FC = () => {
             />
           </SearchIcon>
         </SearchContainer>
-        <Button to="/login">로그인</Button>
-      </Container>
-    </>
+        <ProfileLink to="/login">
+          <ProfileImg src={profileImg} alt="Profile" />
+        </ProfileLink>
+      </RightContainer>
+    </Container>
   );
 };
 
