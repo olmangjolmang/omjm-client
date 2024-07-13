@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Text, Company } from "../styles/Footer";
+
 const Footer: React.FC = () => {
   return (
     <>
