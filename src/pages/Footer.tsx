@@ -1,24 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  height: 400px;
-  padding: 48px 112px 0 112px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Text = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 20px;
-`;
-const Company = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 18px;
-  margin-top: 80px;
-`;
+import { Container, Text, Company } from "../styles/Footer";
 const Footer: React.FC = () => {
   return (
     <>
