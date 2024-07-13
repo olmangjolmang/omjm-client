@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ConfirmationModal from "./ConfirmationModal";
-import StopConfirmationModal from "./StopConfirmationModal"; // 중단 확인 모달 컴포넌트를 임포트합니다.
+import StopConfirmationModal from "./StopConfirmationModal";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -36,12 +36,13 @@ const ModalHeader = styled.div`
   align-self: flex-start;
 `;
 
-const HighlightedText = styled.div`
+const HighlightedTextContainer = styled.div`
   width: 100%;
   padding: 10px;
   color: #272726;
   margin-bottom: 40px;
   font-size: 18px;
+  white-space: pre-wrap;
 `;
 
 const TextArea = styled.textarea`
@@ -58,8 +59,9 @@ const TextArea = styled.textarea`
 `;
 
 const Button = styled.button`
-  margin-top: 17px;
-  padding: 10px 30px;
+  margin-top: 32px;
+  width: 90.75px;
+  padding: 7.5px;
   background-color: #463efb;
   color: white;
   border: none;
@@ -92,7 +94,8 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
 }) => {
   const [note, setNote] = useState<string>("");
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
-  const [isStopConfirmationOpen, setIsStopConfirmationOpen] = useState<boolean>(false);
+  const [isStopConfirmationOpen, setIsStopConfirmationOpen] =
+    useState<boolean>(false);
 
   const handleSave = () => {
     setIsConfirmationOpen(true);
@@ -130,7 +133,7 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
           </svg>
         </CloseButton>
         <ModalHeader>메모</ModalHeader>
-        <HighlightedText>{highlightedText}</HighlightedText>
+        <HighlightedTextContainer>{highlightedText}</HighlightedTextContainer>
         <TextArea
           value={note}
           onChange={(e) => setNote(e.target.value)}
