@@ -22,16 +22,7 @@ import quizimg3 from "../assets/quizimg3.png";
 import quizimg2 from "../assets/quizimg2.png";
 import quizimg1 from "../assets/quizimg1.png";
 import quizimg0 from "../assets/quizimg0.png";
-
-interface QuizModalProps {
-  onClose: () => void;
-}
-
-interface QuestionData {
-  question: string;
-  answers: string[];
-  correctAnswer: number;
-}
+import { QuizModalProps, QuestionData } from "../types";
 
 const quizData: QuestionData[] = [
   {
