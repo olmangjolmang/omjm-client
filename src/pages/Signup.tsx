@@ -125,7 +125,7 @@ export const Signup: React.FC = () => {
           <Label>이메일</Label>
           <Input
             type="email"
-            placeholder="amjm@naver.com"
+            placeholder="omjm@naver.com"
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
