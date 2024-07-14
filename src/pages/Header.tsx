@@ -1,91 +1,23 @@
 import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const Container = styled.div`
-  height: 120px;
-  display: flex;
-  padding: 0 120px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Logo = styled.div`
-  margin-right: 99px;
-  color: #463efb;
-  font-weight: 600;
-  font-family: Montserrat;
-  font-size: 33.082px;
-`;
-
-const MenuContainer = styled.div`
-  gap: 74px;
-  display: flex;
-`;
-
-const Menu = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  &:hover {
-    color: #463efb;
-  }
-  &:active {
-    color: #463efb;
-  }
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-right: 18px;
-  margin-left: 124px;
-`;
-
-const SearchIcon = styled.svg`
-  position: absolute;
-  right: 18px;
-  width: 20px;
-  height: 20px;
-`;
-
-const SearchInput = styled.input`
-  width: 350px;
-  height: 55px;
-  padding: 0 40px 0 18px;
-  background-color: #f4f4f7;
-  color: var(--Gray-300, #afafb6);
-  font-weight: 500;
-  line-height: 32px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-`;
-
-const Button = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  height: 55px;
-  width: 143px;
-  background-color: #463efb;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  font-weight: 600;
-  white-space: nowrap;
-  text-decoration: none;
-`;
+import {
+  Container,
+  LeftContainer,
+  Logo,
+  MenuContainer,
+  RightContainer,
+  Menu,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  ProfileLink,
+  ProfileImg,
+} from "../styles/Header";
+import profileImg from "../assets/headerprofile.png";
 
 const Header: React.FC = () => {
   return (
-    <>
-      <Container>
+    <Container>
+      <LeftContainer>
         <Logo>ticle</Logo>
         <MenuContainer>
           <Menu>홈</Menu>
@@ -93,6 +25,8 @@ const Header: React.FC = () => {
           <Menu>물어봥</Menu>
           <Menu>마이페이지</Menu>
         </MenuContainer>
+      </LeftContainer>
+      <RightContainer>
         <SearchContainer>
           <SearchInput placeholder="궁금한 내용을 검색해 보세요!" />
           <SearchIcon
@@ -114,9 +48,11 @@ const Header: React.FC = () => {
             />
           </SearchIcon>
         </SearchContainer>
-        <Button to="/login">로그인</Button>
-      </Container>
-    </>
+        <ProfileLink to="/login">
+          <ProfileImg src={profileImg} alt="Profile" />
+        </ProfileLink>
+      </RightContainer>
+    </Container>
   );
 };
 
