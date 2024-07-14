@@ -10,20 +10,7 @@ import {
   Button,
   ErrorMessage,
 } from "../styles/Signup";
-
-interface Errors {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirm: string;
-}
-
-interface Touched {
-  email: boolean;
-  nickname: boolean;
-  password: boolean;
-  passwordConfirm: boolean;
-}
+import { Errors, Touched } from "../types"; 
 
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
