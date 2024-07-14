@@ -5,6 +5,8 @@ import quizimg5 from "../assets/quizimg5.png";
 import quizimg4 from "../assets/quizimg4.png";
 import quizimg3 from "../assets/quizimg3.png";
 import quizimg2 from "../assets/quizimg2.png";
+import quizimg1 from "../assets/quizimg1.png";
+import quizimg0 from "../assets/quizimg0.png";
 
 const ModalContainer = styled.div`
   width: 800px;
@@ -151,7 +153,7 @@ const ResultContainer = styled.div`
 `;
 
 const ResultImage = styled.img`
-  width: 255px;
+  width: 315px;
   height: 305px;
   margin-bottom: 56px;
 `;
@@ -265,9 +267,15 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
     } else if (correctAnswersCount === quizData.length - 2) {
       resultText = "걱정마세요, 더 나아질 거에요!";
       imageSrc = quizimg3;
-    } else {
+    } else if (correctAnswersCount === quizData.length - 3) {
       resultText = "다시 한 번 읽어보시겠어요?";
       imageSrc = quizimg2;
+    } else if (correctAnswersCount === quizData.length - 4) {
+      resultText = "다시 한 번 읽어보시겠어요?";
+      imageSrc = quizimg1;
+    } else if (correctAnswersCount === quizData.length - 5) {
+      resultText = "다시 한 번 읽어보시겠어요?";
+      imageSrc = quizimg0;
     }
 
     return (
