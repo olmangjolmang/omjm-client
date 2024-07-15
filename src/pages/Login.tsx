@@ -1,69 +1,14 @@
-import React, { useState, ChangeEvent, FormEvent, FocusEvent } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Label = styled.label`
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 15px;
-`;
-
-const Input = styled.input<{ hasError: boolean }>`
-  width: 515px;
-  height: 60px;
-  border-radius: 10px;
-  font-size: 16px;
-  color: #afafb6;
-  border: solid 1px ${(props) => (props.hasError ? "red" : "#dfdfe5")};
-  margin-bottom: 5px;
-  padding-left: 19px;
-`;
-
-const Button = styled.button<{ disabled: boolean }>`
-  width: 534px;
-  height: 65px;
-  background-color: ${(props) => (props.disabled ? "#F4F4F7" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#AFAFB6" : "#463efb")};
-  border: none;
-  border-radius: 10px;
-  font-size: 20px;
-  font-weight: 600;
-  margin-top: 8px;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-`;
-
-const ErrorMessage = styled.div`
-  color: #f44;
-  font-size: 14px;
-  margin-bottom: 20px;
-`;
-
-const BottomText = styled.div`
-  font-size: 16px;
-  margin-top: 20px;
-  font-weight: 500;
-`;
-
-const SignupText = styled(Link)`
-  font-size: 20px;
-  color: #463efb;
-  font-weight: 600;
-  text-decoration: none;
-  margin-top: 12px;
-`;
+import React, { useState, ChangeEvent, FormEvent, useEffect, useCallback } from "react";
+import {
+  Container,
+  Box,
+  Label,
+  Input,
+  Button,
+  ErrorMessage,
+  BottomText,
+  SignupText,
+} from "../styles/Login";
 
 interface Errors {
   email: string;
@@ -88,7 +33,21 @@ export const Login: React.FC = () => {
     password: false,
   });
 
-  React.useEffect(() => {
+  const validateEmail = useCallback((): string => {
+    if (!email) {
+      return "이메일을 입력해 주세요.";
+    }
+    return "";
+  }, [email]);
+
+  const validatePassword = useCallback((): string => {
+    if (!password) {
+      return "비밀번호를 입력해 주세요.";
+    }
+    return "";
+  }, [password]);
+
+  useEffect(() => {
     const emailError = validateEmail();
     const passwordError = validatePassword();
 
@@ -98,21 +57,7 @@ export const Login: React.FC = () => {
     });
 
     setIsButtonDisabled(!!emailError || !!passwordError);
-  }, [email, password]);
-
-  const validateEmail = (): string => {
-    if (!email) {
-      return "이메일을 입력해 주세요.";
-    }
-    return "";
-  };
-
-  const validatePassword = (): string => {
-    if (!password) {
-      return "비밀번호를 입력해 주세요.";
-    }
-    return "";
-  };
+  }, [email, password, validateEmail, validatePassword]);
 
   const handleBlur = (field: keyof Touched) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
