@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect, useCallback } from "react";
+import axios from "axios";
 import {
   Container,
   Box,
@@ -63,12 +64,25 @@ export const Login: React.FC = () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!errors.email && !errors.password) {
-      // 로그인 로직 추가
-      console.log("로그인 성공");
+      try {
+        const response = await axios.post('/users/sign-in', {
+          email,
+          password,
+        });
+
+        // 로그인 성공 처리
+        console.log("로그인 성공", response.data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("로그인 실패", error.response?.data || error.message);
+        } else {
+          console.error("로그인 실패", error);
+        }
+      }
     }
   };
 
