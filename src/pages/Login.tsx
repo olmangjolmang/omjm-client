@@ -1,4 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import {
   Container,
@@ -10,16 +16,7 @@ import {
   BottomText,
   SignupText,
 } from "../styles/Login";
-
-interface Errors {
-  email: string;
-  password: string;
-}
-
-interface Touched {
-  email: boolean;
-  password: boolean;
-}
+import { Errors, Touched } from "../types/LoginTypes";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -69,7 +66,7 @@ export const Login: React.FC = () => {
 
     if (!errors.email && !errors.password) {
       try {
-        const response = await axios.post('/users/sign-in', {
+        const response = await axios.post("/users/sign-in", {
           email,
           password,
         });
