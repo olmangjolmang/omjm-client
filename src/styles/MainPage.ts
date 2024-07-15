@@ -14,7 +14,7 @@ export const MainContent = styled.main`
 
 export const ImageContainer = styled.div`
   position: relative;
-  width: 1440px;
+
   max-width: 100%;
 `;
 
@@ -105,10 +105,47 @@ export const NavButton = styled.button`
 
 export const PrevButton = styled(NavButton)`
   left: 90px;
-  background-image: url(LeftArrow);
 `;
 
 export const NextButton = styled(NavButton)`
   right: 90px;
-  background-image: url(RightArrow);
+`;
+
+export const PostItemGroupContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 88px;
+  position: relative;
+`;
+
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 41px;
+`;
+
+export const SlideName = styled.h2`
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 48px */
+  letter-spacing: -0.16px;
+  align-self: flex-start; /* 좌측 정렬 */
+  margin-left: 110px; /* 좌측 여백 추가 */
+  margin-bottom: 24px;
+`;
+
+export const SlidePrevButton = styled(NavButton)`
+  left: 23px;
+  filter: invert(46%) sepia(100%) saturate(7476%) hue-rotate(243deg)
+    brightness(100%) contrast(98%);
+`;
+
+export const SlideNextButton = styled(NavButton)`
+  right: 23px;
+  filter: invert(46%) sepia(100%) saturate(7476%) hue-rotate(243deg)
+    brightness(100%) contrast(98%);
 `;
