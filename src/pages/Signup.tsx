@@ -10,7 +10,7 @@ import {
   Button,
   ErrorMessage,
 } from "../styles/Signup";
-import { Errors, Touched } from "../types"; 
+import { Errors, Touched } from "../types/SignupTypes";
 
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");

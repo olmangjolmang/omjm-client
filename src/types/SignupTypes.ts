@@ -1,5 +1,3 @@
-// Signup
-
 export interface Errors {
   email: string;
   nickname: string;
