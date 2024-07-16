@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
 
     if (!errors.email && !errors.password) {
       try {
-        const response = await axios.post("/users/sign-in", {
+        const response = await axios.post("http://3.36.247.28:8080/users/sign-in", {
           email,
           password,
         });
