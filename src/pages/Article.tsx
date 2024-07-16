@@ -48,6 +48,7 @@ const Article: React.FC = () => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
   const [isHighlightModalOpen, setIsHighlightModalOpen] = useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
+  const [highlightedRange, setHighlightedRange] = useState<{ start: number, end: number } | null>(null);
   const [highlightedRanges, setHighlightedRanges] = useState<Array<{ start: number, end: number }>>([]);
 
   useEffect(() => {
@@ -68,14 +69,11 @@ const Article: React.FC = () => {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
-      const preSelectionRange = range.cloneRange();
-      preSelectionRange.selectNodeContents(e.currentTarget);
-      preSelectionRange.setEnd(range.startContainer, range.startOffset);
-      const start = preSelectionRange.toString().length;
-      const end = start + range.toString().length;
+      const start = range.startOffset;
+      const end = range.endOffset;
 
       setHighlightedText(selection.toString());
-      setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
+      setHighlightedRange({ start, end });
     }
   };
 
@@ -99,7 +97,7 @@ const Article: React.FC = () => {
   };
 
   const renderHighlightedText = (text: string) => {
-    if (!highlightedRanges.length) {
+    if (!highlightedRange) {
       return text;
     }
 
