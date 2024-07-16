@@ -6,15 +6,20 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  max-width: 1440px;
+  justify-content: center;
+  align-items: center; /* 모든 요소를 가운데 정렬 */
+  margin: 0 auto; /* 화면 크기에 따라 가운데 정렬 */
 `;
 
 export const MainContent = styled.main`
   flex: 1;
+  width: 100%;
 `;
 
 export const ImageContainer = styled.div`
   position: relative;
-
+  margin: 0 auto; /* 가운데 정렬 */
   max-width: 100%;
 `;
 
@@ -104,11 +109,11 @@ export const NavButton = styled.button`
 `;
 
 export const PrevButton = styled(NavButton)`
-  left: 90px;
+  left: 30px;
 `;
 
 export const NextButton = styled(NavButton)`
-  right: 90px;
+  right: 30px;
 `;
 
 export const PostItemGroupContainer = styled.div`
@@ -118,12 +123,15 @@ export const PostItemGroupContainer = styled.div`
   align-items: center;
   margin-top: 88px;
   position: relative;
+  align-items: center;
 `;
 
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 41px;
+  max-width: 1200px; /* 화면 크기에 맞게 조정 */
+  margin: 0 auto; /* 가운데 정렬 */
 `;
 
 export const SlideName = styled.h2`
@@ -134,18 +142,22 @@ export const SlideName = styled.h2`
   line-height: 150%; /* 48px */
   letter-spacing: -0.16px;
   align-self: flex-start; /* 좌측 정렬 */
-  margin-left: 110px; /* 좌측 여백 추가 */
+  margin-left: 50px; /* 좌측 여백 추가 */
   margin-bottom: 24px;
 `;
 
-export const SlidePrevButton = styled(NavButton)`
-  left: 23px;
+export const SlidePrevButton = styled.button`
+  @media (max-width: 1440px) {
+    left: -30px;
+  }
+  @media (max-width: 970px) {
+    left: -15px;
+  }
   filter: invert(46%) sepia(100%) saturate(7476%) hue-rotate(243deg)
     brightness(100%) contrast(98%);
 `;
 
-export const SlideNextButton = styled(NavButton)`
-  right: 23px;
+export const SlideNextButton = styled.button`
   filter: invert(46%) sepia(100%) saturate(7476%) hue-rotate(243deg)
     brightness(100%) contrast(98%);
 `;
