@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import img from "../assets/signupmodalimg.png";
 
@@ -7,8 +8,14 @@ interface ModalProps {
 }
 
 const SignupModal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
+  const navigate = useNavigate();
+
   const handleClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleProfileComplete = () => {
+    navigate("/profile-completion");
   };
 
   return (
@@ -43,7 +50,7 @@ const SignupModal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
           <br />
           나만의 맞춤형 아티클을 추천해드려요!
         </SubMessage>
-        <ProfileButton onClick={handleClose}>
+        <ProfileButton onClick={handleProfileComplete}>
           프로필 완성하러 가기
         </ProfileButton>
       </ModalContent>
@@ -76,10 +83,8 @@ const ModalContent = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 31px;
-  right: 57px;
-  width: 32px;
-  height: 32px;
+  top: 10px;
+  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
