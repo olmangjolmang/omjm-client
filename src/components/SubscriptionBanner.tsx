@@ -1,7 +1,11 @@
 import React from "react";
 import { BannerContainer, BannerText, BannerButton } from "../styles/MainPage";
 
-const SubscriptionBanner = () => {
+interface BannerProps {
+  onSubscribeClick: () => void;
+}
+
+const SubscriptionBanner = ({ onSubscribeClick }: BannerProps) => {
   return (
     <BannerContainer>
       <BannerText>
@@ -9,7 +13,7 @@ const SubscriptionBanner = () => {
         <br />
         그간 읽은 아티클들을 다시 읽어보세요!
       </BannerText>
-      <BannerButton>소식 받으러가기</BannerButton>
+      <BannerButton onClick={onSubscribeClick}>소식 받으러가기</BannerButton>
     </BannerContainer>
   );
 };
