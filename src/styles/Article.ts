@@ -39,7 +39,7 @@ export const Author = styled.div`
   font-weight: 500;
 `;
 
-export const Date = styled.div`
+export const ArticleDate = styled.div`
   font-weight: 500;
   font-size: 16px;
 `;
