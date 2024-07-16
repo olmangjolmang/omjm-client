@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import LeftArrow from "../assets/leftArrow.png";
-import RightArrow from "../assets/rightArrow.png";
 
 export const Container = styled.div`
   display: flex;
@@ -175,7 +173,7 @@ export const BannerContainer = styled.div`
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-
+  margin-top: 138px;
   white-space: nowrap;
 `;
 
@@ -223,6 +221,7 @@ export const ModalOverlay = styled.div<{ isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
+
   z-index: 1000;
 `;
 
@@ -230,17 +229,166 @@ export const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 500px;
-  max-width: 90%;
+  width: 912px;
+  height: 610px;
+  padding: 0 198px;
   box-sizing: border-box;
 `;
 
 export const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
-  font-size: 24px;
   cursor: pointer;
+
+  svg {
+    width: 38px;
+    height: 39px;
+  }
+  cursor: pointer;
+`;
+export const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const ModalTitle = styled.h2`
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 36px */
+  letter-spacing: -0.12px;
+  margin-bottom: 46px;
+  margin-top: 56px;
+  margin-left: 215px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
+
+export const ModalText = styled.p`
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.09px;
+`;
+
+export const Span = styled.span`
+  color: #463efb;
+`;
+
+export const ModalTextContainer = styled.div`
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const FormGroup = styled.div`
+  margin-bottom: 15px;
+`;
+
+export const Label = styled.label`
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.09px;
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+`;
+
+export const Select = styled.select`
+  width: 100%;
+  border: 1px solid #afafb6;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  display: flex;
+  height: 60px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 32px;
+  appearance: none; /* 기본 드롭다운 아이콘 숨기기 */
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMyIgaGVpZ2h0PSIzMyIgdmlld0JveD0iMCAwIDMzIDMzIiBmaWxsPSJub25lIj4KICA8cGF0aCBkPSJNOC41IDEzLjgyMDhMMTYuNSAyMS44MjA4TDI0LjUgMTMuODIwOCIgc3Ryb2tlPSIjQUZBRkI2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=")
+    no-repeat right 10px center;
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  display: flex;
+  width: 515px;
+  height: 65px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #f4f4f7;
+  color: #afafb6;
+  font-size: 16px;
+  margin-top: 46px;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #463efb;
+    color: #f4f4f7;
+  }
+`;
+
+export const CustomCheckbox = styled.div<{ checked: boolean }>`
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+// 구독 모달 체크박스
+export const CheckboxGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+export const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+`;
+
+export const Link = styled.a`
+  font-size: 14px;
+  color: #afafb6;
+  margin-left: 8px;
+  text-decoration: none;
+  text-decoration: underline;
 `;
