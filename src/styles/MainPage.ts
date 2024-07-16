@@ -21,6 +21,7 @@ export const ImageContainer = styled.div`
   position: relative;
   margin: 0 auto; /* 가운데 정렬 */
   max-width: 100%;
+  white-space: nowrap;
 `;
 
 export const Slide = styled.div<{ index: number }>`
@@ -160,4 +161,52 @@ export const SlidePrevButton = styled.button`
 export const SlideNextButton = styled.button`
   filter: invert(46%) sepia(100%) saturate(7476%) hue-rotate(243deg)
     brightness(100%) contrast(98%);
+`;
+
+//하단 구독 배너 스타일
+export const BannerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333333;
+  color: white;
+  margin-top: 138px;
+  height: 450px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+
+  white-space: nowrap;
+`;
+
+export const BannerText = styled.div`
+  font-family: Pretendard;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 72px */
+  letter-spacing: -0.24px;
+  margin-left: 145px;
+`;
+
+export const BannerButton = styled.a`
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 42px */
+  letter-spacing: -0.14px;
+  color: #463efb;
+  background-color: #f8f8f8;
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 30px 60px;
+  gap: 10px;
+  margin-right: 145px;
+  margin-left: 138px;
+  &:hover {
+    background-color: #e8e8e8;
+  }
 `;

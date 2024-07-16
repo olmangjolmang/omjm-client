@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import { Container, MainContent } from "../styles/MainPage";
 import Intro from "../components/Intro";
 import PostItemGroup from "../components/PostItemGroup";
+import SubscriptionBanner from "../components/SubscriptionBanner";
 const MainPage = () => {
   return (
     <Container>
@@ -14,6 +15,7 @@ const MainPage = () => {
         <PostItemGroup />
         <PostItemGroup />
       </MainContent>
+      <SubscriptionBanner />
       <Footer />
     </Container>
   );
