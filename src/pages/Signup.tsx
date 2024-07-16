@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 import {
   Title,
   Ticle,
@@ -11,6 +11,11 @@ import {
   ErrorMessage,
 } from "../styles/Signup";
 import { Errors, Touched } from "../types/SignupTypes";
+import SignupModal from "../components/SignupModal";
+
+interface SignupErrorResponse {
+  message: string;
+}
 
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -30,6 +35,7 @@ export const Signup: React.FC = () => {
     password: false,
     passwordConfirm: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const validateEmail = (): string => {
@@ -101,7 +107,7 @@ export const Signup: React.FC = () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
@@ -110,13 +116,37 @@ export const Signup: React.FC = () => {
       !errors.password &&
       !errors.passwordConfirm
     ) {
-      // 회원가입 로직 추가
-      console.log("회원가입 성공!");
+      try {
+        const response = await axios.post("http://3.36.247.28:8080/users/sign-up", {
+          email,
+          password,
+          nickName: nickname,
+          category: "default", 
+          agreeTerms: true,
+          roles: ["user"], 
+        });
+
+        if (response.status !== 200) {
+          throw new Error("회원가입에 실패했습니다.");
+        }
+
+        // 회원가입 성공 로직
+        console.log("회원가입 성공!");
+        setIsModalOpen(true);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<SignupErrorResponse>;
+          console.error(axiosError.response?.data?.message || "회원가입에 실패했습니다.");
+        } else {
+          console.error("회원가입에 실패했습니다.");
+        }
+      }
     }
   };
 
   return (
     <Container>
+      {isModalOpen && <SignupModal setIsModalOpen={setIsModalOpen} />}
       <form onSubmit={handleSubmit}>
         <Title>
           <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
@@ -185,11 +215,9 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <Button type="submit" disabled={isButtonDisabled}>
-            확인
-          </Button>
-        </Link>
+        <Button type="submit" disabled={isButtonDisabled}>
+          확인
+        </Button>
       </form>
     </Container>
   );
