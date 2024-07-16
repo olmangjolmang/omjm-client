@@ -1,5 +1,4 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
 import {
   Title,
   Ticle,
@@ -11,6 +10,7 @@ import {
   ErrorMessage,
 } from "../styles/Signup";
 import { Errors, Touched } from "../types/SignupTypes";
+import SignupModal from "../components/SignupModal"; // 모듈 경로 확인
 
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -30,6 +30,7 @@ export const Signup: React.FC = () => {
     password: false,
     passwordConfirm: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const validateEmail = (): string => {
@@ -112,11 +113,13 @@ export const Signup: React.FC = () => {
     ) {
       // 회원가입 로직 추가
       console.log("회원가입 성공!");
+      setIsModalOpen(true);
     }
   };
 
   return (
     <Container>
+      {isModalOpen && <SignupModal setIsModalOpen={setIsModalOpen} />}
       <form onSubmit={handleSubmit}>
         <Title>
           <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
@@ -185,11 +188,9 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <Button type="submit" disabled={isButtonDisabled}>
-            확인
-          </Button>
-        </Link>
+        <Button type="submit" disabled={isButtonDisabled}>
+          확인
+        </Button>
       </form>
     </Container>
   );
