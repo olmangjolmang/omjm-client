@@ -6,8 +6,10 @@ import React, {
   useCallback,
 } from "react";
 import axios from "axios";
+import logo from "../assets/logo.png";
 import {
   Container,
+  Img,
   Box,
   Label,
   Input,
@@ -66,16 +68,18 @@ export const Login: React.FC = () => {
 
     if (!errors.email && !errors.password) {
       try {
-        const response = await axios.post("http://3.36.247.28:8080/users/sign-in", {
-          email,
-          password,
-        });
+        const response = await axios.post(
+          "http://3.36.247.28:8080/users/sign-in",
+          {
+            email,
+            password,
+          }
+        );
 
         console.log("로그인 성공", response.data);
-        
-        const token = response.data.token; 
-        localStorage.setItem('token', token);
-        
+
+        const token = response.data.token;
+        localStorage.setItem("token", token);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error("로그인 실패", error.response?.data || error.message);
@@ -90,6 +94,7 @@ export const Login: React.FC = () => {
     <Container>
       <form onSubmit={handleSubmit}>
         <Box>
+          <Img src={logo} alt="logo" />
           <Label>이메일</Label>
           <Input
             type="email"
