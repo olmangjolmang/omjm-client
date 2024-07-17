@@ -110,9 +110,7 @@ export const DropdownLink = styled(Link)`
   align-self: self-start;
   line-height: 150%;
   color: black;
-  &:hover {
-    background-color: #f0f0f0;
-  }
+  
 `;
 
 export const DropdownItem = styled.div`
