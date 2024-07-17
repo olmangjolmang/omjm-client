@@ -17,6 +17,10 @@ interface SignupErrorResponse {
   message: string;
 }
 
+interface SignupResponse {
+  token: string;
+}
+
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
@@ -117,26 +121,36 @@ export const Signup: React.FC = () => {
       !errors.passwordConfirm
     ) {
       try {
-        const response = await axios.post("http://3.36.247.28:8080/users/sign-up", {
-          email,
-          password,
-          nickName: nickname,
-          category: "default", 
-          agreeTerms: true,
-          roles: ["user"], 
-        });
+        const response = await axios.post<SignupResponse>(
+          "http://3.36.247.28:8080/users/sign-up",
+          {
+            email,
+            password,
+            nickName: nickname,
+            category: "default",
+            agreeTerms: true,
+            roles: ["user"],
+          }
+        );
 
         if (response.status !== 200) {
           throw new Error("회원가입에 실패했습니다.");
         }
 
-        // 회원가입 성공 로직
+        // 회원가입 성공
         console.log("회원가입 성공!");
+
+        // 토큰 저장
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+
         setIsModalOpen(true);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<SignupErrorResponse>;
-          console.error(axiosError.response?.data?.message || "회원가입에 실패했습니다.");
+          console.error(
+            axiosError.response?.data?.message || "회원가입에 실패했습니다."
+          );
         } else {
           console.error("회원가입에 실패했습니다.");
         }

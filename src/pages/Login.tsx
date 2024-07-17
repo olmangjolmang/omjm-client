@@ -71,8 +71,11 @@ export const Login: React.FC = () => {
           password,
         });
 
-        // 로그인 성공 처리
         console.log("로그인 성공", response.data);
+        
+        const token = response.data.token; 
+        localStorage.setItem('token', token);
+        
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error("로그인 실패", error.response?.data || error.message);
@@ -90,7 +93,7 @@ export const Login: React.FC = () => {
           <Label>이메일</Label>
           <Input
             type="email"
-            placeholder="amjm@naver.com"
+            placeholder="omjm@naver.com"
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
