@@ -54,8 +54,18 @@ const Article: React.FC = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://3.36.247.28/post/1`);
-        console.log("response data:", response.data)
+        const token = localStorage.getItem("token"); 
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+
+        const response = await axios.get(`http://3.36.247.28/post/1`, {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+        console.log("response data:", response.data);
         setArticle(response.data);
       } catch (error) {
         console.error("Error fetching article:", error);
