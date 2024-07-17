@@ -5,7 +5,7 @@ import Main from "./pages/Main";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { SignupAgree } from "./pages/SignupAgree";
-
+import ProfileEdit from "./pages/ProfileEdit";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signupagree" element={<SignupAgree />} />
+        <Route path="/profile-edit" element={<ProfileEdit />} />
       </Routes>
     </Router>
   );
