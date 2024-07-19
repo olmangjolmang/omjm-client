@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useArticles } from "../hooks/useArticles";
+import axios from "axios";
 import PostItemMain from "./PostItemMain";
+import CategorySelector from "./CategorySelector";
+import {
+  Category,
+  OrderBy,
+  CATEGORIES,
+  ORDER_BY,
+} from "../types/ArticleBoards";
 
 const Container = styled.div`
   display: flex;
@@ -31,16 +39,54 @@ const PageButton = styled.button<{ active?: boolean }>`
   cursor: pointer;
 `;
 
+const Select = styled.select`
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+`;
+
 const Boards = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = useArticles(page);
+  const [category, setCategory] = useState<Category | undefined>("BACKEND");
+  const [orderBy, setOrderBy] = useState<OrderBy | undefined>("LATEST");
 
+  const { data, isLoading, isError } = useArticles(page, category, orderBy);
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading articles</div>;
-
+  console.log(data);
   return (
     <Container>
       <h2>최신 글</h2>
+      <CategorySelector
+        selectedCategory={category}
+        onSelectCategory={(categories) => {
+          setCategory(categories);
+          setPage(1); // 카테고리가 변경되면 첫 페이지로 돌아감
+        }}
+      />
+      {/* <div>
+        <Select
+          value={category}
+          onChange={(e) => setCategory(e.target.value as Category)}
+        >
+          <option value="">전체</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </Select>
+        <Select
+          value={orderBy}
+          onChange={(e) => setOrderBy(e.target.value as OrderBy)}
+        >
+          {ORDER_BY.map((order) => (
+            <option key={order} value={order}>
+              {order}
+            </option>
+          ))}
+        </Select>
+      </div>
       <GridContainer>
         {data.articles.map((article: any) => (
           <PostItemMain key={article.postId} {...article} />
@@ -64,7 +110,7 @@ const Boards = () => {
         >
           &gt;
         </PageButton>
-      </PaginationContainer>
+      </PaginationContainer> */}
     </Container>
   );
 };
