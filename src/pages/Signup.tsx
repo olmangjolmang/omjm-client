@@ -1,88 +1,22 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import axios, { AxiosError } from "axios";
+import {
+  Title,
+  Ticle,
+  Container,
+  Box,
+  Label,
+  Input,
+  Button,
+  ErrorMessage,
+} from "../styles/Signup";
+import { Errors, Touched } from "../types/SignupTypes";
+import SignupModal from "../components/SignupModal";
 
-// 스타일 컴포넌트 정의
-const Title = styled.div`
-  font-size: 24px;
-  display: flex;
-  flex-direction: row;
-  font-weight: 600;
-  margin-bottom: 45px;
-`;
-
-const Ticle = styled.div`
-  color: #463efb;
-  font-size: 24px;
-  font-weight: 600;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-`;
-
-const Label = styled.label`
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 15px;
-`;
-
-const Input = styled.input<{ hasError: boolean }>`
-  width: 515px;
-  height: 60px;
-  border-radius: 10px;
-  font-size: 16px;
-  color: #afafb6;
-  border: solid 1px ${(props) => (props.hasError ? "red" : "#dfdfe5")};
-  margin-bottom: 5px;
-  padding-left: 19px;
-`;
-
-const Button = styled.button<{ disabled: boolean }>`
-  width: 534px;
-  height: 65px;
-  background-color: ${(props) => (props.disabled ? "#dfdfe5" : "#e5efff")};
-  color: ${(props) => (props.disabled ? "#afafb6" : "#463efb")};
-  border: none;
-  border-radius: 20px;
-  font-size: 20px;
-  font-weight: 500;
-  margin-top: 8px;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-`;
-
-const ErrorMessage = styled.div`
-  color: #f44;
-  font-size: 14px;
-  margin-bottom: 20px;
-`;
-
-// 타입 정의
-interface Errors {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirm: string;
+interface SignupErrorResponse {
+  message: string;
 }
 
-interface Touched {
-  email: boolean;
-  nickname: boolean;
-  password: boolean;
-  passwordConfirm: boolean;
-}
-
-// 컴포넌트 정의
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
@@ -101,6 +35,7 @@ export const Signup: React.FC = () => {
     password: false,
     passwordConfirm: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const validateEmail = (): string => {
@@ -135,7 +70,6 @@ export const Signup: React.FC = () => {
       if (!re.test(password)) {
         return "영문 대소문자, 숫자, 특수문자로 조합되어야 합니다.";
       }
-
       return "";
     };
 
@@ -162,7 +96,10 @@ export const Signup: React.FC = () => {
     });
 
     setIsButtonDisabled(
-      !!emailError || !!nicknameError || !!passwordError || !!passwordConfirmError
+      !!emailError ||
+        !!nicknameError ||
+        !!passwordError ||
+        !!passwordConfirmError
     );
   }, [email, nickname, password, passwordConfirm]);
 
@@ -170,7 +107,7 @@ export const Signup: React.FC = () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
@@ -179,13 +116,37 @@ export const Signup: React.FC = () => {
       !errors.password &&
       !errors.passwordConfirm
     ) {
-      // 회원가입 로직 추가
-      console.log("회원가입 성공!");
+      try {
+        const response = await axios.post("http://3.36.247.28:8080/users/sign-up", {
+          email,
+          password,
+          nickName: nickname,
+          category: "default", 
+          agreeTerms: true,
+          roles: ["user"], 
+        });
+
+        if (response.status !== 200) {
+          throw new Error("회원가입에 실패했습니다.");
+        }
+
+        // 회원가입 성공 로직
+        console.log("회원가입 성공!");
+        setIsModalOpen(true);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<SignupErrorResponse>;
+          console.error(axiosError.response?.data?.message || "회원가입에 실패했습니다.");
+        } else {
+          console.error("회원가입에 실패했습니다.");
+        }
+      }
     }
   };
 
   return (
     <Container>
+      {isModalOpen && <SignupModal setIsModalOpen={setIsModalOpen} />}
       <form onSubmit={handleSubmit}>
         <Title>
           <Ticle>티클</Ticle>로 취준 준비 더욱 완벽하게!
@@ -194,9 +155,11 @@ export const Signup: React.FC = () => {
           <Label>이메일</Label>
           <Input
             type="email"
-            placeholder="amjm@naver.com"
+            placeholder="omjm@naver.com"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
           />
@@ -210,7 +173,9 @@ export const Signup: React.FC = () => {
             type="text"
             placeholder="닉네임을 입력해 주세요."
             value={nickname}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setNickname(e.target.value)
+            }
             onBlur={handleBlur("nickname")}
             hasError={touched.nickname && !!errors.nickname}
           />
@@ -224,7 +189,9 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
           />
@@ -238,7 +205,9 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="동일한 비밀번호를 입력해 주세요."
             value={passwordConfirm}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPasswordConfirm(e.target.value)
+            }
             onBlur={handleBlur("passwordConfirm")}
             hasError={touched.passwordConfirm && !!errors.passwordConfirm}
           />
@@ -246,11 +215,9 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Link to="/login" style={{ textDecoration: "none" }}>
-          <Button type="submit" disabled={isButtonDisabled}>
-            확인
-          </Button>
-        </Link>
+        <Button type="submit" disabled={isButtonDisabled}>
+          확인
+        </Button>
       </form>
     </Container>
   );

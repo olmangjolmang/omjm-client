@@ -12,5 +12,6 @@ const Main: React.FC = () => {
     </div>
   );
 };
-
+// jira test용 주석
+// jira test용 주석22
 export default Main;
