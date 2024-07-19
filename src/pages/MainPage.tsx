@@ -18,18 +18,20 @@ const MainPage = () => {
     setIsModalOpen(false);
   };
   return (
-    <Container>
+    <>
       <Header />
-      <MainContent>
-        <Intro />
-        <PostItemGroup />
-        <PostItemGroup />
-        <PostItemGroup />
-      </MainContent>
-      <SubscriptionBanner onSubscribeClick={handleSubscribeClick} />
-      <SubscribtionModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <Container>
+        <MainContent>
+          <Intro />
+          <PostItemGroup />
+          <PostItemGroup />
+          <PostItemGroup />
+        </MainContent>
+        <SubscriptionBanner onSubscribeClick={handleSubscribeClick} />
+        <SubscribtionModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      </Container>
       <Footer />
-    </Container>
+    </>
   );
 };
 
