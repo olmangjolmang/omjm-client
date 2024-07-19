@@ -9,7 +9,7 @@ const fetchArticles = async (
 ) => {
   const { data } = await axios.get(`/post`, {
     params: {
-      category,
+      category: category !== undefined ? category : undefined,
       orderBy,
       page,
     },
