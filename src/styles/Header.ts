@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   height: 120px;
@@ -94,29 +95,36 @@ export const DropdownMenu = styled.div`
 
   right: 120px;
   background-color: #f4f4f7;
-  border: 1px solid #ddd;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 32px 0;
+  padding: 32px 0 0 0;
+`;
+
+export const DropdownLink = styled(Link)`
+  padding: 16px 32px;
+  cursor: pointer;
+  text-decoration: none;
+  align-self: self-start;
+  line-height: 150%;
+  color: black;
+  
 `;
 
 export const DropdownItem = styled.div`
   padding: 16px 32px;
-  font-weight: 500;
-  align-self: self-start;
   cursor: pointer;
-  &:hover {
-    background-color: #f0f0f0;
-  }
+  align-self: self-start;
+  line-height: 150%;
 `;
-export const ProfileInfo = styled.div`
+export const ProfileInfo = styled(Link)`
   display: flex;
   align-items: center;
   padding: 10px 0;
+  text-decoration: none;
+  color: black;
 `;
 
 export const ProfileImg = styled.img`
@@ -140,6 +148,6 @@ export const ProfileEmail = styled.div`
 export const Divider = styled.div`
   height: 1px;
   background-color: #dfdfe5;
-  margin: 10px 0;
+  margin-top: 32px;
   width: 300px;
 `;

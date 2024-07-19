@@ -15,6 +15,7 @@ import {
   ProfileImg,
   DropdownMenu,
   DropdownItem,
+  DropdownLink,
   ProfileInfo,
   ProfileName,
   ProfileEmail,
@@ -45,6 +46,11 @@ const Header: React.FC = () => {
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // 로그아웃 로직 추가
   };
 
   // 추후 useAuth로 인증 상태 가져오기
@@ -88,7 +94,7 @@ const Header: React.FC = () => {
             <ProfileImg src={profileImg} alt="Profile" />
             {isDropdownOpen && (
               <DropdownMenu>
-                <ProfileInfo>
+                <ProfileInfo to="/profile-edit">
                   <ProfileImg src={profileImg} alt="Profile" />
                   <div>
                     <ProfileName>닉네임</ProfileName>
@@ -96,10 +102,8 @@ const Header: React.FC = () => {
                   </div>
                 </ProfileInfo>
                 <Divider />
-                <DropdownItem>관심분야 수정</DropdownItem>
-                <DropdownItem onClick={() => setIsLoggedIn(false)}>
-                  로그아웃
-                </DropdownItem>
+                <DropdownLink to="/edit-interests">관심분야 수정</DropdownLink>
+                <DropdownItem onClick={handleLogout}>로그아웃</DropdownItem>
               </DropdownMenu>
             )}
           </Profile>
