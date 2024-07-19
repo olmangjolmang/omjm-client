@@ -34,3 +34,25 @@ export const CATEGORY_LABELS: { [key in Category | "ALL"]: string } = {
   INFRA: "인프라",
   ETC: "기타",
 };
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+export interface CategorySelectorProps {
+  selectedCategory: Category | undefined;
+  onSelectCategory: (category: Category | undefined) => void;
+}
+
+export interface Option {
+  value: string;
+  label: string;
+}
+
+export interface SelectProps {
+  value: string | undefined;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: Option[];
+}
