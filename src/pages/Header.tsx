@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 import {
   Container,
   LeftContainer,
@@ -9,12 +11,45 @@ import {
   SearchContainer,
   SearchIcon,
   SearchInput,
-  ProfileLink,
+  Profile,
   ProfileImg,
+  DropdownMenu,
+  DropdownItem,
+  ProfileInfo,
+  ProfileName,
+  ProfileEmail,
+  Divider,
 } from "../styles/Header";
 import profileImg from "../assets/headerprofile.png";
 
+const Button = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  height: 55px;
+  width: 143px;
+  background-color: #463efb;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+`;
+
 const Header: React.FC = () => {
+  // 로그인 상태 관리
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // 추후 useAuth로 인증 상태 가져오기
+  // const { isLoggedIn } = useAuth();
+
   return (
     <Container>
       <LeftContainer>
@@ -48,9 +83,29 @@ const Header: React.FC = () => {
             />
           </SearchIcon>
         </SearchContainer>
-        <ProfileLink to="/login">
-          <ProfileImg src={profileImg} alt="Profile" />
-        </ProfileLink>
+        {isLoggedIn ? (
+          <Profile onClick={toggleDropdown}>
+            <ProfileImg src={profileImg} alt="Profile" />
+            {isDropdownOpen && (
+              <DropdownMenu>
+                <ProfileInfo>
+                  <ProfileImg src={profileImg} alt="Profile" />
+                  <div>
+                    <ProfileName>닉네임</ProfileName>
+                    <ProfileEmail>omjm@example.com</ProfileEmail>
+                  </div>
+                </ProfileInfo>
+                <Divider />
+                <DropdownItem>관심분야 수정</DropdownItem>
+                <DropdownItem onClick={() => setIsLoggedIn(false)}>
+                  로그아웃
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+          </Profile>
+        ) : (
+          <Button to="/login">로그인</Button>
+        )}
       </RightContainer>
     </Container>
   );
