@@ -5,11 +5,11 @@ import commentIcon from "../assets/commentIcon.png";
 
 /*dummy
 const quizData = {
-  title:
+  question:
     "좋은 리더의 자질은 무엇일까요?좋은 리더의 자질은 무엇일까요?좋은 리더의 자질은 무엇일까요?",
-  views: 32,
-  comments: 32,
-  topComments: [
+  viewCount: 32,
+  commentCount: 32,
+  comments: [
     {
       nickname: "닉네임1",
       content:
@@ -32,33 +32,39 @@ type Comment = {
 };
 
 type QnAProps = {
-  title: string;
-  views: number;
-  comments: number;
-  topComments: Comment[];
+  question: string;
+  viewCount: number;
+  commentCount: number;
+  comments?: Comment[];
 };
 
-const QnA: React.FC<QnAProps> = ({ title, views, comments, topComments }) => {
+const QnA: React.FC<QnAProps> = ({
+  question,
+  viewCount,
+  commentCount,
+  comments,
+}) => {
   return (
     <QuizContainer>
-      <Title>{title}</Title>
+      <Title>{question}</Title>
       <InfoContainer>
         <InfoItem>
           <ViewIconStyled src={viewIcon} alt="조회수아이콘" />
-          <InfoText>{views}</InfoText>
+          <InfoText>{viewCount}</InfoText>
         </InfoItem>
         <InfoItem>
           <CommentIconStyled src={commentIcon} alt="댓글수아이콘" />
-          <InfoText>{comments}</InfoText>
+          <InfoText>{commentCount}</InfoText>
         </InfoItem>
       </InfoContainer>
 
-      {topComments.map((comment, index) => (
-        <CommentContainer key={index}>
-          <Nickname>{comment.nickname}</Nickname>
-          <CommentContent>{comment.content}</CommentContent>
-        </CommentContainer>
-      ))}
+      {comments &&
+        comments.map((comment, index) => (
+          <CommentContainer key={index}>
+            <Nickname>{comment.nickname}</Nickname>
+            <CommentContent>{comment.content}</CommentContent>
+          </CommentContainer>
+        ))}
     </QuizContainer>
   );
 };
@@ -70,7 +76,11 @@ const QuizContainer = styled.div`
   padding: 20px;
   border-radius: 20px;
   width: 1216px;
-  margin-bottom: 10px;
+  margin-bottom: 60px;
+  min-width: 1000px;
+  white-space: nowrap;
+  margin: 0 auto;
+  margin-bottom: 60px;
 `;
 
 const Title = styled.div`
@@ -85,7 +95,7 @@ const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  margin: 50px 60px 10px 60px;
+  margin: 50px 112px 10px 112px;
 `;
 
 const InfoContainer = styled.div`

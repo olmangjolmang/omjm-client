@@ -7,12 +7,15 @@ import MainPage from "./pages/MainPage";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { SignupAgree } from "./pages/SignupAgree";
-import ProfileEdit from "./pages/ProfileEdit";
-import InterestEdit from "./pages/InterestEdit";
+import Article from "./pages/Article";
 import ArticleBoards from "./pages/ArticleBoards";
 import ProfileCompletion from "./pages/ProfileCompletion";
+import ProfileEdit from "./pages/ProfileEdit";
+import InterestEdit from "./pages/InterestEdit";
+import QnaBoard from "./pages/QnaBoard";
 
 axios.defaults.baseURL = "http://3.36.247.28";
+
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -28,6 +31,9 @@ const App: React.FC = () => {
           <Route path="/profile-edit" element={<ProfileEdit />} />
           <Route path="/edit-interests" element={<InterestEdit />} />
           <Route path="/articles" element={<ArticleBoards />} />
+          <Route path="/post/:id" element={<Article />} />
+          <Route path="/articles" element={<ArticleBoards />} />
+          <Route path="ticleQna" element={<QnaBoard />} />
         </Routes>
       </Router>
     </QueryClientProvider>
