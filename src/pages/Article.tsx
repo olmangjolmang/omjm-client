@@ -52,9 +52,10 @@ interface ArticleData {
 }
 
 const Article: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Get postId from URL parameters
+  const { id } = useParams<{ id: string }>();
   const [article, setArticle] = useState<ArticleData | null>(null);
-  const [isHighlightModalOpen, setIsHighlightModalOpen] = useState<boolean>(false);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] =
+    useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
   const [highlightedRange, setHighlightedRange] = useState<{
     start: number;
@@ -81,7 +82,6 @@ const Article: React.FC = () => {
         console.log("response data:", response.data);
         const data = response.data;
         const articleData = data.results;
-
         setArticle(articleData);
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -99,7 +99,6 @@ const Article: React.FC = () => {
       const range = selection.getRangeAt(0);
       const start = range.startOffset;
       const end = range.endOffset;
-
       setHighlightedText(selection.toString());
       setHighlightedRange({ start, end });
     }
@@ -113,25 +112,47 @@ const Article: React.FC = () => {
 
   const handleMenuClick = () => {
     if (!article) return;
-
     const combinedText = highlightedRanges
       .map(({ start, end }) => {
         return article.content.slice(start, end);
       })
       .join("\n");
-
     setHighlightedText(combinedText);
     setIsHighlightModalOpen(true);
+  };
+
+  const handleSaveArticle = async () => {
+    if (!article) return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      await axios.post(
+        `http://3.36.247.28/post/${id}/scrap`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Article saved successfully!");
+    } catch (error) {
+      console.error("Error saving article:", error);
+      alert("Failed to save article");
+    }
   };
 
   const renderHighlightedText = (text: string) => {
     if (!highlightedRange) {
       return text;
     }
-
     let lastIndex = 0;
     const elements = [];
-
     highlightedRanges
       .sort((a, b) => a.start - b.start)
       .forEach(({ start, end }, index) => {
@@ -141,14 +162,12 @@ const Article: React.FC = () => {
         );
         lastIndex = end;
       });
-
     elements.push(text.slice(lastIndex));
-
     return elements;
   };
 
   if (!article) {
-    return <div>로딩중...</div>;
+    return <div>Loading...</div>;
   }
 
   const {
@@ -160,13 +179,12 @@ const Article: React.FC = () => {
     image,
     recommendPost,
   } = article;
-
   const formattedDate =
     createdDate.length === 3
       ? `${createdDate[0]}-${String(createdDate[1]).padStart(2, "0")}-${String(
           createdDate[2]
         ).padStart(2, "0")}`
-      : "날짜 정보 없음";
+      : "Date not available";
 
   return (
     <>
@@ -177,25 +195,24 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
-          <LinkIcon src={linkimg} alt="링크 아이콘" />
+          <LinkText href="https://google.com/">Original Link</LinkText>
+          <LinkIcon src={linkimg} alt="Link icon" />
         </AuthorBox>
-
-        <Img src={image?.imageUrl || articleImg} alt="기사 이미지" />
+        <Img src={image?.imageUrl || articleImg} alt="Article image" />
         <Content onMouseUp={handleTextHighlight}>
           {renderHighlightedText(content)}
         </Content>
         <Line />
-        <QuizSection title={title} id={Number(id)} /> {/* Pass id to QuizSection */}
+        <QuizSection title={title} id={Number(id)} />
         <div>
-          <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
+          <BottomArticleTitle>Recommended Articles</BottomArticleTitle>
           <GoodArticleContainer>
             {recommendPost.length > 0 ? (
               recommendPost.map((post) => (
                 <div key={post.postId}>
                   <GoodArticleImg
                     src={image?.imageUrl || articleImg}
-                    alt="함께 읽으면 좋은 아티클"
+                    alt="Recommended article"
                   />
                   <GoodArticleCategory>{postCategory}</GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
@@ -205,7 +222,7 @@ const Article: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div>추천 아티클이 없습니다.</div>
+              <div>No recommended articles</div>
             )}
           </GoodArticleContainer>
         </div>
@@ -220,7 +237,10 @@ const Article: React.FC = () => {
             </Overlay>
           </>
         )}
-        <FloatingButtons onMenuClick={handleMenuClick} />
+        <FloatingButtons
+          onMenuClick={handleMenuClick}
+          onSaveClick={handleSaveArticle} // Pass the save function here
+        />
       </Container>
       <Footer />
     </>
