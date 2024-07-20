@@ -1,25 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios, { AxiosError } from "axios";
-import {
-  Title,
-  Ticle,
-  Container,
-  Box,
-  Label,
-  Input,
-  Button,
-  ErrorMessage,
-} from "../styles/Signup";
-import { Errors, Touched } from "../types/SignupTypes";
+import { Title, Ticle, Container, Box, Label, Input, Button, ErrorMessage } from "../styles/Signup";
+import { Errors, Touched, SignupPayload } from "../types/SignupTypes";
 import SignupModal from "../components/SignupModal";
-
-interface SignupErrorResponse {
-  message: string;
-}
-
-interface SignupResponse {
-  token: string;
-}
+import useSignup from "../hooks/useSignup";
 
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -40,6 +23,8 @@ export const Signup: React.FC = () => {
     passwordConfirm: false,
   });
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const mutation = useSignup();
 
   useEffect(() => {
     const validateEmail = (): string => {
@@ -103,60 +88,31 @@ export const Signup: React.FC = () => {
       !!emailError ||
         !!nicknameError ||
         !!passwordError ||
-        !!passwordConfirmError
+        !!passwordConfirmError ||
+        mutation.status === "pending"
     );
-  }, [email, nickname, password, passwordConfirm]);
+  }, [email, nickname, password, passwordConfirm, mutation.status]);
 
   const handleBlur = (field: keyof Touched) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (
-      !errors.email &&
-      !errors.nickname &&
-      !errors.password &&
-      !errors.passwordConfirm
-    ) {
-      try {
-        const response = await axios.post<SignupResponse>(
-          "http://3.36.247.28:8080/users/sign-up",
-          {
-            email,
-            password,
-            nickName: nickname,
-            category: "default",
-            agreeTerms: true,
-            roles: ["user"],
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error("회원가입에 실패했습니다.");
-        }
-
-        // 회원가입 성공
-        console.log("회원가입 성공!");
-
-        // 토큰 저장
-        const token = response.data.token;
-        localStorage.setItem("token", token);
-
-        setIsModalOpen(true);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError<SignupErrorResponse>;
-          console.error(
-            axiosError.response?.data?.message || "회원가입에 실패했습니다."
-          );
-        } else {
-          console.error("회원가입에 실패했습니다.");
-        }
-      }
+    if (!errors.email && !errors.nickname && !errors.password && !errors.passwordConfirm) {
+      const payload: SignupPayload = { email, password, nickname };
+      mutation.mutate(payload);
     }
   };
+
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      // 이메일, 비번, 닉네임 저장
+      localStorage.setItem("signupData", JSON.stringify({ email, nickname, password }));
+
+      setIsModalOpen(true);
+    }
+  }, [mutation.isSuccess, email, nickname, password]);
 
   return (
     <Container>
@@ -229,8 +185,8 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Button type="submit" disabled={isButtonDisabled}>
-          확인
+        <Button type="submit" disabled={isButtonDisabled || mutation.status === "pending"}>
+          {mutation.status === "pending" ? "처리 중..." : "확인"}
         </Button>
       </form>
     </Container>

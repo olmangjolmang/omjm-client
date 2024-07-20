@@ -10,6 +10,7 @@ import { SignupAgree } from "./pages/SignupAgree";
 import ProfileEdit from "./pages/ProfileEdit";
 import InterestEdit from "./pages/InterestEdit";
 import ArticleBoards from "./pages/ArticleBoards";
+import ProfileCompletion from "./pages/ProfileCompletion";
 
 axios.defaults.baseURL = "http://3.36.247.28";
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signupagree" element={<SignupAgree />} />
+          <Route path="/profile-completion" element={<ProfileCompletion />} />
           <Route path="/profile-edit" element={<ProfileEdit />} />
           <Route path="/edit-interests" element={<InterestEdit />} />
           <Route path="/articles" element={<ArticleBoards />} />
