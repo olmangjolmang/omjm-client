@@ -1,13 +1,19 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+`;
+
+export const Img = styled.img`
+  height: 81px;
+  width: 150px;
+  align-self: center;
+  margin-bottom: 39px;
 `;
 
 export const Box = styled.div`
