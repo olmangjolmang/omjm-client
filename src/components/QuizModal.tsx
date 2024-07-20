@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   ModalContainer,
   Title,
@@ -22,53 +23,64 @@ import quizimg3 from "../assets/quizimg3.png";
 import quizimg2 from "../assets/quizimg2.png";
 import quizimg1 from "../assets/quizimg1.png";
 import quizimg0 from "../assets/quizimg0.png";
-import { QuizModalProps, QuestionData } from "../types";
+import { QuizApiResponse, QuestionData } from "../types/Quiz";
 
-const quizData: QuestionData[] = [
-  {
-    question: "우리팀 이름은?",
-    answers: ["올망", "졸망", "올망졸망", "옹졸"],
-    correctAnswer: 3,
-  },
-  {
-    question: "다음 중 프로그래밍 언어가 아닌 것은?",
-    answers: ["Python", "JavaScript", "HTML", "Java"],
-    correctAnswer: 3,
-  },
-  {
-    question: "CSS에서 글꼴 크기를 지정하는 단위가 아닌 것은?",
-    answers: ["em", "px", "pt", "kg"],
-    correctAnswer: 4,
-  },
-  {
-    question: "React에서 상태(state)를 관리하기 위한 훅은?",
-    answers: ["useEffect", "useState", "useReducer", "useContext"],
-    correctAnswer: 2,
-  },
-  {
-    question: "JavaScript의 데이터 타입이 아닌 것은?",
-    answers: ["string", "number", "boolean", "character"],
-    correctAnswer: 4,
-  },
-];
-
-const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+const QuizModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [quizData, setQuizData] = useState<QuestionData[] | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isStopConfirmationOpen, setIsStopConfirmationOpen] =
     useState<boolean>(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const currentQuestion = quizData[currentStep - 1];
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      try {
+        const { data } = await axios.get<QuizApiResponse>('http://3.36.247.28/post/quiz/1');
+        if (!data.isSuccess) {
+          throw new Error(data.message);
+        }
+        setQuizData(data.results);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleAnswerClick = (answerIndex: number) => {
-    const isCorrect = answerIndex === currentQuestion.correctAnswer;
+    fetchQuizData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!quizData) {
+    return <div>No quiz data available.</div>;
+  }
+
+  const currentQuestion: QuestionData = quizData[currentStep - 1];
+
+  const handleAnswerClick = (answer: string) => {
+    if (!currentQuestion) return;
+
+    const isCorrect = answer === currentQuestion.answer;
     if (isCorrect) {
       setCorrectAnswersCount(correctAnswersCount + 1);
     }
 
-    setSelectedAnswer(answerIndex);
+    setSelectedAnswer(answer);
     setShowCorrectAnswer(true);
     setTimeout(() => {
       setShowCorrectAnswer(false);
@@ -130,24 +142,24 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose }) => {
             </ProgressBarContainer>
             <QuestionContainer>
               <QuestionNumber>{currentStep}</QuestionNumber>
-              <Question>{currentQuestion.question}</Question>
+              <Question>{currentQuestion.quizTitle}</Question>
             </QuestionContainer>
             <AnswersContainer>
-              {currentQuestion.answers.map((answer, index) => (
+              {Object.entries(currentQuestion.multipleChoice).map(([key, answer]) => (
                 <Answer
-                  key={index}
+                  key={key}
                   correct={
-                    selectedAnswer === index + 1 &&
-                    index + 1 === currentQuestion.correctAnswer
+                    selectedAnswer === key &&
+                    key === currentQuestion.answer
                   }
-                  selected={selectedAnswer === index + 1}
+                  selected={selectedAnswer === key}
                   isCorrectAnswer={
                     showCorrectAnswer &&
-                    index + 1 === currentQuestion.correctAnswer
+                    key === currentQuestion.answer
                   }
-                  onClick={() => handleAnswerClick(index + 1)}
+                  onClick={() => handleAnswerClick(key)}
                 >
-                  <AnswerNumber>{String.fromCharCode(65 + index)}</AnswerNumber>
+                  <AnswerNumber>{key}</AnswerNumber>
                   {answer}
                 </Answer>
               ))}
