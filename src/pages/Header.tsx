@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
+import axios from 'axios';
 import styled from "styled-components";
 import {
   Container,
@@ -50,9 +51,16 @@ const Header: React.FC = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // 로그아웃 로직 추가
+  const handleLogout = async () => {
+    try {
+      // API 호출
+      await axios.delete('/users/logout');
+      setIsLoggedIn(false);
+      // 로그아웃 성공 후 추가 로직 (예: 리디렉션) 가능
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      // 오류 처리 로직 추가 가능
+    }
   };
 
   // 추후 useAuth로 인증 상태 가져오기
