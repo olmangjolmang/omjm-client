@@ -11,6 +11,7 @@ import { SignupAgree } from "./pages/SignupAgree";
 import Article from "./pages/Article";
 import ArticleBoards from "./pages/ArticleBoards";
 import QnaBoard from "./pages/QnaBoard";
+import AnswerList from "./pages/AnswerList";
 
 axios.defaults.baseURL = "http://3.36.247.28";
 
@@ -29,6 +30,7 @@ const App: React.FC = () => {
           <Route path="/post/:id" element={<Article />} />
           <Route path="/articles" element={<ArticleBoards />} />
           <Route path="ticleQna" element={<QnaBoard />} />
+          <Route path="/ticleQna/:opinionId" element={<AnswerList />} />
         </Routes>
       </Router>
     </QueryClientProvider>
