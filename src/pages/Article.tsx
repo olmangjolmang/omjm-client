@@ -1,13 +1,14 @@
 import React, { useState, useEffect, MouseEvent } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
 import linkimg from "../assets/linkicon.png";
 import articleImg from "../assets/article.png";
-import QuizModal from "../components/QuizModal";
+import QuizSection from "../components/QuizSection";
 import FloatingButtons from "../components/FloatingButtons";
 import HighlightModal from "../components/HighlightModal";
-import ticlearticle from "../assets/ticlearticle.png";
+
 import {
   Container,
   Category,
@@ -21,12 +22,6 @@ import {
   Content,
   Highlight,
   Line,
-  QuizContainer,
-  QuizContainerRight,
-  QuizTitle,
-  TicleImg,
-  QuizTime,
-  QuizBtn,
   BottomArticleTitle,
   GoodArticleContainer,
   GoodArticleImg,
@@ -53,12 +48,12 @@ interface ArticleData {
     imageFolderName: string;
     imageUrl: string;
   };
-  recommendPost: RecommendPost[]; // 추천 포스트
+  recommendPost: RecommendPost[];
 }
 
 const Article: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const [article, setArticle] = useState<ArticleData | null>(null);
-  const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
   const [isHighlightModalOpen, setIsHighlightModalOpen] =
     useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
@@ -79,7 +74,7 @@ const Article: React.FC = () => {
           return;
         }
 
-        const response = await axios.get(`http://3.36.247.28/post/1`, {
+        const response = await axios.get(`http://3.36.247.28/post/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,15 +82,16 @@ const Article: React.FC = () => {
         console.log("response data:", response.data);
         const data = response.data;
         const articleData = data.results;
-
         setArticle(articleData);
       } catch (error) {
         console.error("Error fetching article:", error);
       }
     };
 
-    fetchArticle();
-  }, []);
+    if (id) {
+      fetchArticle();
+    }
+  }, [id]);
 
   const handleTextHighlight = (e: MouseEvent) => {
     const selection = window.getSelection();
@@ -103,7 +99,6 @@ const Article: React.FC = () => {
       const range = selection.getRangeAt(0);
       const start = range.startOffset;
       const end = range.endOffset;
-
       setHighlightedText(selection.toString());
       setHighlightedRange({ start, end });
     }
@@ -117,25 +112,47 @@ const Article: React.FC = () => {
 
   const handleMenuClick = () => {
     if (!article) return;
-
     const combinedText = highlightedRanges
       .map(({ start, end }) => {
         return article.content.slice(start, end);
       })
       .join("\n");
-
     setHighlightedText(combinedText);
     setIsHighlightModalOpen(true);
+  };
+
+  const handleSaveArticle = async () => {
+    if (!article) return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      await axios.post(
+        `http://3.36.247.28/post/${id}/scrap`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Article saved successfully!");
+    } catch (error) {
+      console.error("Error saving article:", error);
+      alert("아티클 저장 실패");
+    }
   };
 
   const renderHighlightedText = (text: string) => {
     if (!highlightedRange) {
       return text;
     }
-
     let lastIndex = 0;
     const elements = [];
-
     highlightedRanges
       .sort((a, b) => a.start - b.start)
       .forEach(({ start, end }, index) => {
@@ -145,9 +162,7 @@ const Article: React.FC = () => {
         );
         lastIndex = end;
       });
-
     elements.push(text.slice(lastIndex));
-
     return elements;
   };
 
@@ -164,7 +179,6 @@ const Article: React.FC = () => {
     image,
     recommendPost,
   } = article;
-
   const formattedDate =
     createdDate.length === 3
       ? `${createdDate[0]}-${String(createdDate[1]).padStart(2, "0")}-${String(
@@ -184,22 +198,12 @@ const Article: React.FC = () => {
           <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
           <LinkIcon src={linkimg} alt="링크 아이콘" />
         </AuthorBox>
-
         <Img src={image?.imageUrl || articleImg} alt="기사 이미지" />
         <Content onMouseUp={handleTextHighlight}>
           {renderHighlightedText(content)}
         </Content>
         <Line />
-        <QuizContainer>
-          <TicleImg src={ticlearticle} alt="ticleimg" />
-          <QuizContainerRight>
-            <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
-            <QuizTime>소요시간 5분</QuizTime>
-            <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
-              간단 퀴즈 풀어보기
-            </QuizBtn>
-          </QuizContainerRight>
-        </QuizContainer>
+        <QuizSection title={title} id={Number(id)} />
         <div>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
           <GoodArticleContainer>
@@ -222,13 +226,6 @@ const Article: React.FC = () => {
             )}
           </GoodArticleContainer>
         </div>
-        {isQuizModalOpen && (
-          <>
-            <Overlay isModalOpen={isQuizModalOpen}>
-              <QuizModal onClose={() => setIsQuizModalOpen(false)} />
-            </Overlay>
-          </>
-        )}
         {isHighlightModalOpen && (
           <>
             <Overlay isModalOpen={isHighlightModalOpen}>
@@ -240,7 +237,10 @@ const Article: React.FC = () => {
             </Overlay>
           </>
         )}
-        <FloatingButtons onMenuClick={handleMenuClick} />
+        <FloatingButtons
+          onMenuClick={handleMenuClick}
+          onSaveClick={handleSaveArticle} // 추가된 prop 전달
+        />
       </Container>
       <Footer />
     </>
