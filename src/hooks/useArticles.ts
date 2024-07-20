@@ -1,4 +1,4 @@
-import { useQuery, QueryKey, UseQueryOptions } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import axios from "axios";
 import { Category, OrderBy } from "../types/ArticleBoards";
 
