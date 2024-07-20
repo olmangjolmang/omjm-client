@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+
 import PostItemMain from "./PostItemMain";
 import articleImg from "../assets/dummyArticleImage.jpg";
 import {
@@ -15,38 +15,50 @@ import styled from "styled-components";
 
 const postData = [
   {
-    id: "2",
-    imageUrl: articleImg,
-    category: "카테고리고리고리",
+    postId: 1,
+    image: {
+      imageFileName: "TOP9_1.png",
+      imageFolderName: "home/TOP9",
+      imageUrl: articleImg,
+    },
+    postCategory: "카테고리고리고리",
     title: "이것은 예제 제목입니다. 제목이 길어질 경우에 대해 처리합니다.",
     author: "작성자 이름",
-    summary:
+    content:
       "텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트",
-    createdAt: "2000",
+    createdDate: "2000-01-01",
     isSaved: true,
     isSavedIconLoad: true,
   },
   {
-    id: "4",
-    imageUrl: articleImg,
-    category: "카테고리고리고리",
+    postId: 2,
+    image: {
+      imageFileName: "TOP9_2.png",
+      imageFolderName: "home/TOP9",
+      imageUrl: articleImg,
+    },
+    postCategory: "카테고리고리고리",
     title: "이것은 예제 제목입니다. 제목이 길어질 경우에 대해 처리합니다.",
     author: "작성자 이름",
-    summary:
+    content:
       "텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트",
-    createdAt: "2000",
+    createdDate: "2000-01-02",
     isSaved: true,
     isSavedIconLoad: true,
   },
   {
-    id: "3",
-    imageUrl: articleImg,
-    category: "카테고리고리고리",
+    postId: 3,
+    image: {
+      imageFileName: "TOP9_3.png",
+      imageFolderName: "home/TOP9",
+      imageUrl: articleImg,
+    },
+    postCategory: "카테고리고리고리",
     title: "이것은 예제 제목입니다. 제목이 길어질 경우에 대해 처리합니다.",
     author: "작성자 이름",
-    summary:
+    content:
       "텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트",
-    createdAt: "2000",
+    createdDate: "2000-01-03",
     isSaved: true,
     isSavedIconLoad: true,
   },
@@ -91,13 +103,14 @@ const PostItemGroup = () => {
         <Slider {...settings}>
           {postData.map((post) => (
             <PostItemMain
-              id={post.id}
-              imageUrl={post.imageUrl}
-              category={post.category}
+              key={post.postId}
+              postId={post.postId}
+              image={post.image}
+              postCategory={post.postCategory}
               title={post.title}
               author={post.author}
-              summary={post.summary}
-              createdAt={post.createdAt}
+              content={post.content}
+              createdDate={post.createdDate}
               isSaved={post.isSaved}
               isSavedIconLoad={post.isSavedIconLoad}
             />

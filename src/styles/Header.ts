@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   height: 120px;
@@ -74,7 +74,7 @@ export const SearchInput = styled.input`
   box-sizing: border-box;
 `;
 
-export const ProfileLink = styled(Link)`
+export const Profile = styled.div`
   width: 52px;
   height: 52px;
   display: flex;
@@ -88,8 +88,66 @@ export const ProfileLink = styled(Link)`
   }
 `;
 
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100px;
+  align-self: stretch;
+
+  right: 120px;
+  background-color: #f4f4f7;
+  border-radius: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 32px 0 0 0;
+`;
+
+export const DropdownLink = styled(Link)`
+  padding: 16px 32px;
+  cursor: pointer;
+  text-decoration: none;
+  align-self: self-start;
+  line-height: 150%;
+  color: black;
+  
+`;
+
+export const DropdownItem = styled.div`
+  padding: 16px 32px;
+  cursor: pointer;
+  align-self: self-start;
+  line-height: 150%;
+`;
+export const ProfileInfo = styled(Link)`
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  text-decoration: none;
+  color: black;
+`;
+
 export const ProfileImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+`;
+
+export const ProfileName = styled.div`
+  font-weight: 600;
+  margin-left: 16px;
+  font-size: 20px;
+  margin-bottom: 5px;
+`;
+
+export const ProfileEmail = styled.div`
+  font-size: 16px;
+  margin-left: 16px;
+`;
+
+export const Divider = styled.div`
+  height: 1px;
+  background-color: #dfdfe5;
+  margin-top: 32px;
+  width: 300px;
 `;
