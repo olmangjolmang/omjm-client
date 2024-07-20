@@ -143,7 +143,7 @@ const Article: React.FC = () => {
       alert("Article saved successfully!");
     } catch (error) {
       console.error("Error saving article:", error);
-      alert("아티클 저장 실패");
+      alert("Failed to save article");
     }
   };
 
@@ -167,7 +167,7 @@ const Article: React.FC = () => {
   };
 
   if (!article) {
-    return <div>로딩중...</div>;
+    return <div>Loading...</div>;
   }
 
   const {
@@ -184,7 +184,7 @@ const Article: React.FC = () => {
       ? `${createdDate[0]}-${String(createdDate[1]).padStart(2, "0")}-${String(
           createdDate[2]
         ).padStart(2, "0")}`
-      : "날짜 정보 없음";
+      : "Date not available";
 
   return (
     <>
@@ -195,24 +195,24 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
-          <LinkIcon src={linkimg} alt="링크 아이콘" />
+          <LinkText href="https://google.com/">Original Link</LinkText>
+          <LinkIcon src={linkimg} alt="Link icon" />
         </AuthorBox>
-        <Img src={image?.imageUrl || articleImg} alt="기사 이미지" />
+        <Img src={image?.imageUrl || articleImg} alt="Article image" />
         <Content onMouseUp={handleTextHighlight}>
           {renderHighlightedText(content)}
         </Content>
         <Line />
         <QuizSection title={title} id={Number(id)} />
         <div>
-          <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
+          <BottomArticleTitle>Recommended Articles</BottomArticleTitle>
           <GoodArticleContainer>
             {recommendPost.length > 0 ? (
               recommendPost.map((post) => (
                 <div key={post.postId}>
                   <GoodArticleImg
                     src={image?.imageUrl || articleImg}
-                    alt="함께 읽으면 좋은 아티클"
+                    alt="Recommended article"
                   />
                   <GoodArticleCategory>{postCategory}</GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
@@ -222,7 +222,7 @@ const Article: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div>추천 아티클이 없습니다.</div>
+              <div>No recommended articles</div>
             )}
           </GoodArticleContainer>
         </div>
@@ -239,7 +239,7 @@ const Article: React.FC = () => {
         )}
         <FloatingButtons
           onMenuClick={handleMenuClick}
-          onSaveClick={handleSaveArticle} // 추가된 prop 전달
+          onSaveClick={handleSaveArticle} // Pass the save function here
         />
       </Container>
       <Footer />
