@@ -25,7 +25,6 @@ interface OpinionsData {
   message: string;
   results: OpinionsResult;
 }
-
 const fetchOpinions = async (page: number): Promise<OpinionsData> => {
   const { data } = await axios.get<OpinionsData>("/opinion", {
     params: { page },
