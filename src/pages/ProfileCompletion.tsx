@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   Title,
@@ -37,9 +38,18 @@ const ProfileCompletion: React.FC = () => {
     );
   };
 
-  const handleSubmit = () => {
-    console.log("관심 직무:", selectedJobs);
-    navigate("/");
+  const handleSubmit = async () => {
+    try {
+      const signupData = JSON.parse(localStorage.getItem("signupData") || "{}");
+      await axios.post("/users/signup", {
+        ...signupData,
+        category: selectedJobs,
+      });
+      localStorage.removeItem("signupData");
+      navigate("/");
+    } catch (error) {
+      console.error("직무 설정 전송 실패:", error);
+    }
   };
 
   const toggleDropdown = () => {

@@ -12,6 +12,7 @@ export const Title = styled.h1`
   margin-bottom: 40px;
   font-size: 24px;
   font-weight: 700;
+  white-space: nowrap;
 `;
 
 export const DropdownContainer = styled.div`
@@ -21,7 +22,7 @@ export const DropdownContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  align-self: stretch;
+  width: 740px;
   margin-bottom: 1rem;
 `;
 

@@ -27,10 +27,12 @@ export const MenuContainer = styled.div`
   display: flex;
 `;
 
-export const Menu = styled.div`
+export const Menu = styled(Link)`
   font-size: 16px;
   font-weight: 600;
   white-space: nowrap;
+  text-decoration: none;
+  color: black;
   cursor: pointer;
   &:hover {
     color: #463efb;
@@ -110,7 +112,6 @@ export const DropdownLink = styled(Link)`
   align-self: self-start;
   line-height: 150%;
   color: black;
-  
 `;
 
 export const DropdownItem = styled.div`

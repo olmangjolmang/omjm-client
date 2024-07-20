@@ -61,10 +61,10 @@ const Header: React.FC = () => {
       <LeftContainer>
         <Logo>ticle</Logo>
         <MenuContainer>
-          <Menu>홈</Menu>
-          <Menu>아티클</Menu>
-          <Menu>물어봥</Menu>
-          <Menu>마이페이지</Menu>
+          <Menu to="/">홈</Menu>
+          <Menu to="/articles">아티클</Menu>
+          <Menu to="/">물어봥</Menu>
+          <Menu to="/">마이페이지</Menu>
         </MenuContainer>
       </LeftContainer>
       <RightContainer>
