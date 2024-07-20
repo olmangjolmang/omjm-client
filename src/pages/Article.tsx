@@ -1,13 +1,19 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import axios from "axios";
+import Header from "./Header";
+import Footer from "./Footer";
+import linkimg from "../assets/linkicon.png";
 import articleImg from "../assets/article.png";
 import QuizModal from "../components/QuizModal";
 import FloatingButtons from "../components/FloatingButtons";
 import HighlightModal from "../components/HighlightModal";
+import ticlearticle from "../assets/ticlearticle.png";
 import {
   Container,
   Category,
   Title,
+  LinkText,
+  LinkIcon,
   AuthorBox,
   Author,
   ArticleDate,
@@ -16,7 +22,9 @@ import {
   Highlight,
   Line,
   QuizContainer,
+  QuizContainerRight,
   QuizTitle,
+  TicleImg,
   QuizTime,
   QuizBtn,
   BottomArticleTitle,
@@ -28,33 +36,44 @@ import {
   Overlay,
 } from "../styles/Article";
 
+interface RecommendPost {
+  postId: number;
+  postTitle: string;
+}
+
 interface ArticleData {
   postId: number;
   title: string;
   content: string;
   author: string;
-  createdDate: string;
+  createdDate: [number, number, number];
   postCategory: string;
   image: {
     imageFileName: string;
     imageFolderName: string;
     imageUrl: string;
   };
-  recommendPost: any;  // 추천 포스트
+  recommendPost: RecommendPost[]; // 추천 포스트
 }
 
 const Article: React.FC = () => {
   const [article, setArticle] = useState<ArticleData | null>(null);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
-  const [isHighlightModalOpen, setIsHighlightModalOpen] = useState<boolean>(false);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] =
+    useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
-  const [highlightedRange, setHighlightedRange] = useState<{ start: number, end: number } | null>(null);
-  const [highlightedRanges, setHighlightedRanges] = useState<Array<{ start: number, end: number }>>([]);
+  const [highlightedRange, setHighlightedRange] = useState<{
+    start: number;
+    end: number;
+  } | null>(null);
+  const [highlightedRanges, setHighlightedRanges] = useState<
+    Array<{ start: number; end: number }>
+  >([]);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
         if (!token) {
           console.error("No token found");
           return;
@@ -62,11 +81,14 @@ const Article: React.FC = () => {
 
         const response = await axios.get(`http://3.36.247.28/post/1`, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         });
         console.log("response data:", response.data);
-        setArticle(response.data);
+        const data = response.data;
+        const articleData = data.results;
+
+        setArticle(articleData);
       } catch (error) {
         console.error("Error fetching article:", error);
       }
@@ -133,63 +155,95 @@ const Article: React.FC = () => {
     return <div>로딩중...</div>;
   }
 
-  const { title, content, author, createdDate, postCategory, image } = article;
+  const {
+    title,
+    content,
+    author,
+    createdDate = [0, 0, 0],
+    postCategory,
+    image,
+    recommendPost,
+  } = article;
 
-  const formattedDate = new Date(createdDate).toLocaleDateString();
+  const formattedDate =
+    createdDate.length === 3
+      ? `${createdDate[0]}-${String(createdDate[1]).padStart(2, "0")}-${String(
+          createdDate[2]
+        ).padStart(2, "0")}`
+      : "날짜 정보 없음";
 
   return (
-    <Container>
-      <Category>{postCategory}</Category>
-      <Title>{title}</Title>
-      <AuthorBox>
-        <Author>{author}</Author>
-        <ArticleDate>{formattedDate}</ArticleDate>
-      </AuthorBox>
-      <Img src={image?.imageUrl || articleImg} alt="기사 이미지" />
-      <Content onMouseUp={handleTextHighlight}>
-        {renderHighlightedText(content)}
-      </Content>
-      <Line />
-      <QuizContainer>
-        <QuizTitle>{title}</QuizTitle>
-        <QuizTime>소요시간 5분</QuizTime>
-        <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
-          간단 퀴즈 풀어보기
-        </QuizBtn>
-      </QuizContainer>
-      <div>
-        <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
-        <GoodArticleContainer>
-          <div>
-            <GoodArticleImg src={image?.imageUrl || articleImg} alt="함께 읽으면 좋은 아티클" />
-            <GoodArticleCategory>{postCategory}</GoodArticleCategory>
-            <GoodArticleTitle>
-              AI 시대에 필요한 개발자, 프로덕트 엔지니어
-            </GoodArticleTitle>
-            <GoodArticleAuthor>{author} | {formattedDate}</GoodArticleAuthor>
-          </div>
-        </GoodArticleContainer>
-      </div>
-      {isQuizModalOpen && (
-        <>
-          <Overlay isModalOpen={isQuizModalOpen}>
-            <QuizModal onClose={() => setIsQuizModalOpen(false)} />
-          </Overlay>
-        </>
-      )}
-      {isHighlightModalOpen && (
-        <>
-          <Overlay isModalOpen={isHighlightModalOpen}>
-            <HighlightModal
-              highlightedText={highlightedText}
-              onClose={() => setIsHighlightModalOpen(false)}
-              onSave={handleSaveNote}
-            />
-          </Overlay>
-        </>
-      )}
-      <FloatingButtons onMenuClick={handleMenuClick} />
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <Category>{postCategory}</Category>
+        <Title>{title}</Title>
+        <AuthorBox>
+          <Author>{author}</Author>
+          <ArticleDate>{formattedDate}</ArticleDate>
+          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
+          <LinkIcon src={linkimg} alt="링크 아이콘" />
+        </AuthorBox>
+
+        <Img src={image?.imageUrl || articleImg} alt="기사 이미지" />
+        <Content onMouseUp={handleTextHighlight}>
+          {renderHighlightedText(content)}
+        </Content>
+        <Line />
+        <QuizContainer>
+          <TicleImg src={ticlearticle} alt="ticleimg" />
+          <QuizContainerRight>
+            <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
+            <QuizTime>소요시간 5분</QuizTime>
+            <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
+              간단 퀴즈 풀어보기
+            </QuizBtn>
+          </QuizContainerRight>
+        </QuizContainer>
+        <div>
+          <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
+          <GoodArticleContainer>
+            {recommendPost.length > 0 ? (
+              recommendPost.map((post) => (
+                <div key={post.postId}>
+                  <GoodArticleImg
+                    src={image?.imageUrl || articleImg}
+                    alt="함께 읽으면 좋은 아티클"
+                  />
+                  <GoodArticleCategory>{postCategory}</GoodArticleCategory>
+                  <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
+                  <GoodArticleAuthor>
+                    {author} | {formattedDate}
+                  </GoodArticleAuthor>
+                </div>
+              ))
+            ) : (
+              <div>추천 아티클이 없습니다.</div>
+            )}
+          </GoodArticleContainer>
+        </div>
+        {isQuizModalOpen && (
+          <>
+            <Overlay isModalOpen={isQuizModalOpen}>
+              <QuizModal onClose={() => setIsQuizModalOpen(false)} />
+            </Overlay>
+          </>
+        )}
+        {isHighlightModalOpen && (
+          <>
+            <Overlay isModalOpen={isHighlightModalOpen}>
+              <HighlightModal
+                highlightedText={highlightedText}
+                onClose={() => setIsHighlightModalOpen(false)}
+                onSave={handleSaveNote}
+              />
+            </Overlay>
+          </>
+        )}
+        <FloatingButtons onMenuClick={handleMenuClick} />
+      </Container>
+      <Footer />
+    </>
   );
 };
 
