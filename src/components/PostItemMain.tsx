@@ -5,39 +5,44 @@ import { ReactComponent as SaveIcon } from "../assets/saveIcon.svg";
 
 // 게시물 정보를 나타내는 타입 정의
 type PostItemProps = {
-  id: string;
-  imageUrl: string;
-  category: string;
+  postId: number;
+  image: {
+    imageFileName: string;
+    imageFolderName: string;
+    imageUrl: string;
+  };
+  postCategory: string;
   title: string;
   author: string;
-  createdAt: string;
-  summary?: string;
+  createdDate: string;
+  content: string;
+  recommendPost?: any | null;
   isSavedIconLoad: boolean;
   isSaved: boolean;
 };
 
 const PostItemMain: React.FC<PostItemProps> = ({
-  id,
-  imageUrl,
-  category,
+  postId,
+  image,
+  postCategory,
   title,
   author,
-  summary,
+  content,
   isSaved,
-  createdAt,
+  createdDate,
   isSavedIconLoad,
 }) => {
   return (
     <Container>
-      <Image src={imageUrl} alt="미리보기 이미지" />
+      <Image src={image.imageUrl} alt="미리보기 이미지" />
       <CategoryRow>
-        <Category>{category}</Category>
+        <Category>{postCategory}</Category>
         {isSavedIconLoad && <StyledSaveIcon isSaved={isSaved} />}
       </CategoryRow>
       <Title>{title}</Title>
-      {summary && <Summary>{summary}</Summary>}
-      <Author hasSummary={!!summary}>
-        {author} {createdAt}
+      {content && <Summary>{content}</Summary>}
+      <Author hasSummary={!!content}>
+        {author} {createdDate}
       </Author>
     </Container>
   );
@@ -45,25 +50,9 @@ const PostItemMain: React.FC<PostItemProps> = ({
 
 export default PostItemMain;
 
-/*
-상위 페이지에서 다음과 같이 렌더링 가능
-<PostItemMain
-        id="2"
-        imageUrl={articleImg}
-        category="카테고리고리고리"
-        title="이것은 예제 제목입니다. 제목이 길어질 경우에 대해 처리합니다."
-        author="작성자 이름"
-        summary="텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스텍스트텍스트텍스트텍스스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트"
-        createdAt="2000"
-        isSaved={true}
-        isSavedIconLoad={true}
-      />
-*/
-
 // 스타일드 컴포넌트 정의
 const Container = styled.div`
   width: 379px;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -111,6 +100,7 @@ const Title = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
   margin-left: 10px;
   height: 72px;
 `;

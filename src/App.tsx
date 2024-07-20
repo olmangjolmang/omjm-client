@@ -1,6 +1,9 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import axios from "axios";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import MainPage from "./pages/MainPage";
 import Main from "./pages/Main";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";

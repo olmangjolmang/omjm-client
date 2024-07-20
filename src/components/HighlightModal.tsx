@@ -151,6 +151,10 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
         <StopConfirmationModal
           onConfirm={handleConfirmStop}
           onCancel={() => setIsStopConfirmationOpen(false)}
+          headerText="메모를 중단하시겠습니까?"
+          messageText="중단 시 작성 내용이 사라집니다."
+          confirmButtonText="중단하기"
+          cancelButtonText="돌아가기"
         />
       )}
     </ModalOverlay>
