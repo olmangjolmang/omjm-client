@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 import styled from "styled-components";
 import {
   Container,
@@ -39,6 +40,7 @@ const Button = styled(Link)`
   text-decoration: none;
 `;
 
+
 const Header: React.FC = () => {
   // 로그인 상태 관리
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -59,7 +61,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <LeftContainer>
-        <Logo>ticle</Logo>
+        <Logo src={logo} alt="로고" />
         <MenuContainer>
           <Menu to="/">홈</Menu>
           <Menu to="/articles">아티클</Menu>

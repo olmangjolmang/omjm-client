@@ -13,13 +13,10 @@ export const LeftContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
-export const Logo = styled.div`
-  margin-right: 99px;
-  color: #463efb;
-  font-weight: 600;
-  font-family: Montserrat;
-  font-size: 33.082px;
+export const Logo = styled.img`
+  width: 76px;
+  height: 40px;
+  margin-right: 98px;
 `;
 
 export const MenuContainer = styled.div`
