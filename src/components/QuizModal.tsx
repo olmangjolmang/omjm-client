@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   ModalContainer,
@@ -25,21 +25,28 @@ import quizimg1 from "../assets/quizimg1.png";
 import quizimg0 from "../assets/quizimg0.png";
 import { QuizApiResponse, QuestionData } from "../types/Quiz";
 
-const QuizModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+interface QuizModalProps {
+  onClose: () => void;
+  title: string;
+  id: number; // Add id to props
+}
+
+const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
   const [quizData, setQuizData] = useState<QuestionData[] | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [isStopConfirmationOpen, setIsStopConfirmationOpen] =
-    useState<boolean>(false);
+  const [isStopConfirmationOpen, setIsStopConfirmationOpen] = useState<boolean>(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
-        const { data } = await axios.get<QuizApiResponse>('http://3.36.247.28/post/quiz/1');
+        const { data } = await axios.get<QuizApiResponse>(`http://3.36.247.28/post/quiz/${id}`);
         if (!data.isSuccess) {
           throw new Error(data.message);
         }
@@ -56,7 +63,18 @@ const QuizModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     };
 
     fetchQuizData();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -133,8 +151,8 @@ const QuizModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <>
-      <ModalContainer>
-        <Title>AI 시대에 화웨이가 주목받는다?</Title>
+      <ModalContainer ref={modalRef}>
+        <Title>{title}</Title>
         {currentStep <= quizData.length ? (
           <>
             <ProgressBarContainer>

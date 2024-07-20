@@ -11,7 +11,12 @@ import {
   Overlay,
 } from "../styles/Article";
 
-const QuizSection: React.FC = () => {
+interface QuizSectionProps {
+  title: string;
+  id: number; 
+}
+
+const QuizSection: React.FC<QuizSectionProps> = ({ title, id }) => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
 
   return (
@@ -19,7 +24,7 @@ const QuizSection: React.FC = () => {
       <QuizContainer>
         <TicleImg src={ticlearticle} alt="ticleimg" />
         <QuizContainerRight>
-          <QuizTitle>AI 시대에 화웨이가 주목받는다?</QuizTitle>
+          <QuizTitle>{title}</QuizTitle>
           <QuizTime>소요시간 5분</QuizTime>
           <QuizBtn onClick={() => setIsQuizModalOpen(true)}>
             간단 퀴즈 풀어보기
@@ -28,7 +33,11 @@ const QuizSection: React.FC = () => {
       </QuizContainer>
       {isQuizModalOpen && (
         <Overlay isModalOpen={isQuizModalOpen}>
-          <QuizModal onClose={() => setIsQuizModalOpen(false)} />
+          <QuizModal
+            title={title}
+            id={id} // Pass id to QuizModal
+            onClose={() => setIsQuizModalOpen(false)}
+          />
         </Overlay>
       )}
     </>

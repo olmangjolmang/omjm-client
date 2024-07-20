@@ -1,10 +1,11 @@
 import React, { useState, useEffect, MouseEvent } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
 import linkimg from "../assets/linkicon.png";
 import articleImg from "../assets/article.png";
-import QuizSection from "../components/QuizSection"; // Import the new QuizSection component
+import QuizSection from "../components/QuizSection";
 import FloatingButtons from "../components/FloatingButtons";
 import HighlightModal from "../components/HighlightModal";
 
@@ -47,13 +48,13 @@ interface ArticleData {
     imageFolderName: string;
     imageUrl: string;
   };
-  recommendPost: RecommendPost[]; // 추천 포스트
+  recommendPost: RecommendPost[];
 }
 
 const Article: React.FC = () => {
+  const { id } = useParams<{ id: string }>(); // Get postId from URL parameters
   const [article, setArticle] = useState<ArticleData | null>(null);
-  const [isHighlightModalOpen, setIsHighlightModalOpen] =
-    useState<boolean>(false);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] = useState<boolean>(false);
   const [highlightedText, setHighlightedText] = useState<string>("");
   const [highlightedRange, setHighlightedRange] = useState<{
     start: number;
@@ -72,7 +73,7 @@ const Article: React.FC = () => {
           return;
         }
 
-        const response = await axios.get(`http://3.36.247.28/post/1`, {
+        const response = await axios.get(`http://3.36.247.28/post/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,8 +88,10 @@ const Article: React.FC = () => {
       }
     };
 
-    fetchArticle();
-  }, []);
+    if (id) {
+      fetchArticle();
+    }
+  }, [id]);
 
   const handleTextHighlight = (e: MouseEvent) => {
     const selection = window.getSelection();
@@ -183,7 +186,7 @@ const Article: React.FC = () => {
           {renderHighlightedText(content)}
         </Content>
         <Line />
-        <QuizSection /> {/* Use the QuizSection component */}
+        <QuizSection title={title} id={Number(id)} /> {/* Pass id to QuizSection */}
         <div>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
           <GoodArticleContainer>
