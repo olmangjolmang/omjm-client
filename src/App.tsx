@@ -8,29 +8,19 @@ import Main from "./pages/Main";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { SignupAgree } from "./pages/SignupAgree";
-import ProfileEdit from "./pages/ProfileEdit";
-import InterestEdit from "./pages/InterestEdit";
-import ArticleBoards from "./pages/ArticleBoards";
-
-axios.defaults.baseURL = "http://3.36.247.28";
-const queryClient = new QueryClient();
+import Article from "./pages/Article";
 
 const App: React.FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/article" element={<Main />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signupagree" element={<SignupAgree />} />
-          <Route path="/profile-edit" element={<ProfileEdit />} />
-          <Route path="/edit-interests" element={<InterestEdit />} />
-          <Route path="articles" element={<ArticleBoards />} />
-        </Routes>
-      </Router>
-    </QueryClientProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signupagree" element={<SignupAgree />} />
+        <Route path="/post/:id" element={<Article />} />
+      </Routes>
+    </Router>
   );
 };
 
