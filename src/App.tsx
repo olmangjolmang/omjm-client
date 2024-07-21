@@ -15,8 +15,7 @@ import InterestEdit from "./pages/InterestEdit";
 import QnaBoard from "./pages/QnaBoard";
 import AnswerList from "./pages/AnswerList";
 import MyPage from "./pages/Mypage";
-
-axios.defaults.baseURL = "http://3.36.247.28/api/";
+import axiosInstance from "./api/AxiosInstance"; // Axios 인스턴스 가져오기
 
 const queryClient = new QueryClient();
 
