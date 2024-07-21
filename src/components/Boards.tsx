@@ -46,13 +46,14 @@ const Boards = () => {
         />
       </div>
       <GridContainer>
-        {data.results.content.map((article: any) => (
-          <PostItemMain
-            key={article.postId}
-            {...article}
-            postCategory={CATEGORY_LABELS[article.postCategory as Category]}
-          />
-        ))}
+        {data &&
+          data.results.content.map((article: any) => (
+            <PostItemMain
+              key={article.postId}
+              {...article}
+              postCategory={CATEGORY_LABELS[article.postCategory as Category]}
+            />
+          ))}
       </GridContainer>
       <Pagination
         currentPage={page}
