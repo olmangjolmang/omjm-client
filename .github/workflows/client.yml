@@ -28,10 +28,12 @@ jobs:
         run: echo "IMAGE_NAME=ticle-client:$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
       - name: Build and push Docker image
-        run: |
-          docker build -t ${{ env.IMAGE_NAME }} . 
-          docker push ${{ env.IMAGE_NAME }}
-	  
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -39,13 +41,8 @@ jobs:
           command_timeout: 200m
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          env:
-            SCRIPT: |
-              sudo docker pull ${{ env.IMAGE_NAME }}
-              sudo docker rm -f ticle-client
-              images=$(sudo docker images | awk 'NR>4 {print $3}')
-              if [ -n "$images" ]; then
-                echo "$images" | xargs sudo docker rmi -f
-              fi
-              sudo docker run -d -p 3001:80 --name ticle-client ${{ env.IMAGE_NAME }}
-          script: ${{ env.SCRIPT }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+            docker rm -f ticle-client || true
+            docker images -q | xargs -r docker rmi
+            docker run -d -p 3001:80 --name ticle-client ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
