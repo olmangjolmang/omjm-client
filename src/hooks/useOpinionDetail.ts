@@ -9,11 +9,17 @@ interface Comment {
   isHeart: boolean;
 }
 
+interface Result {
+  question: string;
+  userNickname: string;
+  responseList: Comment[];
+}
+
 interface OpinionDetails {
   isSuccess: boolean;
   code: string;
   message: string;
-  results: Comment[];
+  results: Result;
 }
 
 const fetchOpinionDetails = async (

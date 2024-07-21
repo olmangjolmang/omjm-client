@@ -15,7 +15,7 @@ import InterestEdit from "./pages/InterestEdit";
 import QnaBoard from "./pages/QnaBoard";
 import AnswerList from "./pages/AnswerList";
 
-axios.defaults.baseURL = "http://3.36.247.28";
+axios.defaults.baseURL = "http://3.36.247.28/api/";
 
 const queryClient = new QueryClient();
 
