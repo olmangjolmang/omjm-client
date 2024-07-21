@@ -1,70 +1,28 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-const Container = styled.div`
-  height: 120px;
-  display: flex;
-  padding: 0 120px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Logo = styled.div`
-  margin-right: 99px;
-  color: #463efb;
-  font-weight: 600;
-  font-family: Montserrat;
-  font-size: 33.082px;
-`;
-
-const MenuContainer = styled.div`
-  gap: 74px;
-  display: flex;
-`;
-
-const Menu = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  &:hover {
-    color: #463efb;
-  }
-  &:active {
-    color: #463efb;
-  }
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-right: 18px;
-  margin-left: 124px;
-`;
-
-const SearchIcon = styled.svg`
-  position: absolute;
-  right: 18px;
-  width: 20px;
-  height: 20px;
-`;
-
-const SearchInput = styled.input`
-  width: 350px;
-  height: 55px;
-  padding: 0 40px 0 18px;
-  background-color: #f4f4f7;
-  color: var(--Gray-300, #afafb6);
-  font-weight: 500;
-  line-height: 32px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-`;
+import logo from "../assets/logo.png";
+import styled from "styled-components";
+import {
+  Container,
+  LeftContainer,
+  Logo,
+  MenuContainer,
+  RightContainer,
+  Menu,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  Profile,
+  ProfileImg,
+  DropdownMenu,
+  DropdownItem,
+  DropdownLink,
+  ProfileInfo,
+  ProfileName,
+  ProfileEmail,
+  Divider,
+} from "../styles/Header";
+import profileImg from "../assets/headerprofile.png";
 
 const Button = styled(Link)`
   display: flex;
@@ -82,17 +40,36 @@ const Button = styled(Link)`
   text-decoration: none;
 `;
 
+
 const Header: React.FC = () => {
+  // 로그인 상태 관리
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    // 로그아웃 로직 추가
+  };
+
+  // 추후 useAuth로 인증 상태 가져오기
+  // const { isLoggedIn } = useAuth();
+
   return (
-    <>
-      <Container>
-        <Logo>ticle</Logo>
+    <Container>
+      <LeftContainer>
+        <Logo src={logo} alt="로고" />
         <MenuContainer>
-          <Menu>홈</Menu>
-          <Menu>아티클</Menu>
-          <Menu>물어봥</Menu>
-          <Menu>마이페이지</Menu>
+          <Menu to="/">홈</Menu>
+          <Menu to="/articles">아티클</Menu>
+          <Menu to="/">물어봥</Menu>
+          <Menu to="/">마이페이지</Menu>
         </MenuContainer>
+      </LeftContainer>
+      <RightContainer>
         <SearchContainer>
           <SearchInput placeholder="궁금한 내용을 검색해 보세요!" />
           <SearchIcon
@@ -114,9 +91,29 @@ const Header: React.FC = () => {
             />
           </SearchIcon>
         </SearchContainer>
-        <Button to="/login">로그인</Button>
-      </Container>
-    </>
+        {isLoggedIn ? (
+          <Profile onClick={toggleDropdown}>
+            <ProfileImg src={profileImg} alt="Profile" />
+            {isDropdownOpen && (
+              <DropdownMenu>
+                <ProfileInfo to="/profile-edit">
+                  <ProfileImg src={profileImg} alt="Profile" />
+                  <div>
+                    <ProfileName>닉네임</ProfileName>
+                    <ProfileEmail>omjm@example.com</ProfileEmail>
+                  </div>
+                </ProfileInfo>
+                <Divider />
+                <DropdownLink to="/edit-interests">관심분야 수정</DropdownLink>
+                <DropdownItem onClick={handleLogout}>로그아웃</DropdownItem>
+              </DropdownMenu>
+            )}
+          </Profile>
+        ) : (
+          <Button to="/login">로그인</Button>
+        )}
+      </RightContainer>
+    </Container>
   );
 };
 

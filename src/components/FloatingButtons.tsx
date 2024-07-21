@@ -3,6 +3,9 @@ import styled from "styled-components";
 import upArrowIcon from "../assets/up-arrow.png";
 import pencilIcon from "../assets/pencil.png";
 import bookmarkIcon from "../assets/bookmark.png";
+import upArrowIconSelected from "../assets/select-up-arrow.png";
+import pencilIconSelected from "../assets/select-pencil.png";
+import bookmarkIconSelected from "../assets/select-bookmark.png";
 
 // 스타일 컴포넌트 정의
 const FixedButtons = styled.div`
@@ -17,7 +20,7 @@ const FixedButtons = styled.div`
   z-index: 1000;
 `;
 
-const Icon = styled.img`
+const Icon = styled.img<{ src: string; hoverSrc: string; activeSrc?: string }>`
   width: 44px;
   height: 44px;
   cursor: pointer;
@@ -27,20 +30,45 @@ const Icon = styled.img`
 
   &:hover {
     background-color: #f0f0f0;
+    content: url(${(props) => props.hoverSrc});
+  }
+
+  &:active {
+    content: url(${(props) => props.activeSrc || props.hoverSrc});
   }
 `;
 
+interface FloatingButtonsProps {
+  onMenuClick: () => void;
+  onSaveClick: () => void; // 추가된 prop
+}
+
 // 컴포넌트 정의
-const FloatingButtons: React.FC = () => {
+const FloatingButtons: React.FC<FloatingButtonsProps> = ({ onMenuClick, onSaveClick }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <FixedButtons>
-      <Icon src={upArrowIcon} alt="Scroll to top" onClick={scrollToTop} />
-      <Icon src={pencilIcon} alt="Edit" />
-      <Icon src={bookmarkIcon} alt="Bookmark" />
+      <Icon
+        src={upArrowIcon}
+        hoverSrc={upArrowIconSelected}
+        activeSrc={upArrowIconSelected}
+        onClick={scrollToTop}
+      />
+      <Icon
+        src={pencilIcon}
+        hoverSrc={pencilIconSelected}
+        activeSrc={pencilIconSelected}
+        onClick={onMenuClick}
+      />
+      <Icon
+        src={bookmarkIcon}
+        hoverSrc={bookmarkIconSelected}
+        activeSrc={bookmarkIconSelected}
+        onClick={onSaveClick} // 추가된 클릭 핸들러
+      />
     </FixedButtons>
   );
 };
