@@ -33,17 +33,19 @@ jobs:
           docker push ${{ env.IMAGE_NAME }}
 	  
       - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v0.1.11
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
           command_timeout: 200m
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          script: |
-            sudo docker pull ${{ env.IMAGE_NAME }}
-            sudo docker rm -f ticle-client
-            images=$(sudo docker images | awk 'NR>4 {print $3}')
-            if [ -n "$images" ]; then
-              echo "$images" | xargs sudo docker rmi -f
-            fi
-            sudo docker run -d -p 3001:80 --name ticle-client ${{ env.IMAGE_NAME }}    
+          env:
+            SCRIPT: |
+              sudo docker pull ${{ env.IMAGE_NAME }}
+              sudo docker rm -f ticle-client
+              images=$(sudo docker images | awk 'NR>4 {print $3}')
+              if [ -n "$images" ]; then
+                echo "$images" | xargs sudo docker rmi -f
+              fi
+              sudo docker run -d -p 3001:80 --name ticle-client ${{ env.IMAGE_NAME }}
+          script: ${{ env.SCRIPT }}
