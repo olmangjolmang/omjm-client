@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import axiosInstance from "../api/AxiosInstance";
 
 interface Comment {
   commentId: number;
@@ -25,7 +26,7 @@ interface OpinionDetails {
 const fetchOpinionDetails = async (
   opinionId: number
 ): Promise<OpinionDetails> => {
-  const { data } = await axios.get(`/opinion/${opinionId}`);
+  const { data } = await axiosInstance.get(`/opinion/${opinionId}`);
   return data;
 };
 

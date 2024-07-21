@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axiosInstance from "../api/AxiosInstance"; // Axios 인스턴스 가져오기
 
 interface AnswerFormProps {
   opinionId: number;
@@ -11,14 +11,17 @@ const AnswerForm = ({ opinionId }: AnswerFormProps) => {
   const [content, setContent] = useState("");
   const [charCount, setCharCount] = useState(0);
   const queryClient = useQueryClient();
+  const token = localStorage.getItem("token");
+  console.log(token);
 
   const mutation = useMutation({
     mutationFn: (newComment: { content: string }) =>
-      axios.post(`/opinion/${opinionId}/comment`, newComment),
+      axiosInstance.post(`/opinion/${opinionId}/comment`, newComment),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["opinionDetails", opinionId],
       });
+      window.location.reload();
     },
   });
 
