@@ -1,5 +1,14 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { Title, Ticle, Container, Box, Label, Input, Button, ErrorMessage } from "../styles/Signup";
+import {
+  Title,
+  Ticle,
+  Container,
+  Box,
+  Label,
+  Input,
+  Button,
+  ErrorMessage,
+} from "../styles/Signup";
 import { Errors, Touched, SignupPayload } from "../types/SignupTypes";
 import SignupModal from "../components/SignupModal";
 import useSignup from "../hooks/useSignup";
@@ -29,46 +38,29 @@ export const Signup: React.FC = () => {
   useEffect(() => {
     const validateEmail = (): string => {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!email) {
-        return "이메일을 입력해 주세요.";
-      } else if (!re.test(email)) {
-        return "올바르지 않은 이메일 형식입니다.";
-      }
+      if (!email) return "이메일을 입력해 주세요.";
+      if (!re.test(email)) return "올바르지 않은 이메일 형식입니다.";
       return "";
     };
 
     const validateNickname = (): string => {
-      if (!nickname.trim()) {
-        return "닉네임을 입력해 주세요.";
-      }
+      if (!nickname.trim()) return "닉네임을 입력해 주세요.";
       return "";
     };
 
     const validatePassword = (): string => {
-      if (!password) {
-        return "비밀번호를 입력해 주세요.";
-      }
-      if (password.length < 8) {
-        return "8자리 이상 입력해 주세요.";
-      }
-      if (password.length > 16) {
-        return "16자리 이하로 입력해 주세요.";
-      }
       const re =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-      if (!re.test(password)) {
-        return "영문 대소문자, 숫자, 특수문자로 조합되어야 합니다.";
-      }
+      if (!password) return "비밀번호를 입력해 주세요.";
+      if (password.length < 8) return "8자리 이상 입력해 주세요.";
+      if (password.length > 16) return "16자리 이하로 입력해 주세요.";
+      if (!re.test(password)) return "영문 대소문자, 숫자, 특수문자로 조합되어야 합니다.";
       return "";
     };
 
     const validatePasswordConfirm = (): string => {
-      if (!passwordConfirm) {
-        return "비밀번호 확인을 입력해 주세요.";
-      }
-      if (password !== passwordConfirm) {
-        return "비밀번호가 일치하지 않습니다.";
-      }
+      if (!passwordConfirm) return "비밀번호 확인을 입력해 주세요.";
+      if (password !== passwordConfirm) return "비밀번호가 일치하지 않습니다.";
       return "";
     };
 
@@ -86,10 +78,10 @@ export const Signup: React.FC = () => {
 
     setIsButtonDisabled(
       !!emailError ||
-        !!nicknameError ||
-        !!passwordError ||
-        !!passwordConfirmError ||
-        mutation.status === "pending"
+      !!nicknameError ||
+      !!passwordError ||
+      !!passwordConfirmError ||
+      mutation.status === "pending"
     );
   }, [email, nickname, password, passwordConfirm, mutation.status]);
 
@@ -99,20 +91,24 @@ export const Signup: React.FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!errors.email && !errors.nickname && !errors.password && !errors.passwordConfirm) {
+    if (
+      !errors.email &&
+      !errors.nickname &&
+      !errors.password &&
+      !errors.passwordConfirm
+    ) {
       const payload: SignupPayload = { email, password, nickname };
-      mutation.mutate(payload);
+      localStorage.setItem("signupData", JSON.stringify(payload));
+      setIsModalOpen(true);
+      console.log("회원가입 1차 완료");
     }
   };
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      // 이메일, 비번, 닉네임 저장
-      localStorage.setItem("signupData", JSON.stringify({ email, nickname, password }));
-
       setIsModalOpen(true);
     }
-  }, [mutation.isSuccess, email, nickname, password]);
+  }, [mutation.isSuccess]);
 
   return (
     <Container>
@@ -127,9 +123,7 @@ export const Signup: React.FC = () => {
             type="email"
             placeholder="omjm@naver.com"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
           />
@@ -143,9 +137,7 @@ export const Signup: React.FC = () => {
             type="text"
             placeholder="닉네임을 입력해 주세요."
             value={nickname}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setNickname(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
             onBlur={handleBlur("nickname")}
             hasError={touched.nickname && !!errors.nickname}
           />
@@ -159,9 +151,7 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
           />
@@ -175,9 +165,7 @@ export const Signup: React.FC = () => {
             type="password"
             placeholder="동일한 비밀번호를 입력해 주세요."
             value={passwordConfirm}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPasswordConfirm(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
             onBlur={handleBlur("passwordConfirm")}
             hasError={touched.passwordConfirm && !!errors.passwordConfirm}
           />
@@ -185,7 +173,10 @@ export const Signup: React.FC = () => {
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
           )}
         </Box>
-        <Button type="submit" disabled={isButtonDisabled || mutation.status === "pending"}>
+        <Button
+          type="submit"
+          disabled={isButtonDisabled || mutation.status === "pending"}
+        >
           {mutation.status === "pending" ? "처리 중..." : "확인"}
         </Button>
       </form>
