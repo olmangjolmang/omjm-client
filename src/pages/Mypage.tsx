@@ -3,12 +3,12 @@ import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
 import TicleWarehouse from "../components/TicleWarehouse";
-
-const TicleQnA = () => <div>티클 문답 내용</div>;
-const TicleNotes = () => <div>티클 노트 내용</div>;
+import TicleQna from "../components/TicleQna";
+import TicleNote from "../components/TicleNote";
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<string>("ticleWarehouse");
+  console.log(localStorage.getItem("token"));
   return (
     <>
       <Header />
@@ -35,8 +35,8 @@ const MyPage = () => {
         </TabContainer>
         <TabContent>
           {activeTab === "ticleWarehouse" && <TicleWarehouse />}
-          {activeTab === "ticleQnA" && <TicleQnA />}
-          {activeTab === "ticleNotes" && <TicleNotes />}
+          {activeTab === "ticleQnA" && <TicleQna />}
+          {activeTab === "ticleNotes" && <TicleNote />}
         </TabContent>
       </PageContainer>
       <Footer />
