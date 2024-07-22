@@ -17,7 +17,7 @@ const orderByOptions: Option[] = [
 ];
 
 const Boards = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
 
@@ -41,7 +41,7 @@ const Boards = () => {
       </div>
       <GridContainer>
         {data &&
-          data.results.map((article: any) => (
+          data.results.savedTicleResponseList.map((article: any) => (
             <PostItemMain
               key={article.postId}
               {...article}
