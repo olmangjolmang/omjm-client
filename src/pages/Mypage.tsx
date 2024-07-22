@@ -6,25 +6,13 @@ import TicleWarehouse from "../components/TicleWarehouse";
 import TicleQna from "../components/TicleQna";
 import TicleNote from "../components/TicleNote";
 import { useMyNotes } from "../hooks/useMyNotes";
-
-export interface Note {
-  noteId: number;
-  content: string;
-  memoDate: number[];
-  postId: number;
-  postTitle: string;
-}
+import { useMyQuestion } from "../hooks/useMyQuestion";
+import TicleQnaGroup from "../components/TicleQnaGroup";
+import TicleNoteGroup from "../components/TicleNoteGroup";
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<string>("ticleWarehouse");
   console.log(localStorage.getItem("token"));
-
-  const { data, isLoading, isError } = useMyNotes();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading notes</div>;
-
-  console.log(data);
 
   return (
     <>
@@ -52,8 +40,8 @@ const MyPage = () => {
         </TabContainer>
         <TabContent>
           {activeTab === "ticleWarehouse" && <TicleWarehouse />}
-          {activeTab === "ticleQnA" && <TicleQna />}
-          {activeTab === "ticleNotes" && data && <TicleNote {...data[0]} />}
+          {activeTab === "ticleQnA" && <TicleQnaGroup />}
+          {activeTab === "ticleNotes" && <TicleNoteGroup />}
         </TabContent>
       </PageContainer>
       <Footer />
