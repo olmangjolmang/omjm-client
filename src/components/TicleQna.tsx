@@ -5,11 +5,11 @@ import axiosInstance from "../api/AxiosInstance";
 
 interface QnAItemProps {
   question: string;
-  answer: string;
-  date: string;
+  createdDate: string;
+  comment: string;
 }
 
-const TicleQna = () => {
+const TicleQna = ({ question, createdDate, comment }: QnAItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [answer, setAnswer] = useState("답변");
@@ -51,9 +51,6 @@ const TicleQna = () => {
   const handleAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer(e.target.value);
   };
-
-  const { data, isLoading, isError } = useMyQuestion(1);
-  console.log(data);
 
   return (
     <Container onClick={toggleOpen}>
