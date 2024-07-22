@@ -3,17 +3,18 @@ import styled from "styled-components";
 import { useMyQuestion } from "../hooks/useMyQuestion";
 import axiosInstance from "../api/AxiosInstance";
 
-interface QnAItemProps {
-  question: string;
+export interface Note {
+  noteId: number;
   content: string;
-  note: string;
-  date: string;
+  memoDate: number[]; // [year, month, day, hour, minute, second, nanoseconds]
+  postId: number;
+  postTitle: string;
 }
 
-const TicleNote = () => {
+const TicleNote = ({ noteId, content, memoDate, postId, postTitle }: Note) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [answer, setAnswer] = useState("본문");
+  const [answer, setAnswer] = useState(content);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -60,8 +61,10 @@ const TicleNote = () => {
     <Container onClick={toggleOpen}>
       <QuestionSection>
         <QnD>
-          <Question>제목</Question>
-          <Date>날짜</Date>
+          <Question>{postTitle}</Question>
+          <Date>
+            {memoDate[0]}-{memoDate[1]}-{memoDate[2]}
+          </Date>
         </QnD>
         <ToggleIcon isOpen={isOpen}>
           {isOpen ? (
@@ -97,7 +100,7 @@ const TicleNote = () => {
           )}
         </ToggleIcon>
       </QuestionSection>
-      <Content>asd</Content>
+      <Content>{content}</Content>
       {isOpen && (
         <AnswerSection>
           {isEditing ? (
