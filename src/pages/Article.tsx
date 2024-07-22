@@ -39,7 +39,6 @@ const Article: React.FC = () => {
 
   const [isHighlightModalOpen, setIsHighlightModalOpen] = React.useState<boolean>(false);
   const [highlightedText, setHighlightedText] = React.useState<string>("");
-  const [highlightedRange, setHighlightedRange] = React.useState<{ start: number; end: number } | null>(null);
   const [highlightedRanges, setHighlightedRanges] = React.useState<Array<{ start: number; end: number }>>([]);
 
   const handleTextHighlight = (e: React.MouseEvent) => {
@@ -48,8 +47,13 @@ const Article: React.FC = () => {
       const range = selection.getRangeAt(0);
       const start = range.startOffset;
       const end = range.endOffset;
-      setHighlightedText(selection.toString());
-      setHighlightedRange({ start, end });
+      const text = selection.toString();
+
+      if (text) {
+        setHighlightedText(text);
+        setHighlightedRanges(prevRanges => [...prevRanges, { start, end }]);
+        selection.removeAllRanges(); // Remove selection after capturing it
+      }
     }
   };
 
@@ -60,10 +64,9 @@ const Article: React.FC = () => {
   };
 
   const handleMenuClick = () => {
-    if (!article) return;
     const combinedText = highlightedRanges
       .map(({ start, end }) => {
-        return article.content.slice(start, end);
+        return article?.content.slice(start, end) || "";
       })
       .join("\n");
     setHighlightedText(combinedText);
@@ -103,15 +106,18 @@ const Article: React.FC = () => {
   };
 
   const renderHighlightedText = (text: string) => {
-    if (!highlightedRange) {
+    if (!highlightedRanges.length) {
       return text;
     }
+
     let lastIndex = 0;
     const elements = [];
     highlightedRanges
       .sort((a, b) => a.start - b.start)
       .forEach(({ start, end }, index) => {
-        elements.push(text.slice(lastIndex, start));
+        if (start > lastIndex) {
+          elements.push(text.slice(lastIndex, start));
+        }
         elements.push(
           <Highlight key={index}>{text.slice(start, end)}</Highlight>
         );
@@ -133,16 +139,14 @@ const Article: React.FC = () => {
     title,
     content,
     author,
-    createdDate, 
+    createdDate,
     postCategory,
     image,
     recommendPost,
   } = article;
 
-
   const date = new Date(createdDate);
-
-  const formattedDate = date.toISOString().split('T')[0]
+  const formattedDate = date.toISOString().split('T')[0];
 
   return (
     <>
