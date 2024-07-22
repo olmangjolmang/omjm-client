@@ -31,13 +31,6 @@ const Boards = () => {
   console.log(data);
   return (
     <Container>
-      <CategorySelector
-        selectedCategory={category}
-        onSelectCategory={(categories) => {
-          setCategory(categories);
-          setPage(1); // 카테고리가 변경되면 첫 페이지로 돌아감
-        }}
-      />
       <div>
         <Select
           value={orderBy}

@@ -87,11 +87,11 @@ export const Answer = styled.div<{
   align-items: center;
   gap: 10px;
   border-radius: 20px;
-  border: 1px solid var(--Gray-300, #afafb6);
+  border: 1px solid #afafb6;
   cursor: pointer;
   font-weight: 500;
   font-size: 18px;
-
+  line-height: 150%;
   ${(props) =>
     props.selected &&
     `

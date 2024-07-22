@@ -13,8 +13,9 @@ import ProfileCompletion from "./pages/ProfileCompletion";
 import ProfileEdit from "./pages/ProfileEdit";
 import InterestEdit from "./pages/InterestEdit";
 import QnaBoard from "./pages/QnaBoard";
-
-axios.defaults.baseURL = "http://3.36.247.28";
+import AnswerList from "./pages/AnswerList";
+import MyPage from "./pages/Mypage";
+import axiosInstance from "./api/AxiosInstance"; // Axios 인스턴스 가져오기
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,8 @@ const App: React.FC = () => {
           <Route path="/post/:id" element={<Article />} />
           <Route path="/articles" element={<ArticleBoards />} />
           <Route path="ticleQna" element={<QnaBoard />} />
+          <Route path="/ticleQna/:opinionId" element={<AnswerList />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Router>
     </QueryClientProvider>

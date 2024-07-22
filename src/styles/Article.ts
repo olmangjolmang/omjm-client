@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 160px 180px;
+  padding: 180px 180px;
 `;
 
 export const Category = styled.div`
@@ -15,8 +15,11 @@ export const Category = styled.div`
   align-items: center;
   gap: 10px;
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 600;
   color: #463efe;
+  line-height: 150%;
+  letter-spacing: -0.12px;
+
   border-radius: 40px;
   border: 2px solid var(--Blue-300, #463efb);
   margin-bottom: 39px;
@@ -24,24 +27,43 @@ export const Category = styled.div`
 
 export const Title = styled.div`
   font-weight: 600;
-  font-size: 48px;
-  margin-bottom: 18px;
+  font-size: 32px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+`;
+
+export const LinkText = styled.a`
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
+  color: #463efb;
+  text-decoration: none;
+`;
+
+export const LinkIcon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-left: -5px;
 `;
 
 export const AuthorBox = styled.div`
   display: flex;
   gap: 16px;
   margin-bottom: 94px;
+  align-items: center;
 `;
 
 export const Author = styled.div`
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -0.08px;
+  line-height: 150%;
 `;
 
 export const ArticleDate = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
+  color: #7f7f86;
 `;
 
 export const Img = styled.img`
@@ -71,35 +93,47 @@ export const Line = styled.div`
 `;
 
 export const QuizContainer = styled.div`
-  background-color: #272726;
-  width: 906.578px;
-  height: 339.943px;
+  background-color: #f4f4f7;
+  width: 1080px;
+  height: 320px;
   flex-shrink: 0;
   border-radius: 30px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   margin-bottom: 94px;
+`;
+export const QuizContainerRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+export const TicleImg = styled.img`
+  width: 269.996px;
+  height: 228px;
+  margin-right: 70px;
+  margin-left: 120px;
 `;
 
 export const QuizTitle = styled.div`
-  color: white;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
-  margin-bottom: 38px;
+  margin-bottom: 12px;
+  line-height: 150%;
 `;
 
 export const QuizTime = styled.div`
-  color: white;
-  font-size: 28px;
-  font-weight: 500;
-  margin-bottom: 34px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 28px;
 `;
 
 export const QuizBtn = styled.button`
   display: inline-flex;
   padding: 21px 176px;
+  width: 500px;
+  height: 66px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -109,6 +143,9 @@ export const QuizBtn = styled.button`
   color: white;
   font-size: 20px;
   font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
+  cursor: pointer;
 `;
 
 export const BottomArticleTitle = styled.div`
@@ -134,7 +171,14 @@ export const GoodArticleCategory = styled.div`
   color: #463efb;
   font-size: 16px;
   font-weight: 600;
-  margin: 20px 0 24px 20px;
+  width: 86px;
+  height: 44px;
+  background-color: #f4f4f7;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 14px 0 16px 10px;
 `;
 
 export const GoodArticleTitle = styled.div`
