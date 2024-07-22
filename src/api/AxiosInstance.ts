@@ -11,9 +11,9 @@ axiosInstance.interceptors.request.use((config) => {
   const excludedUrls = [
     "/opinion",
     "/home",
-    "/user/sign-up",
-    "/user/sign-in",
-    "/users/emainSend",
+    "/users/sign-up",
+    "/users/sign-in",
+    "/users/emailSend",
     "/post", // 문자열로 /post 제외
     /^\/post\/\d+$/, // 정규 표현식으로 /post/{id} 패턴 매칭
   ];
