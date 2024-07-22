@@ -1,13 +1,14 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import axios from "axios";
 import { Category, OrderBy } from "../types/ArticleBoards";
+import axiosInstance from "../api/AxiosInstance";
 
 const fetchArticles = async (
   page?: number,
   category?: Category,
   orderBy?: OrderBy
 ) => {
-  const { data } = await axios.get(`/post`, {
+  const { data } = await axiosInstance.get(`/post`, {
     params: {
       category: category !== undefined ? category : undefined,
       orderBy,
