@@ -3,12 +3,29 @@ import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
 import TicleWarehouse from "../components/TicleWarehouse";
+import TicleQna from "../components/TicleQna";
+import TicleNote from "../components/TicleNote";
+import { useMyNotes } from "../hooks/useMyNotes";
 
-const TicleQnA = () => <div>티클 문답 내용</div>;
-const TicleNotes = () => <div>티클 노트 내용</div>;
+export interface Note {
+  noteId: number;
+  content: string;
+  memoDate: number[];
+  postId: number;
+  postTitle: string;
+}
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<string>("ticleWarehouse");
+  console.log(localStorage.getItem("token"));
+
+  const { data, isLoading, isError } = useMyNotes();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading notes</div>;
+
+  console.log(data);
+
   return (
     <>
       <Header />
@@ -35,8 +52,8 @@ const MyPage = () => {
         </TabContainer>
         <TabContent>
           {activeTab === "ticleWarehouse" && <TicleWarehouse />}
-          {activeTab === "ticleQnA" && <TicleQnA />}
-          {activeTab === "ticleNotes" && <TicleNotes />}
+          {activeTab === "ticleQnA" && <TicleQna />}
+          {activeTab === "ticleNotes" && data && <TicleNote {...data[0]} />}
         </TabContent>
       </PageContainer>
       <Footer />

@@ -1,34 +1,32 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import axios from "axios";
 import { Category, OrderBy } from "../types/ArticleBoards";
 import axiosInstance from "../api/AxiosInstance";
 
-const fetchArticles = async (
+const fetchWarehouse = async (
   page?: number,
   category?: Category,
   orderBy?: OrderBy
 ) => {
-  const { data } = await axiosInstance.get(`/post`, {
+  const { data } = await axiosInstance.get(`/mypage/saved-ticles`, {
     params: {
       category: category !== undefined ? category : undefined,
-      orderBy,
       page,
     },
   });
+  console.log("data는");
+  console.log(data);
   return data;
 };
 
-const useArticles = (
+const useTicleWarehouse = (
   page?: number,
   category?: Category,
-  orderBy?: OrderBy,
   options?: UseQueryOptions
 ) => {
   return useQuery({
-    queryKey: ["articles", page, category, orderBy],
-    queryFn: () => fetchArticles(page, category, orderBy),
-    placeholderData: (previousData, previousQuery) => previousData,
+    queryKey: ["TicleWarehouse", page, category],
+    queryFn: () => fetchWarehouse(page, category),
   });
 };
 
-export { useArticles };
+export { useTicleWarehouse };

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ticleImg from "../assets/signupmodalimg.png";
+import axiosInstance from "../api/AxiosInstance";
 
 interface Props {
   commentId: number;
@@ -24,7 +25,7 @@ const Answer = ({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: () => axios.post(`/opinion/comment/${commentId}/heart`),
+    mutationFn: () => axiosInstance.post(`/opinion/comment/${commentId}/heart`),
     onMutate: async () => {
       await queryClient.cancelQueries({
         queryKey: ["opinionDetails", commentId],

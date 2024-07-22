@@ -16,12 +16,10 @@ const orderByOptions: Option[] = [
   { value: "SCRAPPED", label: "스크랩순" },
 ];
 
-const Boards = () => {
+const TicleQnaGroup = () => {
   const [page, setPage] = useState(0);
-  const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
 
-  const { data, isLoading, isError } = useTicleWarehouse(page, category);
+  const { data, isLoading, isError } = useTicleWarehouse(page);
 
   useEffect(() => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
@@ -32,13 +30,6 @@ const Boards = () => {
   console.log(data);
   return (
     <Container>
-      <div>
-        <Select
-          value={orderBy}
-          onChange={(e) => setOrderBy(e.target.value as OrderBy)}
-          options={orderByOptions}
-        />
-      </div>
       <GridContainer>
         {data &&
           data.results.map((article: any) => (
@@ -60,4 +51,4 @@ const Boards = () => {
   );
 };
 
-export default Boards;
+export default TicleQnaGroup;
