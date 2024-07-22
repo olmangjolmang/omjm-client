@@ -24,9 +24,8 @@ const useTicleWarehouse = (
   options?: UseQueryOptions
 ) => {
   return useQuery({
-    queryKey: ["articles", page, category],
+    queryKey: ["TicleWarehouse", page, category],
     queryFn: () => fetchWarehouse(page, category),
-    placeholderData: (previousData, previousQuery) => previousData,
   });
 };
 
