@@ -9,12 +9,20 @@ export interface Note {
   memoDate: number[]; // [year, month, day, hour, minute, second, nanoseconds]
   postId: number;
   postTitle: string;
+  targetText: string;
 }
 
-const TicleNote = ({ noteId, content, memoDate, postId, postTitle }: Note) => {
+const TicleNote = ({
+  noteId,
+  content,
+  memoDate,
+  postId,
+  postTitle,
+  targetText,
+}: Note) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [answer, setAnswer] = useState(content);
+  const [answer, setAnswer] = useState(targetText);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -27,9 +35,8 @@ const TicleNote = ({ noteId, content, memoDate, postId, postTitle }: Note) => {
   const handleSave = async () => {
     setIsEditing(false);
     // Replace with your question ID
-    const id = 1;
     try {
-      await axiosInstance.put(`/mypage/my-note/${id}`, {
+      await axiosInstance.put(`/mypage/my-note/${postId}`, {
         content: answer,
       });
       // Optionally handle the response or refresh data
@@ -40,9 +47,9 @@ const TicleNote = ({ noteId, content, memoDate, postId, postTitle }: Note) => {
 
   const handleDelete = async () => {
     // Replace with your question ID
-    const id = 1;
+
     try {
-      await axiosInstance.delete(`/mypage/my-note/${id}`);
+      await axiosInstance.delete(`/mypage/my-note/${postId}`);
       // Optionally handle the response or refresh data
       alert("삭제되었습니다.");
     } catch (error) {

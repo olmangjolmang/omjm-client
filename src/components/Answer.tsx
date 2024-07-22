@@ -86,12 +86,13 @@ const Answer = ({
 const AnswerContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 1216px;
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-
+  width: 1216px;
   margin: 0 auto;
   margin-bottom: 35px;
   gap: 35px 900px;
@@ -131,6 +132,7 @@ const Content = styled.div`
 const LikeSection = styled.div`
   display: flex;
   align-items: center;
+  min-width: 85px;
 `;
 
 const HeartIcon = styled.div`
