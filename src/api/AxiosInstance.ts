@@ -28,8 +28,12 @@ axiosInstance.interceptors.request.use((config) => {
       return false;
     });
 
-    if (!isExcluded) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      if (config.url === "/users/logout") {
+        config.headers.Authorization = `${token}`;
+      } else if (!isExcluded) {
+        config.headers.Authorization = `Bearer ${token}`; 
+      }
     }
   }
 
