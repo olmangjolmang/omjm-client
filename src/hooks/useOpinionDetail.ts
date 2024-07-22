@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import axiosInstance from "../api/AxiosInstance";
 
 interface Comment {
   commentId: number;
@@ -9,17 +10,23 @@ interface Comment {
   isHeart: boolean;
 }
 
+interface Result {
+  question: string;
+  userNickname: string;
+  responseList: Comment[];
+}
+
 interface OpinionDetails {
   isSuccess: boolean;
   code: string;
   message: string;
-  results: Comment[];
+  results: Result;
 }
 
 const fetchOpinionDetails = async (
   opinionId: number
 ): Promise<OpinionDetails> => {
-  const { data } = await axios.get(`/opinion/${opinionId}`);
+  const { data } = await axiosInstance.get(`/opinion/${opinionId}`);
   return data;
 };
 

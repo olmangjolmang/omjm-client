@@ -19,7 +19,7 @@ interface Opinion {
 const AnswerList = () => {
   const { opinionId } = useParams<{ opinionId: string }>();
   const { data, isLoading, isError } = useOpinionDetail(Number(opinionId));
-  const myNickname = "user5"; // replace with actual user nickname
+  const myNickname = data?.results.userNickname; // replace with actual user nickname
   console.log(data);
 
   if (isLoading) {
@@ -30,10 +30,10 @@ const AnswerList = () => {
     return <div>Error loading opinion details</div>;
   }
 
-  const myAnswers = data?.results.filter(
+  const myAnswers = data?.results.responseList.filter(
     (opinion: Opinion) => opinion.nickname === myNickname
   );
-  const otherAnswers = data?.results.filter(
+  const otherAnswers = data?.results.responseList.filter(
     (opinion: Opinion) => opinion.nickname !== myNickname
   );
 

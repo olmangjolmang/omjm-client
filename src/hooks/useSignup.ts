@@ -1,31 +1,37 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-import { SignupResponse, SignupErrorResponse, SignupPayload } from "../types/SignupTypes";
+import { AxiosError } from "axios";
+import {
+  SignupResponse,
+  SignupErrorResponse,
+  SignupPayload,
+} from "../types/SignupTypes";
+import axiosInstance from "../api/AxiosInstance";
 
+// 회원가입 요청 함수
 const signup = async (payload: SignupPayload): Promise<SignupResponse> => {
-  const { data } = await axios.post<SignupResponse>("/users/sign-up", {
+  const { data } = await axiosInstance.post<SignupResponse>("/users/sign-up", {
     ...payload,
-    category: "AI",
     agreeTerms: true,
-    roles: ["user"],
   });
   return data;
 };
 
-const useSignup = (): UseMutationResult<SignupResponse, AxiosError<SignupErrorResponse>, SignupPayload> => {
+// 회원가입 훅
+const useSignup = (): UseMutationResult<
+  SignupResponse,
+  AxiosError<SignupErrorResponse>,
+  SignupPayload
+> => {
   return useMutation<SignupResponse, AxiosError<SignupErrorResponse>, SignupPayload>({
     mutationFn: signup,
     onSuccess: (data) => {
       console.log("회원가입 성공!");
       localStorage.setItem("token", data.token);
     },
-    // onError: (error) => {
-    //   console.error(
-    //     error.response?.data?.message || "회원가입에 실패했습니다."
-    //   );
-    // },
-    onError(error, variables, context) {
-        console.log(error);
+    onError: (error) => {
+      console.error(
+        error.response?.data?.message || "회원가입에 실패했습니다."
+      );
     },
   });
 };

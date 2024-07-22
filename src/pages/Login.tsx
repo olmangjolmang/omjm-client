@@ -21,6 +21,7 @@ import {
   SignupText,
 } from "../styles/Login";
 import { Errors, Touched } from "../types/LoginTypes";
+import axiosInstance from "../api/AxiosInstance";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -71,16 +72,20 @@ export const Login: React.FC = () => {
 
     if (!errors.email && !errors.password) {
       try {
-        const response = await axios.post("/users/sign-in", {
+        console.log("로그인 요청", { email, password });
+        const response = await axiosInstance.post("/users/sign-in", {
           email,
           password,
         });
 
         console.log("로그인 성공", response.data);
 
-        const token = response.data.token;
+        const token = response.data.results.accessToken;
         localStorage.setItem("token", token);
-        navigate("/")
+        console.log(token);
+        console.log(localStorage.getItem("token"));
+
+        navigate("/");
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error("로그인 실패", error.response?.data || error.message);

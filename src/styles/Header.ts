@@ -8,7 +8,21 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-
+export const Button = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  height: 55px;
+  width: 143px;
+  background-color: #463efb;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+`;
 export const LeftContainer = styled.div`
   display: flex;
   align-items: center;

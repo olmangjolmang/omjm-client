@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import styled from "styled-components";
+import axiosInstance from "../api/AxiosInstance";
 import {
   Container,
   LeftContainer,
@@ -14,6 +13,7 @@ import {
   SearchInput,
   Profile,
   ProfileImg,
+  Button,
   DropdownMenu,
   DropdownItem,
   DropdownLink,
@@ -24,39 +24,24 @@ import {
 } from "../styles/Header";
 import profileImg from "../assets/headerprofile.png";
 
-const Button = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  height: 55px;
-  width: 143px;
-  background-color: #463efb;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  font-weight: 600;
-  white-space: nowrap;
-  text-decoration: none;
-`;
-
-
 const Header: React.FC = () => {
-  // 로그인 상태 관리
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // 로그아웃 로직 추가
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.delete("/users/logout");
+      setIsLoggedIn(false);
+      setIsLoggedIn(false);
+      console.log("로그아웃 성공");
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+    }
   };
-
-  // 추후 useAuth로 인증 상태 가져오기
-  // const { isLoggedIn } = useAuth();
 
   return (
     <Container>
