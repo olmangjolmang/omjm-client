@@ -8,18 +8,23 @@ import Select from "./Select";
 import { Category, OrderBy, CATEGORY_LABELS } from "../types/ArticleBoards";
 import { Container, GridContainer } from "../styles/ArticleBoards";
 import { Option } from "../types/ArticleBoards";
-import { useTicleWarehouse } from "../hooks/useTicleWarehouse";
+import { useMyNotes } from "../hooks/useMyNotes";
+import TicleNote from "./TicleNote";
 
-const orderByOptions: Option[] = [
-  { value: "LATEST", label: "최신순" },
-  { value: "OLDEST", label: "오래된순" },
-  { value: "SCRAPPED", label: "스크랩순" },
-];
+export interface Note {
+  noteId: number;
+  content: string;
+  memoDate: number[];
+  postId: number;
+  postTitle: string;
+  targetText: string;
+}
 
 const TicleNoteGroup = () => {
   const [page, setPage] = useState(0);
 
-  const { data, isLoading, isError } = useTicleWarehouse(page);
+  const { data, isLoading, isError } = useMyNotes();
+  console.log(data);
 
   useEffect(() => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
@@ -30,23 +35,13 @@ const TicleNoteGroup = () => {
   console.log(data);
   return (
     <Container>
-      <GridContainer>
-        {data &&
-          data.results.map((article: any) => (
-            <PostItemMain
-              key={article.postId}
-              {...article}
-              postCategory={CATEGORY_LABELS[article.postCategory as Category]}
-              isSaved={true}
-              isSavedIconLoad={true}
-            />
-          ))}
-      </GridContainer>
-      <Pagination
+      {data && data.results.map((note: any) => <TicleNote {...note} />)}
+
+      {/* <Pagination
         currentPage={page}
         totalPages={data.results.totalPages}
         onPageChange={setPage}
-      />
+      /> */}
     </Container>
   );
 };
