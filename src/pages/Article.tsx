@@ -30,6 +30,7 @@ import {
   GoodArticleAuthor,
   Overlay,
 } from "../styles/Article";
+import axiosInstance from "../api/AxiosInstance";
 
 interface RecommendPost {
   postId: number;
@@ -74,11 +75,7 @@ const Article: React.FC = () => {
           return;
         }
 
-        const response = await axios.get(`http://3.36.247.28/post/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axiosInstance.get(`/post/${id}`);
         console.log("response data:", response.data);
         const data = response.data;
         const articleData = data.results;
