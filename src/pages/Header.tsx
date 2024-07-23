@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import axiosInstance from "../api/AxiosInstance";
 import {
@@ -28,6 +28,13 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -35,7 +42,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     try {
       await axiosInstance.delete("/users/logout");
-      setIsLoggedIn(false);
+      localStorage.removeItem("token"); // remove token from local storage
       setIsLoggedIn(false);
       console.log("로그아웃 성공");
     } catch (error) {
