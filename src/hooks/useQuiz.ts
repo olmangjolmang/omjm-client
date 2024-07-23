@@ -1,9 +1,9 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import axios from "axios";
+import axiosInstance from "../api/AxiosInstance"; // axiosInstance를 가져옵니다.
 import { QuizApiResponse, QuestionData } from "../types/Quiz";
 
 const fetchQuizData = async (id: number): Promise<QuestionData[]> => {
-  const { data } = await axios.get<QuizApiResponse>(`http://3.36.247.28/post/quiz/${id}`);
+  const { data } = await axiosInstance.get<QuizApiResponse>(`/post/quiz/${id}`);
   if (!data.isSuccess) {
     throw new Error(data.message);
   }

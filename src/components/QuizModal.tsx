@@ -61,7 +61,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
   }
 
   if (!quizData) {
-    return <div>No quiz data available.</div>;
+    return <div></div>;
   }
 
   const currentQuestion: QuestionData = quizData[currentStep - 1];
