@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ticleImg from "../assets/signupmodalimg.png";
+import axiosInstance from "../api/AxiosInstance";
 
 interface Props {
   commentId: number;
@@ -24,7 +25,7 @@ const Answer = ({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: () => axios.post(`/opinion/comment/${commentId}/heart`),
+    mutationFn: () => axiosInstance.post(`/opinion/comment/${commentId}/heart`),
     onMutate: async () => {
       await queryClient.cancelQueries({
         queryKey: ["opinionDetails", commentId],
@@ -85,12 +86,13 @@ const Answer = ({
 const AnswerContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 1216px;
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-
+  width: 1216px;
   margin: 0 auto;
   margin-bottom: 35px;
   gap: 35px 900px;
@@ -130,6 +132,7 @@ const Content = styled.div`
 const LikeSection = styled.div`
   display: flex;
   align-items: center;
+  min-width: 85px;
 `;
 
 const HeartIcon = styled.div`

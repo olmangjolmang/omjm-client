@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { ReactComponent as SaveIcon } from "../assets/saveIcon.svg";
+import axiosInstance from "../api/AxiosInstance";
 
 // 게시물 정보를 나타내는 타입 정의
 type PostItemProps = {
@@ -32,12 +33,27 @@ const PostItemMain: React.FC<PostItemProps> = ({
   createdDate,
   isSavedIconLoad,
 }) => {
+  const [saved, setSaved] = useState<boolean>(isSaved);
+
+  const handleSave = async () => {
+    try {
+      await axiosInstance.post(`/post/${postId}/scrap`);
+      console.log("Scrap Success");
+      setSaved(!saved);
+      // 성공적으로 스크랩한 경우 추가로 상태 업데이트 로직을 작성할 수 있습니다.
+    } catch (error) {
+      console.error("Error savehandler", error);
+    }
+  };
+
   return (
     <Container>
       <Image src={image.imageUrl} alt="미리보기 이미지" />
       <CategoryRow>
         <Category>{postCategory}</Category>
-        {isSavedIconLoad && <StyledSaveIcon isSaved={isSaved} />}
+        {isSavedIconLoad && (
+          <StyledSaveIcon isSaved={saved} onClick={handleSave} />
+        )}
       </CategoryRow>
       <Title>{title}</Title>
       {content && <Summary>{content}</Summary>}
@@ -145,4 +161,5 @@ const StyledSaveIcon = styled(SaveIcon)<{ isSaved: boolean }>`
   margin-right: 21.67px;
   stroke-width: 3px;
   stroke: #463efb;
+  cursor: pointer;
 `;

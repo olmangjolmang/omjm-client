@@ -30,6 +30,10 @@ const AnswerList = () => {
     return <div>Error loading opinion details</div>;
   }
 
+  const userHasAnswered = data?.results.responseList.some(
+    (response: Opinion) => response.nickname === data.results.userNickname
+  );
+
   const myAnswers = data?.results.responseList.filter(
     (opinion: Opinion) => opinion.nickname === myNickname
   );
@@ -54,7 +58,7 @@ const AnswerList = () => {
         {otherAnswers?.map((opinion: Opinion) => (
           <Answer key={opinion.commentId} {...opinion} />
         ))}
-        <AnswerForm opinionId={Number(opinionId)} />
+        {!userHasAnswered && <AnswerForm opinionId={Number(opinionId)} />}
       </PageContainer>
       <Footer />
     </>

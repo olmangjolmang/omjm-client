@@ -8,7 +8,8 @@ import Select from "./Select";
 import { Category, OrderBy, CATEGORY_LABELS } from "../types/ArticleBoards";
 import { Container, GridContainer } from "../styles/ArticleBoards";
 import { Option } from "../types/ArticleBoards";
-import { useTicleWarehouse } from "../hooks/useTicleWarehouse";
+import { useMyQuestion } from "../hooks/useMyQuestion";
+import TicleQna from "./TicleQna";
 
 const orderByOptions: Option[] = [
   { value: "LATEST", label: "최신순" },
@@ -16,12 +17,10 @@ const orderByOptions: Option[] = [
   { value: "SCRAPPED", label: "스크랩순" },
 ];
 
-const Boards = () => {
+const TicleQnaGroup = () => {
   const [page, setPage] = useState(1);
-  const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
 
-  const { data, isLoading, isError } = useTicleWarehouse(page, category);
+  const { data, isLoading, isError } = useMyQuestion(0);
 
   useEffect(() => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
@@ -32,25 +31,8 @@ const Boards = () => {
   console.log(data);
   return (
     <Container>
-      <div>
-        <Select
-          value={orderBy}
-          onChange={(e) => setOrderBy(e.target.value as OrderBy)}
-          options={orderByOptions}
-        />
-      </div>
-      <GridContainer>
-        {data &&
-          data.results.savedTicleResponseList.map((article: any) => (
-            <PostItemMain
-              key={article.postId}
-              {...article}
-              postCategory={CATEGORY_LABELS[article.postCategory as Category]}
-              isSaved={true}
-              isSavedIconLoad={true}
-            />
-          ))}
-      </GridContainer>
+      {data && data.results.map((qna: any) => <TicleQna {...qna} />)}
+
       <Pagination
         currentPage={page}
         totalPages={data.results.totalPages}
@@ -60,4 +42,4 @@ const Boards = () => {
   );
 };
 
-export default Boards;
+export default TicleQnaGroup;
