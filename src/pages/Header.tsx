@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import axiosInstance from "../api/AxiosInstance";
 import {
@@ -28,6 +28,13 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -35,7 +42,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     try {
       await axiosInstance.delete("/users/logout");
-      setIsLoggedIn(false);
+      localStorage.removeItem("token"); // remove token from local storage
       setIsLoggedIn(false);
       console.log("로그아웃 성공");
     } catch (error) {
@@ -50,8 +57,8 @@ const Header: React.FC = () => {
         <MenuContainer>
           <Menu to="/">홈</Menu>
           <Menu to="/articles">아티클</Menu>
-          <Menu to="/">물어봥</Menu>
-          <Menu to="/">마이페이지</Menu>
+          <Menu to="/ticleQna">물어봥</Menu>
+          <Menu to="/mypage">마이페이지</Menu>
         </MenuContainer>
       </LeftContainer>
       <RightContainer>
