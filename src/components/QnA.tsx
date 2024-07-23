@@ -2,28 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import viewIcon from "../assets/viewIcon.png";
 import commentIcon from "../assets/commentIcon.png";
-
-/*dummy
-const quizData = {
-  question:
-    "좋은 리더의 자질은 무엇일까요?좋은 리더의 자질은 무엇일까요?좋은 리더의 자질은 무엇일까요?",
-  viewCount: 32,
-  commentCount: 32,
-  comments: [
-    {
-      nickname: "닉네임1",
-      content:
-        "좋은 리더는 팀원들과의 협력을 장려하고, 또한 다른 사람들의 리더십 능력을 발전시키는 데에도 주도적으로 기여하는 사람이다.",
-    },
-    {
-      nickname: "닉네임2",
-      content:
-        "좋은 리더는 팀원들과의 협력을 장려하고, 또한 다른 사람들의 리더십 능력을 발전시키는 데에도 주도적으로 기여하는 사람이다.",
-    },
-  ],
-};
-
-*/
+import { useNavigate, useLocation } from "react-router-dom";
 
 // 댓글 정보를 나타내는 타입 정의
 type Comment = {
@@ -32,6 +11,7 @@ type Comment = {
 };
 
 type QnAProps = {
+  opinionId: number;
   question: string;
   viewCount: number;
   commentCount: number;
@@ -39,13 +19,23 @@ type QnAProps = {
 };
 
 const QnA: React.FC<QnAProps> = ({
+  opinionId,
   question,
   viewCount,
   commentCount,
   comments,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigate = () => {
+    navigate(`/ticleQna/${opinionId}`, {
+      state: { from: location.pathname + location.search },
+    });
+  };
+
   return (
-    <QuizContainer>
+    <QuizContainer onClick={handleNavigate}>
       <Title>{question}</Title>
       <InfoContainer>
         <InfoItem>
