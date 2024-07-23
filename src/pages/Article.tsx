@@ -52,15 +52,44 @@ const Article: React.FC = () => {
       if (text) {
         setHighlightedText(text);
         setHighlightedRanges(prevRanges => [...prevRanges, { start, end }]);
-        selection.removeAllRanges(); // Remove selection after capturing it
+        selection.removeAllRanges();
       }
     }
   };
 
-  const handleSaveNote = (note: string) => {
-    console.log("Highlighted Text:", highlightedText);
-    console.log("Note:", note);
-    setIsHighlightModalOpen(false);
+  const handleSaveNote = async (note: string) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      
+      const response = await axiosInstance.post(
+        `/post/memo/${id}`,
+        {
+          targetText: highlightedText,
+          content: note
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.success) {
+        alert("메모가 저장되었습니다.");
+      } else {
+        alert("메모 저장 실패.");
+      }
+      
+    } catch (error) {
+      console.error("Error saving note:", error);
+      alert("메모 저장 실패.");
+    } finally {
+      setIsHighlightModalOpen(false);
+    }
   };
 
   const handleMenuClick = () => {
