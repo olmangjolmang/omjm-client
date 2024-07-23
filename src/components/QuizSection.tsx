@@ -35,7 +35,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({ title, id }) => {
         <Overlay isModalOpen={isQuizModalOpen}>
           <QuizModal
             title={title}
-            id={id} // Pass id to QuizModal
+            id={id} 
             onClose={() => setIsQuizModalOpen(false)}
           />
         </Overlay>
