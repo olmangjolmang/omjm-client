@@ -129,6 +129,7 @@ const Container = styled.div`
   margin: 0 auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  margin-bottom: 60px;
 `;
 
 const QuestionSection = styled.div`
