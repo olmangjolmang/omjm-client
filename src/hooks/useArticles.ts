@@ -6,13 +6,15 @@ import axiosInstance from "../api/AxiosInstance";
 const fetchArticles = async (
   page?: number,
   category?: Category,
-  orderBy?: OrderBy
+  orderBy?: OrderBy,
+  keyword?: string
 ) => {
   const { data } = await axiosInstance.get(`/post`, {
     params: {
+      page,
       category: category !== undefined ? category : undefined,
       orderBy,
-      page,
+      keyword,
     },
   });
   return data;
@@ -22,11 +24,12 @@ const useArticles = (
   page?: number,
   category?: Category,
   orderBy?: OrderBy,
+  keyword?: string,
   options?: UseQueryOptions
 ) => {
   return useQuery({
-    queryKey: ["articles", page, category, orderBy],
-    queryFn: () => fetchArticles(page, category, orderBy),
+    queryKey: ["articles", category, keyword, orderBy, page],
+    queryFn: () => fetchArticles(page, category, orderBy, keyword),
     placeholderData: (previousData, previousQuery) => previousData,
   });
 };

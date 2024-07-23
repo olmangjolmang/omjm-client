@@ -1,11 +1,19 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import axiosInstance from "../api/AxiosInstance";
 
+interface Page {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
 // Note 타입 정의
 interface Note {
   noteId: number;
+  pageInfo: Page;
   content: string;
-  memoDate: number[];
+  memoDate: string;
   postId: number;
   postTitle: string;
   targetText: string;

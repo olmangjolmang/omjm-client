@@ -27,18 +27,10 @@ const Boards = () => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
   }, [page]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading articles</div>;
+  if (isError) return <div>로그인 정보를 확인해주세요!</div>;
   console.log(data);
   return (
     <Container>
-      <div>
-        <Select
-          value={orderBy}
-          onChange={(e) => setOrderBy(e.target.value as OrderBy)}
-          options={orderByOptions}
-        />
-      </div>
       <GridContainer>
         {data &&
           data.results.savedTicleResponseList.map((article: any) => (
@@ -51,11 +43,13 @@ const Boards = () => {
             />
           ))}
       </GridContainer>
-      <Pagination
-        currentPage={page}
-        totalPages={data.results.totalPages}
-        onPageChange={setPage}
-      />
+      {data && (
+        <Pagination
+          currentPage={page}
+          totalPages={data.results.pageInfo.totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </Container>
   );
 };

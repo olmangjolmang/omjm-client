@@ -38,7 +38,7 @@ export const MenuContainer = styled.div`
   display: flex;
 `;
 
-export const Menu = styled(Link)`
+export const Menu = styled.div`
   font-size: 16px;
   font-weight: 600;
   white-space: nowrap;

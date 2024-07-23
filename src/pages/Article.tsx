@@ -37,6 +37,7 @@ const Article: React.FC = () => {
     enabled: !!id,
   });
 
+
   const [isHighlightModalOpen, setIsHighlightModalOpen] = React.useState<boolean>(false);
   const [highlightedText, setHighlightedText] = React.useState<string>("");
   const [highlightedRanges, setHighlightedRanges] = React.useState<Array<{ start: number; end: number }>>([]);
