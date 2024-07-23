@@ -11,6 +11,7 @@ import {
   DeleteButton,
   DeleteButtonContainer,
 } from "../styles/ProfileEdit";
+import axios from "axios";
 import profileImg from "../assets/headerprofile.png";
 import Header from "./Header";
 
@@ -27,14 +28,36 @@ const ProfileEdit: React.FC = () => {
     setNickname(event.target.value);
   };
 
-  const handleSaveChanges = () => {
-    // 변경사항 저장 로직 추가
-    console.log("변경사항 저장");
+  const handleSaveChanges = async () => {
+    try {
+      await axios.put(
+        "/users/profile",
+        {
+          nickName: nickname,
+          email: email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("변경사항 저장");
+    } catch (error) {
+      console.error("프로필 업데이트 중 오류 발생:", error);
+    }
   };
-
-  const handleDeleteAccount = () => {
-    // 탈퇴 로직 추가
-    console.log("계정 탈퇴");
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.delete("/users/profile", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("계정 탈퇴");
+    } catch (error) {
+      console.error("계정 탈퇴 중 오류 발생:", error);
+    }
   };
 
   return (
