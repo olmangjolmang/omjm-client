@@ -1,14 +1,14 @@
-import React, { useState, useEffect, MouseEvent } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Header from "./Header";
-import Footer from "./Footer";
-import linkimg from "../assets/linkicon.png";
-import articleImg from "../assets/article.png";
-import QuizSection from "../components/QuizSection";
-import FloatingButtons from "../components/FloatingButtons";
-import HighlightModal from "../components/HighlightModal";
-
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer';
+import axiosInstance from '../api/AxiosInstance';
+import linkimg from '../assets/linkicon.png';
+import articleImg from '../assets/article.png';
+import QuizSection from '../components/QuizSection';
+import FloatingButtons from '../components/FloatingButtons';
+import HighlightModal from '../components/HighlightModal';
+import { useArticle } from '../hooks/useArticle';
 import {
   Container,
   Category,
@@ -29,78 +29,31 @@ import {
   GoodArticleTitle,
   GoodArticleAuthor,
   Overlay,
-} from "../styles/Article";
-
-interface RecommendPost {
-  postId: number;
-  postTitle: string;
-}
-
-interface ArticleData {
-  postId: number;
-  title: string;
-  content: string;
-  author: string;
-  createdDate: [number, number, number];
-  postCategory: string;
-  image: {
-    imageFileName: string;
-    imageFolderName: string;
-    imageUrl: string;
-  };
-  recommendPost: RecommendPost[];
-}
+} from '../styles/Article';
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [article, setArticle] = useState<ArticleData | null>(null);
-  const [isHighlightModalOpen, setIsHighlightModalOpen] =
-    useState<boolean>(false);
-  const [highlightedText, setHighlightedText] = useState<string>("");
-  const [highlightedRange, setHighlightedRange] = useState<{
-    start: number;
-    end: number;
-  } | null>(null);
-  const [highlightedRanges, setHighlightedRanges] = useState<
-    Array<{ start: number; end: number }>
-  >([]);
+  const { data: article, isLoading } = useArticle(id || "", {
+    enabled: !!id,
+  });
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("No token found");
-          return;
-        }
+  const [isHighlightModalOpen, setIsHighlightModalOpen] = React.useState<boolean>(false);
+  const [highlightedText, setHighlightedText] = React.useState<string>("");
+  const [highlightedRanges, setHighlightedRanges] = React.useState<Array<{ start: number; end: number }>>([]);
 
-        const response = await axios.get(`http://3.36.247.28/post/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("response data:", response.data);
-        const data = response.data;
-        const articleData = data.results;
-        setArticle(articleData);
-      } catch (error) {
-        console.error("Error fetching article:", error);
-      }
-    };
-
-    if (id) {
-      fetchArticle();
-    }
-  }, [id]);
-
-  const handleTextHighlight = (e: MouseEvent) => {
+  const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
       const start = range.startOffset;
       const end = range.endOffset;
-      setHighlightedText(selection.toString());
-      setHighlightedRange({ start, end });
+      const text = selection.toString();
+
+      if (text) {
+        setHighlightedText(text);
+        setHighlightedRanges(prevRanges => [...prevRanges, { start, end }]);
+        selection.removeAllRanges(); // Remove selection after capturing it
+      }
     }
   };
 
@@ -111,10 +64,9 @@ const Article: React.FC = () => {
   };
 
   const handleMenuClick = () => {
-    if (!article) return;
     const combinedText = highlightedRanges
       .map(({ start, end }) => {
-        return article.content.slice(start, end);
+        return article?.content.slice(start, end) || "";
       })
       .join("\n");
     setHighlightedText(combinedText);
@@ -122,41 +74,50 @@ const Article: React.FC = () => {
   };
 
   const handleSaveArticle = async () => {
-    if (!article) return;
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) {
-        console.error("No token found");
+        alert("로그인이 필요합니다.");
         return;
       }
+      console.log("Access Token:", token);
+      console.log("Post ID:", id);
 
-      await axios.post(
-        `http://3.36.247.28/post/${id}/scrap`,
-        {},
+      const response = await axiosInstance.post(
+        `/post/${id}/scrap`,
+        { postId: id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      console.log("Response:", response);
 
-      alert("Article saved successfully!");
+      if (response.data.success) {
+        alert("아티클 저장 완료");
+      } else {
+        console.log("아티클 저장 실패");
+      }
     } catch (error) {
       console.error("Error saving article:", error);
-      alert("Failed to save article");
+      alert("아티클 저장 실패");
     }
   };
 
   const renderHighlightedText = (text: string) => {
-    if (!highlightedRange) {
+    if (!highlightedRanges.length) {
       return text;
     }
+
     let lastIndex = 0;
     const elements = [];
     highlightedRanges
       .sort((a, b) => a.start - b.start)
       .forEach(({ start, end }, index) => {
-        elements.push(text.slice(lastIndex, start));
+        if (start > lastIndex) {
+          elements.push(text.slice(lastIndex, start));
+        }
         elements.push(
           <Highlight key={index}>{text.slice(start, end)}</Highlight>
         );
@@ -166,25 +127,26 @@ const Article: React.FC = () => {
     return elements;
   };
 
-  if (!article) {
+  if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!article) {
+    return <div>No article found</div>;
   }
 
   const {
     title,
     content,
     author,
-    createdDate = [0, 0, 0],
+    createdDate,
     postCategory,
     image,
     recommendPost,
   } = article;
-  const formattedDate =
-    createdDate.length === 3
-      ? `${createdDate[0]}-${String(createdDate[1]).padStart(2, "0")}-${String(
-          createdDate[2]
-        ).padStart(2, "0")}`
-      : "Date not available";
+
+  const date = new Date(createdDate);
+  const formattedDate = date.toISOString().split('T')[0];
 
   return (
     <>
@@ -195,7 +157,7 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkText href="https://google.com/">Original Link</LinkText>
+          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
           <LinkIcon src={linkimg} alt="Link icon" />
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
@@ -205,7 +167,7 @@ const Article: React.FC = () => {
         <Line />
         <QuizSection title={title} id={Number(id)} />
         <div>
-          <BottomArticleTitle>Recommended Articles</BottomArticleTitle>
+          <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
           <GoodArticleContainer>
             {recommendPost.length > 0 ? (
               recommendPost.map((post) => (
@@ -222,7 +184,7 @@ const Article: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div>No recommended articles</div>
+              <div>추천 아티클이 없습니다.</div>
             )}
           </GoodArticleContainer>
         </div>
@@ -239,7 +201,7 @@ const Article: React.FC = () => {
         )}
         <FloatingButtons
           onMenuClick={handleMenuClick}
-          onSaveClick={handleSaveArticle} // Pass the save function here
+          onSaveClick={handleSaveArticle}
         />
       </Container>
       <Footer />
