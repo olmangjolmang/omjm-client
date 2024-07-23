@@ -50,8 +50,8 @@ const Header: React.FC = () => {
         <MenuContainer>
           <Menu to="/">홈</Menu>
           <Menu to="/articles">아티클</Menu>
-          <Menu to="/">물어봥</Menu>
-          <Menu to="/">마이페이지</Menu>
+          <Menu to="/ticleQna">물어봥</Menu>
+          <Menu to="/mypage">마이페이지</Menu>
         </MenuContainer>
       </LeftContainer>
       <RightContainer>
