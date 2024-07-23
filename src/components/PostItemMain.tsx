@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as SaveIcon } from "../assets/saveIcon.svg";
 import axiosInstance from "../api/AxiosInstance";
 
@@ -33,6 +34,15 @@ const PostItemMain: React.FC<PostItemProps> = ({
   createdDate,
   isSavedIconLoad,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigate = () => {
+    navigate(`/post/${postId}`, {
+      state: { from: location.pathname + location.search },
+    });
+  };
+
   const [saved, setSaved] = useState<boolean>(isSaved);
 
   const handleSave = async () => {
@@ -47,7 +57,7 @@ const PostItemMain: React.FC<PostItemProps> = ({
   };
 
   return (
-    <Container>
+    <Container onClick={handleNavigate}>
       <Image src={image.imageUrl} alt="미리보기 이미지" />
       <CategoryRow>
         <Category>{postCategory}</Category>
