@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import {
   ModalContainer,
   Title,
@@ -23,47 +22,24 @@ import quizimg3 from "../assets/quizimg3.png";
 import quizimg2 from "../assets/quizimg2.png";
 import quizimg1 from "../assets/quizimg1.png";
 import quizimg0 from "../assets/quizimg0.png";
-import { QuizApiResponse, QuestionData } from "../types/Quiz";
+import { useQuiz } from "../hooks/useQuiz";
+import { QuestionData } from "../types/Quiz";
 
 interface QuizModalProps {
   onClose: () => void;
   title: string;
-  id: number; // Add id to props
+  id: number; 
 }
 
 const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
-  const [quizData, setQuizData] = useState<QuestionData[] | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isStopConfirmationOpen, setIsStopConfirmationOpen] = useState<boolean>(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const fetchQuizData = async () => {
-      try {
-        const { data } = await axios.get<QuizApiResponse>(`http://3.36.247.28/post/quiz/${id}`);
-        if (!data.isSuccess) {
-          throw new Error(data.message);
-        }
-        setQuizData(data.results);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuizData();
-  }, [id]);
+  const { data: quizData, isLoading, error } = useQuiz(id);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -76,12 +52,12 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   if (!quizData) {
