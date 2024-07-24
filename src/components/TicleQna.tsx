@@ -3,16 +3,31 @@ import styled from "styled-components";
 import { useMyQuestion } from "../hooks/useMyQuestion";
 import axiosInstance from "../api/AxiosInstance";
 
-interface QnAItemProps {
-  question: string;
-  createdDate: string;
-  comment: string;
+interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
-const TicleQna = ({ question, createdDate, comment }: QnAItemProps) => {
+interface Response {
+  question: string;
+  questionId: number;
+  comment: string;
+  createdDate: string;
+  pageInfo: PageInfo;
+}
+
+const TicleQna = ({
+  question,
+  questionId,
+  comment,
+  createdDate,
+  pageInfo,
+}: Response) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [answer, setAnswer] = useState("답변");
+  const [answer, setAnswer] = useState(comment);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -25,7 +40,7 @@ const TicleQna = ({ question, createdDate, comment }: QnAItemProps) => {
   const handleSave = async () => {
     setIsEditing(false);
     // Replace with your question ID
-    const questionId = 1;
+
     try {
       await axiosInstance.put(`/mypage/my-question/${questionId}`, {
         content: answer,
@@ -53,11 +68,11 @@ const TicleQna = ({ question, createdDate, comment }: QnAItemProps) => {
   };
 
   return (
-    <Container onClick={toggleOpen}>
-      <QuestionSection>
+    <Container>
+      <QuestionSection onClick={toggleOpen}>
         <QnD>
-          <Question>질문</Question>
-          <Date>날짜</Date>
+          <Question>{question}</Question>
+          <Date>{createdDate}</Date>
         </QnD>
         <ToggleIcon isOpen={isOpen}>
           {isOpen ? (
@@ -182,7 +197,7 @@ const Answer = styled.div`
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
+  width: 1000px;
   font-family: Pretendard;
   font-size: 16px;
   padding: 10px;
