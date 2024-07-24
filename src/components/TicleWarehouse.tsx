@@ -8,6 +8,7 @@ import Select from "./Select";
 import { Category, OrderBy, CATEGORY_LABELS } from "../types/ArticleBoards";
 import { Container, GridContainer } from "../styles/ArticleBoards";
 import { Option } from "../types/ArticleBoards";
+import { useTicleWarehouse } from "../hooks/useTicleWarehouse";
 
 const orderByOptions: Option[] = [
   { value: "LATEST", label: "최신순" },
@@ -20,39 +21,35 @@ const Boards = () => {
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
 
-  const { data, isLoading, isError } = useArticles(page, category, orderBy);
+  const { data, isLoading, isError } = useTicleWarehouse(page, category);
 
   useEffect(() => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
   }, [page]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading articles</div>;
+  if (isError) return <div>로그인 정보를 확인해주세요!</div>;
   console.log(data);
   return (
     <Container>
-      <div>
-        <Select
-          value={orderBy}
-          onChange={(e) => setOrderBy(e.target.value as OrderBy)}
-          options={orderByOptions}
-        />
-      </div>
       <GridContainer>
         {data &&
-          data.results.content.map((article: any) => (
+          data.results.savedTicleResponseList.map((article: any) => (
             <PostItemMain
               key={article.postId}
               {...article}
               postCategory={CATEGORY_LABELS[article.postCategory as Category]}
+              isSaved={true}
+              isSavedIconLoad={true}
             />
           ))}
       </GridContainer>
-      <Pagination
-        currentPage={page}
-        totalPages={data.results.totalPages}
-        onPageChange={setPage}
-      />
+      {data && (
+        <Pagination
+          currentPage={page}
+          totalPages={data.results.pageInfo.totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </Container>
   );
 };

@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use((config) => {
       if (config.url === "/users/logout") {
         config.headers.Authorization = `${token}`;
       } else if (!isExcluded) {
-        config.headers.Authorization = `Bearer ${token}`; 
+        config.headers.Authorization = `Bearer ${token}`;
       }
     }
   }

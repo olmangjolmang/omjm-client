@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { useArticles } from "../hooks/useArticles";
 import PostItemMain from "./PostItemMain";
 import CategorySelector from "./CategorySelector";
@@ -16,18 +17,45 @@ const orderByOptions: Option[] = [
 ];
 
 const Boards = () => {
-  const [page, setPage] = useState(1);
+  const location = useLocation();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+
+  const [page, setPage] = useState<number>(initialPage);
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data, isLoading, isError } = useArticles(page, category, orderBy);
+  useEffect(() => {
+    if (location.state && location.state.reload) {
+      window.location.reload();
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (location.state && location.state.searchTerm) {
+      setSearchTerm(location.state.searchTerm);
+    }
+  }, [location.state]);
+
+  const { data, isLoading, isError } = useArticles(
+    page,
+    category,
+    orderBy,
+    searchTerm ? searchTerm : undefined
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
   }, [page]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading articles</div>;
+  useEffect(() => {
+    setSearchParams({ page: String(page) });
+  }, [page, setSearchParams]);
+
+  if (isLoading) return <div>아티클을 불러오는 중입니다.</div>;
+  if (isError) return <div>잘못된 접근입니다.</div>;
   console.log(data);
   return (
     <Container>

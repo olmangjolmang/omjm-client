@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -15,23 +16,28 @@ interface Opinion {
 }
 
 const QnaBoard = () => {
-  const [page, setPage] = useState<number>(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+
+  const [page, setPage] = useState<number>(initialPage);
   const { data, isLoading, isError } = useOpinions(page);
+  console.log(data);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    setSearchParams({ page: String(page) });
+  }, [page, setSearchParams]);
+
   if (isError) {
-    return <div>Error loading opinions</div>;
+    return <div>잘못된 접근입니다.</div>;
   }
   return (
     <>
       <Header />
-      <Title>물어봥</Title>
+      <Title>티클 문답</Title>
       <PageContainer>
         {data &&
           data.results.opinionResponseList.map((qna: Opinion) => (

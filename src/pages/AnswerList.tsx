@@ -22,13 +22,13 @@ const AnswerList = () => {
   const myNickname = data?.results.userNickname; // replace with actual user nickname
   console.log(data);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isError) {
+    return <div>잘못된 접근입니다.</div>;
   }
 
-  if (isError) {
-    return <div>Error loading opinion details</div>;
-  }
+  const userHasAnswered = data?.results.responseList.some(
+    (response: Opinion) => response.nickname === data.results.userNickname
+  );
 
   const myAnswers = data?.results.responseList.filter(
     (opinion: Opinion) => opinion.nickname === myNickname
@@ -40,10 +40,10 @@ const AnswerList = () => {
   return (
     <>
       <Header />
-      <Title>물어봥</Title>
+      <Title>티클 문답</Title>
       <QustionSpace>
         <TicleImage src={think} alt="ticleImage" />
-        <Question>Q. {data?.message}</Question>
+        <Question>Q. {data?.results.question}</Question>
       </QustionSpace>
       <PageContainer>
         {myAnswers?.map((opinion: Opinion) => (
@@ -54,7 +54,7 @@ const AnswerList = () => {
         {otherAnswers?.map((opinion: Opinion) => (
           <Answer key={opinion.commentId} {...opinion} />
         ))}
-        <AnswerForm opinionId={Number(opinionId)} />
+        {!userHasAnswered && <AnswerForm opinionId={Number(opinionId)} />}
       </PageContainer>
       <Footer />
     </>
@@ -95,6 +95,7 @@ const QustionSpace = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 112px;
 `;
 
 export const Question = styled.div`
