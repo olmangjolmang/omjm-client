@@ -34,12 +34,12 @@ export const Label = styled.label`
   margin-bottom: 15px;
 `;
 
-export const Input = styled.input<{ hasError: boolean }>`
+export const Input = styled.input<{ hasError: boolean; hasText: boolean }>`
   width: 515px;
   height: 60px;
   border-radius: 10px;
   font-size: 16px;
-  color: #afafb6;
+  color: ${(props) => (props.hasText ? "#272726" : "#afafb6")};
   border: solid 1px ${(props) => (props.hasError ? "red" : "#dfdfe5")};
   margin-bottom: 5px;
   padding-left: 19px;
@@ -63,4 +63,3 @@ export const ErrorMessage = styled.div`
   font-size: 14px;
   margin-bottom: 20px;
 `;
-

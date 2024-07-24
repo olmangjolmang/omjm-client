@@ -47,6 +47,7 @@ const Header: React.FC = () => {
     try {
       await axiosInstance.delete("/users/logout");
       setIsLoggedIn(false);
+      localStorage.removeItem("token");
       console.log("로그아웃 성공");
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
@@ -54,6 +55,7 @@ const Header: React.FC = () => {
   };
 
   const handleSearch = () => {
+    if (searchTerm === "") alert("검색어를 입력해주세요.");
     if (searchTerm.trim() !== "") {
       navigate("/articles", { state: { searchTerm } });
     }
@@ -61,6 +63,12 @@ const Header: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const handleMenuClick = (path: string) => {
@@ -74,7 +82,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <LeftContainer>
-        <Logo src={logo} alt="로고" />
+        <Logo src={logo} alt="로고" onClick={() => handleMenuClick("/")} />
         <MenuContainer>
           <Menu onClick={() => handleMenuClick("/")}>홈</Menu>
           <Menu onClick={() => handleMenuClick("/articles")}>아티클</Menu>
@@ -88,6 +96,7 @@ const Header: React.FC = () => {
             placeholder="궁금한 내용을 검색해 보세요!"
             value={searchTerm}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
           />
           <SearchIcon
             xmlns="http://www.w3.org/2000/svg"

@@ -36,7 +36,7 @@ const TicleNote = ({
     setIsEditing(false);
     // Replace with your question ID
     try {
-      await axiosInstance.put(`/mypage/my-note/${postId}`, {
+      await axiosInstance.put(`/mypage/my-note/${noteId}`, {
         content: answer,
       });
       // Optionally handle the response or refresh data
@@ -49,7 +49,7 @@ const TicleNote = ({
     // Replace with your question ID
 
     try {
-      await axiosInstance.delete(`/mypage/my-note/${postId}`);
+      await axiosInstance.delete(`/mypage/my-note/${noteId}`);
       // Optionally handle the response or refresh data
       alert("삭제되었습니다.");
     } catch (error) {

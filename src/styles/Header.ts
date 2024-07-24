@@ -7,6 +7,7 @@ export const Container = styled.div`
   padding: 0 120px;
   align-items: center;
   justify-content: space-between;
+  gap: 50px;
 `;
 export const Button = styled(Link)`
   display: flex;
@@ -31,6 +32,7 @@ export const Logo = styled.img`
   width: 76px;
   height: 40px;
   margin-right: 98px;
+  cursor: pointer;
 `;
 
 export const MenuContainer = styled.div`
@@ -99,6 +101,7 @@ export const Profile = styled.div`
     width: 40px;
     height: 40px;
   }
+  cursor: pointer;
 `;
 
 export const DropdownMenu = styled.div`

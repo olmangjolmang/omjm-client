@@ -10,6 +10,7 @@ import SubscribtionModal from "../components/SubscriptionModal";
 import { useHomeData } from "../hooks/useHomeData";
 
 interface ResponseItem {
+  postId: number;
   title: string;
   imageUrl: string;
   category: string;

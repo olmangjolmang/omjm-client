@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 import { ReactComponent as SaveIcon } from "../assets/saveIcon.svg";
 import axiosInstance from "../api/AxiosInstance";
 
 // 게시물 정보를 나타내는 타입 정의
 interface ResponseItem {
+  postId: number;
   title: string;
   imageUrl: string;
   category: string;
@@ -14,21 +14,30 @@ interface ResponseItem {
 }
 
 const PostItemHome = ({
+  postId,
   title,
   imageUrl,
   category,
   author,
   createdDate,
 }: ResponseItem) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigate = () => {
+    navigate(`/post/${postId}`, {
+      state: { from: location.pathname + location.search },
+    });
+  };
   return (
-    <Container>
+    <Container onClick={handleNavigate}>
       <Image src={imageUrl} alt="미리보기 이미지" />
       <CategoryRow>
         <Category>{category}</Category>
       </CategoryRow>
       <Title>{title}</Title>
       <Author>
-        {author} {createdDate}
+        {author} | {createdDate}
       </Author>
     </Container>
   );

@@ -1,14 +1,14 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import Header from "./Header";
-import Footer from "./Footer";
-import axiosInstance from "../api/AxiosInstance";
-import linkimg from "../assets/linkicon.png";
-import articleImg from "../assets/article.png";
-import QuizSection from "../components/QuizSection";
-import FloatingButtons from "../components/FloatingButtons";
-import HighlightModal from "../components/HighlightModal";
-import { useArticle } from "../hooks/useArticle";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer';
+import axiosInstance from '../api/AxiosInstance';
+import linkimg from '../assets/linkicon.png';
+import articleImg from '../assets/article.png';
+import QuizSection from '../components/QuizSection';
+import FloatingButtons from '../components/FloatingButtons';
+import HighlightModal from '../components/HighlightModal';
+import { useArticle } from '../hooks/useArticle';
 import {
   Container,
   Category,
@@ -29,7 +29,7 @@ import {
   GoodArticleTitle,
   GoodArticleAuthor,
   Overlay,
-} from "../styles/Article";
+} from '../styles/Article';
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,12 +37,9 @@ const Article: React.FC = () => {
     enabled: !!id,
   });
 
-  const [isHighlightModalOpen, setIsHighlightModalOpen] =
-    React.useState<boolean>(false);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] = React.useState<boolean>(false);
   const [highlightedText, setHighlightedText] = React.useState<string>("");
-  const [highlightedRanges, setHighlightedRanges] = React.useState<
-    Array<{ start: number; end: number }>
-  >([]);
+  const [highlightedRanges, setHighlightedRanges] = React.useState<Array<{ start: number; end: number }>>([]);
 
   const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
@@ -54,44 +51,16 @@ const Article: React.FC = () => {
 
       if (text) {
         setHighlightedText(text);
-        setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
+        setHighlightedRanges(prevRanges => [...prevRanges, { start, end }]);
         selection.removeAllRanges(); // Remove selection after capturing it
       }
     }
   };
 
-  const handleSaveNote = async (note: string) => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
-
-      const response = await axiosInstance.post(
-        `/post/memo/${id}`,
-        {
-          targetText: highlightedText,
-          content: note,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        alert("메모가 저장되었습니다.");
-      } else {
-        alert("메모 저장 실패.");
-      }
-    } catch (error) {
-      console.error("Error saving note:", error);
-      alert("메모 저장 실패.");
-    } finally {
-      setIsHighlightModalOpen(false);
-    }
+  const handleSaveNote = (note: string) => {
+    console.log("Highlighted Text:", highlightedText);
+    console.log("Note:", note);
+    setIsHighlightModalOpen(false);
   };
 
   const handleMenuClick = () => {
@@ -173,11 +142,11 @@ const Article: React.FC = () => {
     createdDate,
     postCategory,
     image,
-    recommendPost,
+    recommendPost = [], // Ensure recommendPost is always an array
   } = article;
 
   const date = new Date(createdDate);
-  const formattedDate = date.toISOString().split("T")[0];
+  const formattedDate = date.toISOString().split('T')[0];
 
   return (
     <>
