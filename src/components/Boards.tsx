@@ -7,7 +7,7 @@ import CategorySelector from "./CategorySelector";
 import Pagination from "./Pagination";
 import Select from "./Select";
 import { Category, OrderBy, CATEGORY_LABELS } from "../types/ArticleBoards";
-import { Container, GridContainer } from "../styles/ArticleBoards";
+import { Container, GridContainer, NoContent } from "../styles/ArticleBoards";
 import { Option } from "../types/ArticleBoards";
 
 const orderByOptions: Option[] = [
@@ -56,6 +56,7 @@ const Boards = () => {
 
   if (isLoading) return <div>아티클을 불러오는 중입니다.</div>;
   if (isError) return <div>잘못된 접근입니다.</div>;
+
   console.log(data);
   return (
     <Container>
@@ -73,16 +74,20 @@ const Boards = () => {
           options={orderByOptions}
         />
       </div>
-      <GridContainer>
-        {data &&
-          data.results.content.map((article: any) => (
-            <PostItemMain
-              key={article.postId}
-              {...article}
-              postCategory={CATEGORY_LABELS[article.postCategory as Category]}
-            />
-          ))}
-      </GridContainer>
+      {data && data.results.empty === true ? (
+        <NoContent>조건에 맞는 아티클이 없습니다.</NoContent>
+      ) : (
+        <GridContainer>
+          {data &&
+            data.results.content.map((article: any) => (
+              <PostItemMain
+                key={article.postId}
+                {...article}
+                postCategory={CATEGORY_LABELS[article.postCategory as Category]}
+              />
+            ))}
+        </GridContainer>
+      )}
       <Pagination
         currentPage={page}
         totalPages={data.results.totalPages}

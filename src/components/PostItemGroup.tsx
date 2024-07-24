@@ -15,6 +15,7 @@ import styled from "styled-components";
 import { Category, CATEGORY_LABELS } from "../types/ArticleBoards";
 
 interface ResponseItem {
+  postId: number;
   title: string;
   imageUrl: string;
   category: string;
@@ -85,6 +86,7 @@ const PostItemGroup = ({ topic, responseList }: Result) => {
         <Slider {...settings}>
           {responseList.map((post) => (
             <PostItemHome
+              postId={post.postId}
               imageUrl={post.imageUrl}
               category={CATEGORY_LABELS[post.category as Category]}
               title={post.title}

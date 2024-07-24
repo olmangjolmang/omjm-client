@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../api/AxiosInstance";
 
 interface ResponseItem {
+  postId: number;
   title: string;
   imageUrl: string;
   category: string;

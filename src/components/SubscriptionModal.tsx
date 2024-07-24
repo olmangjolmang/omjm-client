@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ModalOverlay,
   ModalContent,
@@ -20,6 +19,8 @@ import {
   Span,
 } from "../styles/MainPage";
 import styled from "styled-components";
+import axiosInstance from "../api/AxiosInstance";
+
 interface SubscribtionModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -87,6 +88,29 @@ const CloseIcon = () => (
 const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
   const [isRequiredChecked, setIsRequiredChecked] = useState<boolean>(false);
   const [isOptionalChecked, setIsOptionalChecked] = useState<boolean>(false);
+  const [selectedDay, setSelectedDay] = useState<string>("");
+
+  const isSubmitEnabled = selectedDay !== "" && isRequiredChecked;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isSubmitEnabled) return;
+
+    const params = {
+      subsDay: selectedDay,
+      agreeInfo: isRequiredChecked,
+      agreeMarketing: isOptionalChecked,
+    };
+
+    try {
+      const response = await axiosInstance.post("/home/subscription", params);
+      console.log("Subscription successful:", response.data);
+
+      onClose();
+    } catch (error) {
+      console.error("Subscription failed:", error);
+    }
+  };
 
   return (
     <ModalOverlay isOpen={isOpen}>
@@ -109,17 +133,20 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
         <Form>
           <FormGroup>
             <Label>요일</Label>
-            <Select defaultValue="">
-              <option value="" disabled hidden selected>
+            <Select
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(e.target.value)}
+            >
+              <option value="" disabled hidden>
                 아티클을 받을 요일을 선택해주세요.
               </option>
-              <option value="monday">월요일</option>
-              <option value="tuesday">화요일</option>
-              <option value="wednesday">수요일</option>
-              <option value="thursday">목요일</option>
-              <option value="friday">금요일</option>
-              <option value="saturday">토요일</option>
-              <option value="sunday">일요일</option>
+              <option value="MONDAY">월요일</option>
+              <option value="TUESDAY">화요일</option>
+              <option value="WEDNESDAY">수요일</option>
+              <option value="THURSDAY">목요일</option>
+              <option value="FRIDAY">금요일</option>
+              <option value="SATURDAY">토요일</option>
+              <option value="SUNDAY">일요일</option>
               {/* 요일 옵션 추가 */}
             </Select>
           </FormGroup>
@@ -147,7 +174,12 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
               <Link href="#">약관 상세보기</Link>
             </CheckboxLabel>
           </CheckboxGroup>
-          <SubmitButton type="submit">구독하기</SubmitButton>
+          <SubmitButton
+            isSubmitEnabled={isSubmitEnabled}
+            onClick={handleSubmit}
+          >
+            구독하기
+          </SubmitButton>
         </Form>
       </ModalContent>
     </ModalOverlay>
