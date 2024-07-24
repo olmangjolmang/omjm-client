@@ -170,7 +170,7 @@ export const BannerContainer = styled.div`
   color: white;
   margin-top: 138px;
   height: 450px;
-  width: 100%;
+
   max-width: 1440px;
   margin: 0 auto;
   margin-top: 138px;
