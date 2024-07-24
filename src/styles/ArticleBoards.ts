@@ -21,6 +21,21 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
+export const NoContent = styled.div`
+  color: #463efb;
+  text-align: center;
+  /* Head/1 */
+  font-family: Pretendard;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 54px */
+  letter-spacing: -0.18px;
+  align-items: center;
+  padding: 20px;
+  justify-content: center;
+`;
+
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
