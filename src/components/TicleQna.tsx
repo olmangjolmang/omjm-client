@@ -28,7 +28,7 @@ const TicleQna = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [answer, setAnswer] = useState(comment);
-
+  const date = createdDate.split("T")[0];
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -72,7 +72,7 @@ const TicleQna = ({
       <QuestionSection onClick={toggleOpen}>
         <QnD>
           <Question>{question}</Question>
-          <Date>{createdDate}</Date>
+          <Date>{date}</Date>
         </QnD>
         <ToggleIcon isOpen={isOpen}>
           {isOpen ? (

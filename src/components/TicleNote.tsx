@@ -6,7 +6,7 @@ import axiosInstance from "../api/AxiosInstance";
 export interface Note {
   noteId: number;
   content: string;
-  memoDate: number[]; // [year, month, day, hour, minute, second, nanoseconds]
+  memoDate: string; // [year, month, day, hour, minute, second, nanoseconds]
   postId: number;
   postTitle: string;
   targetText: string;
@@ -23,7 +23,7 @@ const TicleNote = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [answer, setAnswer] = useState(targetText);
-
+  const date = memoDate.split("T")[0];
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -69,9 +69,7 @@ const TicleNote = ({
       <QuestionSection onClick={toggleOpen}>
         <QnD>
           <Question>{postTitle}</Question>
-          <Date>
-            {memoDate[0]}-{memoDate[1]}-{memoDate[2]}
-          </Date>
+          <Date>{date}</Date>
         </QnD>
         <ToggleIcon>
           {isOpen ? (
