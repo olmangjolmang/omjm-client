@@ -31,6 +31,7 @@ export const Logo = styled.img`
   width: 76px;
   height: 40px;
   margin-right: 98px;
+  cursor: pointer;
 `;
 
 export const MenuContainer = styled.div`
