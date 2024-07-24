@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const ModalContainer = styled.div`
-  width: 800px;
-  height: 680px;
+  width: 750px;
+  height: 600px;
   border-radius: 40px;
   background: white;
   padding: 40px 40px 60px 40px;
@@ -18,7 +18,7 @@ export const ModalContainer = styled.div`
 export const Title = styled.h1`
   margin-bottom: 56px;
   color: var(--Blue-300, #463efb);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   margin-top: 10px;
   text-align: center;
@@ -46,9 +46,9 @@ export const ProgressBar = styled.div<{ progress: number; total: number }>`
 export const QuestionContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 42px;
   align-self: flex-start;
   margin-left: 50px;
+  margin-bottom: 20px;
 `;
 
 export const QuestionNumber = styled.div`
@@ -83,15 +83,14 @@ export const Answer = styled.div<{
 }>`
   display: flex;
   width: 650px;
-  padding: 20px 10px 30px 35px;
+  padding: 15px 10px 15px 35px;
   align-items: center;
   gap: 10px;
   border-radius: 20px;
-  border: 1px solid #afafb6;
+  border: 1px solid var(--Gray-300, #afafb6);
   cursor: pointer;
   font-weight: 500;
   font-size: 18px;
-  line-height: 150%;
   ${(props) =>
     props.selected &&
     `
@@ -101,7 +100,6 @@ export const Answer = styled.div<{
     background: ${
       props.correct ? "var(--Green-100, #E7FFE8)" : "var(--Red-100, #FFE4E4)"
     };
-
     & > div {
       background: ${
         props.correct ? "var(--Green-200, #09D535)" : "var(--Red-200, #F44)"
@@ -109,14 +107,12 @@ export const Answer = styled.div<{
       color: white;
     }
   `}
-
   ${(props) =>
     !props.selected &&
     props.isCorrectAnswer &&
     `
     border: 2px solid var(--Green-200, #09D535);
     background: var(--Green-100, #E7FFE8);
-
     & > div {
       background: var(--Green-200, #09D535);
       color: white;
@@ -168,7 +164,6 @@ export const HomeButton = styled.button`
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
-
   &:hover {
     background: #d0e0ff;
   }
