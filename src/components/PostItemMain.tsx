@@ -62,7 +62,17 @@ const PostItemMain: React.FC<PostItemProps> = ({
       <CategoryRow>
         <Category>{postCategory}</Category>
         {isSavedIconLoad && (
-          <StyledSaveIcon isSaved={saved} onClick={handleSave} />
+          <SaveIconWrapper
+            role="button"
+            tabIndex={0}
+            aria-pressed={saved}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSave();
+            }}
+          >
+            <StyledSaveIcon $isSaved={saved} />
+          </SaveIconWrapper>
         )}
       </CategoryRow>
       <Title>{title}</Title>
@@ -162,14 +172,20 @@ const Author = styled.div<{ hasSummary: boolean }>`
   `}
 `;
 
-const StyledSaveIcon = styled(SaveIcon)<{ isSaved: boolean }>`
+const SaveIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const StyledSaveIcon = styled(SaveIcon)<{ $isSaved: boolean }>`
   width: 16.667px;
   height: 25.976px;
   flex-shrink: 0;
-  fill: ${({ isSaved }) =>
-    isSaved ? "#463efb" : "#ffffff"}; // 조건에 따라 색상 변경
+  fill: ${({ $isSaved }) =>
+    $isSaved ? "#463efb" : "#ffffff"}; // 조건에 따라 색상 변경
   margin-right: 21.67px;
   stroke-width: 3px;
   stroke: #463efb;
-  cursor: pointer;
 `;

@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import viewIcon from "../assets/viewIcon.png";
 import commentIcon from "../assets/commentIcon.png";
@@ -18,13 +17,13 @@ type QnAProps = {
   comments?: Comment[];
 };
 
-const QnA: React.FC<QnAProps> = ({
+const QnA = ({
   opinionId,
   question,
   viewCount,
   commentCount,
   comments,
-}) => {
+}: QnAProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 

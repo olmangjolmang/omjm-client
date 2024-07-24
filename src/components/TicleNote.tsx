@@ -73,7 +73,7 @@ const TicleNote = ({
             {memoDate[0]}-{memoDate[1]}-{memoDate[2]}
           </Date>
         </QnD>
-        <ToggleIcon isOpen={isOpen}>
+        <ToggleIcon>
           {isOpen ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +192,7 @@ const Content = styled.div`
   letter-spacing: -0.1px;
 `;
 
-const ToggleIcon = styled.div<{ isOpen: boolean }>`
+const ToggleIcon = styled.div`
   width: 32px;
   height: 32px;
 `;
