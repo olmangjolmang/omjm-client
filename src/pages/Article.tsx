@@ -33,7 +33,7 @@ import {
 } from "../styles/Article";
 
 type CategoryType =
-  | "FRONTEND"
+  | "WEB_FRONT"
   | "BACKEND"
   | "NETWORK"
   | "APP"
@@ -44,7 +44,7 @@ type CategoryType =
   | "ETC";
 
 const categoryMap: Record<CategoryType, string> = {
-  FRONTEND: "웹 프론트",
+  WEB_FRONT: "웹 프론트",
   BACKEND: "백(서버, CI/CD)",
   NETWORK: "네트워크/통신",
   APP: "앱",
@@ -54,6 +54,11 @@ const categoryMap: Record<CategoryType, string> = {
   INFRA: "인프라",
   ETC: "기타",
 };
+
+interface RecommendPost {
+  postId: number;
+  postTitle: string;
+}
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -68,9 +73,9 @@ const Article: React.FC = () => {
     Array<{ start: number; end: number }>
   >([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
 
   useEffect(() => {
-    
     const checkIfSaved = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -87,8 +92,18 @@ const Article: React.FC = () => {
       }
     };
 
+    const fetchRecommendPosts = async () => {
+      try {
+        const response = await axiosInstance.get(`/post/recommend/${id}`);
+        setRecommendPosts(response.data.results.recommendPost);
+      } catch (error) {
+        console.error("Error fetching recommend posts:", error);
+      }
+    };
+
     if (id) {
       checkIfSaved();
+      fetchRecommendPosts();
     }
   }, [id]);
 
@@ -103,7 +118,7 @@ const Article: React.FC = () => {
       if (text) {
         setHighlightedText(text);
         setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
-        selection.removeAllRanges(); 
+        selection.removeAllRanges();
       }
     }
   };
@@ -135,8 +150,7 @@ const Article: React.FC = () => {
       console.log("Post ID:", id);
 
       if (isSaved) {
-        // 아티클 저장 취소
-        const response = await axiosInstance.post(`/post/${id}/scrap`, {
+        const response = await axiosInstance.post(`/post/${id}/unscrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -150,7 +164,6 @@ const Article: React.FC = () => {
           console.log("아티클 저장 취소 실패");
         }
       } else {
-        // 아티클 저장
         const response = await axiosInstance.post(
           `/post/${id}/scrap`,
           { postId: id },
@@ -205,15 +218,7 @@ const Article: React.FC = () => {
     return <div>No article found</div>;
   }
 
-  const {
-    title,
-    content,
-    author,
-    createdDate,
-    postCategory,
-    image,
-    recommendPost = [], 
-  } = article;
+  const { title, content, author, createdDate, postCategory, image } = article;
 
   const date = new Date(createdDate);
   const formattedDate = date.toISOString().split("T")[0];
@@ -241,15 +246,15 @@ const Article: React.FC = () => {
         <GoodArticleSection>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
           <GoodArticleContainer>
-            {recommendPost.length > 0 ? (
-              recommendPost.map((post) => (
+            {recommendPosts.length > 0 ? (
+              recommendPosts.map((post) => (
                 <div key={post.postId}>
                   <GoodArticleImg
                     src={image?.imageUrl || articleImg}
                     alt="Recommended article"
                   />
                   <GoodArticleCategory>
-                    {translatedCategory}
+                    {categoryMap[postCategory as CategoryType] || postCategory}
                   </GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
                   <GoodArticleAuthor>
