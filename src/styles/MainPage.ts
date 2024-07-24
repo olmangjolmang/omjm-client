@@ -336,7 +336,8 @@ export const Select = styled.select`
   }
 `;
 
-export const SubmitButton = styled.button`
+// SubmitButton
+export const SubmitButton = styled.button<{ isSubmitEnabled: boolean }>`
   display: flex;
   width: 515px;
   height: 65px;
@@ -344,15 +345,18 @@ export const SubmitButton = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  background-color: #f4f4f7;
-  color: #afafb6;
+  background-color: ${({ isSubmitEnabled }) =>
+    isSubmitEnabled ? "#463efb" : "#f4f4f7"};
+  color: ${({ isSubmitEnabled }) => (isSubmitEnabled ? "#f4f4f7" : "#afafb6")};
   font-size: 16px;
   margin-top: 46px;
   border: none;
   cursor: pointer;
   &:hover {
-    background-color: #463efb;
-    color: #f4f4f7;
+    background-color: ${({ isSubmitEnabled }) =>
+      isSubmitEnabled ? "#362fdd" : "#f4f4f7"};
+    color: ${({ isSubmitEnabled }) =>
+      isSubmitEnabled ? "#e4e4f7" : "#afafb6"};
   }
 `;
 
