@@ -28,7 +28,7 @@ const PostItemHome = ({
       </CategoryRow>
       <Title>{title}</Title>
       <Author>
-        {author} {createdDate}
+        {author} | {createdDate}
       </Author>
     </Container>
   );

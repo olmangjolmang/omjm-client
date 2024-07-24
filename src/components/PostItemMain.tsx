@@ -68,7 +68,7 @@ const PostItemMain: React.FC<PostItemProps> = ({
       <Title>{title}</Title>
       {content && <Summary>{content}</Summary>}
       <Author hasSummary={!!content}>
-        {author} {createdDate}
+        {author} | {createdDate}
       </Author>
     </Container>
   );
