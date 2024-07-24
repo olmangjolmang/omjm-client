@@ -70,7 +70,7 @@ const Article: React.FC = () => {
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
   useEffect(() => {
-    // Check if the article is already saved
+    
     const checkIfSaved = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -103,7 +103,7 @@ const Article: React.FC = () => {
       if (text) {
         setHighlightedText(text);
         setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
-        selection.removeAllRanges(); // Remove selection after capturing it
+        selection.removeAllRanges(); 
       }
     }
   };
@@ -135,7 +135,7 @@ const Article: React.FC = () => {
       console.log("Post ID:", id);
 
       if (isSaved) {
-        // Cancel saving the article
+        // 아티클 저장 취소
         const response = await axiosInstance.post(`/post/${id}/scrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ const Article: React.FC = () => {
           console.log("아티클 저장 취소 실패");
         }
       } else {
-        // Save the article
+        // 아티클 저장
         const response = await axiosInstance.post(
           `/post/${id}/scrap`,
           { postId: id },
@@ -212,7 +212,7 @@ const Article: React.FC = () => {
     createdDate,
     postCategory,
     image,
-    recommendPost = [], // Ensure recommendPost is always an array
+    recommendPost = [], 
   } = article;
 
   const date = new Date(createdDate);
