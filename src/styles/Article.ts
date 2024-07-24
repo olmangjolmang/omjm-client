@@ -5,13 +5,15 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 180px 180px;
+  padding: 90px 180px;
 `;
 
 export const Category = styled.div`
   display: inline-flex;
   padding: 15px 40px;
   justify-content: center;
+  font-family: Pretendard;
+
   align-items: center;
   gap: 10px;
   font-size: 24px;
@@ -27,13 +29,18 @@ export const Category = styled.div`
 
 export const Title = styled.div`
   font-weight: 600;
-  font-size: 32px;
-  margin-bottom: 20px;
+  font-size: 24px;
+  font-family: Pretendard;
+  line-height: 150%;
+  letter-spacing: -0.12px;
+  margin-bottom: 18px;
   white-space: nowrap;
 `;
 
 export const LinkText = styled.a`
   font-size: 16px;
+  font-family: Pretendard;
+
   font-weight: 600;
   line-height: 150%;
   color: #463efb;
@@ -57,6 +64,8 @@ export const Author = styled.div`
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.08px;
+  font-family: Pretendard;
+
   line-height: 150%;
 `;
 
@@ -67,17 +76,18 @@ export const ArticleDate = styled.div`
 `;
 
 export const Img = styled.img`
-  width: 1080px;
-  height: 590.625px;
-  margin-bottom: 94px;
+  width: 1000px;
+  height: 500px;
+  margin-bottom: 52px;
 `;
 
 export const Content = styled.div`
   font-size: 16px;
   font-weight: 500;
+  font-family: Pretendard;
   line-height: 32px;
   white-space: pre-wrap;
-  margin-bottom: 94px;
+  margin-bottom: 80px;
   position: relative;
 `;
 
@@ -89,44 +99,48 @@ export const Line = styled.div`
   height: 1px;
   width: 1080px;
   background: #afafb6;
-  margin-bottom: 94px;
+  margin-bottom: 80px;
 `;
 
 export const QuizContainer = styled.div`
   background-color: #f4f4f7;
   width: 1080px;
-  height: 320px;
+  height: 280px;
   flex-shrink: 0;
   border-radius: 30px;
   display: flex;
   align-items: center;
   flex-direction: row;
-  margin-bottom: 94px;
+  margin-bottom: 80px;
 `;
 export const QuizContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-right: 120px;
 `;
 export const TicleImg = styled.img`
-  width: 269.996px;
-  height: 228px;
+  width: 240px;
+  height: 204px;
   margin-right: 70px;
   margin-left: 120px;
 `;
 
 export const QuizTitle = styled.div`
-  font-size: 32px;
+  font-size: 24px;
+
   font-weight: 700;
   margin-bottom: 12px;
   line-height: 150%;
+  font-family: Pretendard;
 `;
 
 export const QuizTime = styled.div`
   font-size: 20px;
   font-weight: 600;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
+  font-family: Pretendard;
 `;
 
 export const QuizBtn = styled.button`
@@ -143,6 +157,7 @@ export const QuizBtn = styled.button`
   color: white;
   font-size: 20px;
   font-weight: 600;
+  font-family: Pretendard;
   flex-shrink: 0;
   white-space: nowrap;
   cursor: pointer;
@@ -150,15 +165,21 @@ export const QuizBtn = styled.button`
 
 export const BottomArticleTitle = styled.div`
   font-weight: 600;
-  font-size: 32px;
-  margin-bottom: 40px;
+  font-size: 28px;
+  margin-bottom: 27px;
+  font-family: Pretendard;
   align-self: flex-start;
+`;
+
+export const GoodArticleSection = styled.div`
+  align-self: flex-start;
+  width: 100%;
 `;
 
 export const GoodArticleContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 40px;
+  flex-direction: column;
+  gap: 41px;
 `;
 
 export const GoodArticleImg = styled.img`
@@ -171,6 +192,7 @@ export const GoodArticleCategory = styled.div`
   color: #463efb;
   font-size: 16px;
   font-weight: 600;
+  font-family: Pretendard;
   width: 86px;
   height: 44px;
   background-color: #f4f4f7;
@@ -182,18 +204,21 @@ export const GoodArticleCategory = styled.div`
 `;
 
 export const GoodArticleTitle = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   width: 275px;
   margin-left: 10px;
-  margin-bottom: 18px;
+  font-family: Pretendard;
+  margin-bottom: 44px;
 `;
 
 export const GoodArticleAuthor = styled.div`
   color: #7f7f86;
   font-size: 16px;
   font-weight: 500;
-  line-height: 32px;
+  font-family: Pretendard;
+  line-height: 150%;
+  letter-spacing: -0.08px;
   margin-left: 10px;
 `;
 
