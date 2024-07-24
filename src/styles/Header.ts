@@ -99,6 +99,7 @@ export const Profile = styled.div`
     width: 40px;
     height: 40px;
   }
+  cursor: pointer;
 `;
 
 export const DropdownMenu = styled.div`
