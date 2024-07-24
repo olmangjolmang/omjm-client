@@ -77,9 +77,9 @@ export const AnswersContainer = styled.div`
 `;
 
 export const Answer = styled.div<{
-  selected: boolean;
-  correct: boolean;
-  isCorrectAnswer: boolean;
+  $selected: boolean;
+  $correct: boolean;
+  $isCorrectAnswer: boolean;
 }>`
   display: flex;
   width: 650px;
@@ -92,24 +92,24 @@ export const Answer = styled.div<{
   font-weight: 500;
   font-size: 18px;
   ${(props) =>
-    props.selected &&
+    props.$selected &&
     `
     border: 2px solid ${
-      props.correct ? "var(--Green-200, #09D535)" : "var(--Red-200, #F44)"
+      props.$correct ? "var(--Green-200, #09D535)" : "var(--Red-200, #F44)"
     };
     background: ${
-      props.correct ? "var(--Green-100, #E7FFE8)" : "var(--Red-100, #FFE4E4)"
+      props.$correct ? "var(--Green-100, #E7FFE8)" : "var(--Red-100, #FFE4E4)"
     };
     & > div {
       background: ${
-        props.correct ? "var(--Green-200, #09D535)" : "var(--Red-200, #F44)"
+        props.$correct ? "var(--Green-200, #09D535)" : "var(--Red-200, #F44)"
       };
       color: white;
     }
   `}
   ${(props) =>
-    !props.selected &&
-    props.isCorrectAnswer &&
+    !props.$selected &&
+    props.$isCorrectAnswer &&
     `
     border: 2px solid var(--Green-200, #09D535);
     background: var(--Green-100, #E7FFE8);
@@ -167,4 +167,22 @@ export const HomeButton = styled.button`
   &:hover {
     background: #d0e0ff;
   }
+`;
+
+export const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+`;
+
+export const LoadingText = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+  color: #463efb;
 `;

@@ -212,8 +212,8 @@ export const BannerButton = styled.a`
 
 // 구독모달
 
-export const ModalOverlay = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+export const ModalOverlay = styled.div<{ $isOpen: boolean }>`
+  display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   position: fixed;
   top: 0;
   left: 0;
@@ -353,7 +353,7 @@ export const Select = styled.select`
 `;
 
 // SubmitButton
-export const SubmitButton = styled.button<{ isSubmitEnabled: boolean }>`
+export const SubmitButton = styled.button<{ $isSubmitEnabled: boolean }>`
   display: flex;
   width: 515px;
   height: 65px;
@@ -361,22 +361,17 @@ export const SubmitButton = styled.button<{ isSubmitEnabled: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  background-color: ${({ isSubmitEnabled }) =>
-    isSubmitEnabled ? "#463efb" : "#f4f4f7"};
-  color: ${({ isSubmitEnabled }) => (isSubmitEnabled ? "#f4f4f7" : "#afafb6")};
+  background-color: ${({ $isSubmitEnabled }) =>
+    $isSubmitEnabled ? "#463efb" : "#f4f4f7"};
+  color: ${({ $isSubmitEnabled }) =>
+    $isSubmitEnabled ? "#f4f4f7" : "#afafb6"};
   font-size: 16px;
   margin-top: 46px;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: ${({ isSubmitEnabled }) =>
-      isSubmitEnabled ? "#362fdd" : "#f4f4f7"};
-    color: ${({ isSubmitEnabled }) =>
-      isSubmitEnabled ? "#e4e4f7" : "#afafb6"};
-  }
 `;
 
-export const CustomCheckbox = styled.div<{ checked: boolean }>`
+export const CustomCheckbox = styled.div`
   width: 26px;
   height: 26px;
   display: flex;
