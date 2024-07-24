@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import axios from "axios";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainPage from "./pages/MainPage";
 import { Login } from "./pages/Login";
@@ -15,7 +15,6 @@ import InterestEdit from "./pages/InterestEdit";
 import QnaBoard from "./pages/QnaBoard";
 import AnswerList from "./pages/AnswerList";
 import MyPage from "./pages/Mypage";
-import axiosInstance from "./api/AxiosInstance"; // Axios 인스턴스 가져오기
 
 const queryClient = new QueryClient();
 

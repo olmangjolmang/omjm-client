@@ -1,14 +1,15 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
-import axiosInstance from '../api/AxiosInstance';
-import linkimg from '../assets/linkicon.png';
-import articleImg from '../assets/article.png';
-import QuizSection from '../components/QuizSection';
-import FloatingButtons from '../components/FloatingButtons';
-import HighlightModal from '../components/HighlightModal';
-import { useArticle } from '../hooks/useArticle';
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer";
+import axios from "axios";
+import axiosInstance from "../api/AxiosInstance";
+import linkimg from "../assets/linkicon.png";
+import articleImg from "../assets/article.png";
+import QuizSection from "../components/QuizSection";
+import FloatingButtons from "../components/FloatingButtons";
+import HighlightModal from "../components/HighlightModal";
+import { useArticle } from "../hooks/useArticle";
 import {
   Container,
   Category,
@@ -23,13 +24,42 @@ import {
   Highlight,
   Line,
   BottomArticleTitle,
+  GoodArticleSection,
   GoodArticleContainer,
   GoodArticleImg,
   GoodArticleCategory,
   GoodArticleTitle,
   GoodArticleAuthor,
   Overlay,
-} from '../styles/Article';
+} from "../styles/Article";
+
+type CategoryType =
+  | "WEB_FRONT"
+  | "BACKEND"
+  | "NETWORK"
+  | "APP"
+  | "SECURITY"
+  | "AI"
+  | "VISION"
+  | "INFRA"
+  | "ETC";
+
+const categoryMap: Record<CategoryType, string> = {
+  WEB_FRONT: "웹 프론트",
+  BACKEND: "백(서버, CI/CD)",
+  NETWORK: "네트워크/통신",
+  APP: "앱",
+  SECURITY: "보안",
+  AI: "빅데이터/AI",
+  VISION: "Vision",
+  INFRA: "인프라",
+  ETC: "기타",
+};
+
+interface RecommendPost {
+  postId: number;
+  postTitle: string;
+}
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,31 +67,122 @@ const Article: React.FC = () => {
     enabled: !!id,
   });
 
-  const [isHighlightModalOpen, setIsHighlightModalOpen] = React.useState<boolean>(false);
-  const [highlightedText, setHighlightedText] = React.useState<string>("");
-  const [highlightedRanges, setHighlightedRanges] = React.useState<Array<{ start: number; end: number }>>([]);
+  const [isHighlightModalOpen, setIsHighlightModalOpen] =
+    useState<boolean>(false);
+  const [highlightedText, setHighlightedText] = useState<string>("");
+  const [highlightedRanges, setHighlightedRanges] = useState<
+    Array<{ start: number; end: number }>
+  >([]);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkIfSaved = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axiosInstance.get(`/post/${id}/is-saved`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setIsSaved(response.data.isSaved);
+        }
+      } catch (error) {
+        console.error("Error checking if article is saved:", error);
+      }
+    };
+
+    const fetchRecommendPosts = async () => {
+      try {
+        const response = await axiosInstance.get(`/post/recommend/${id}`);
+        setRecommendPosts(response.data.results.recommendPost);
+      } catch (error) {
+        console.error("Error fetching recommend posts:", error);
+      }
+    };
+
+    if (id) {
+      checkIfSaved();
+      fetchRecommendPosts();
+    }
+  }, [id]);
 
   const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
+    const contentElement = contentRef.current;
+
+    if (selection && selection.rangeCount > 0 && contentElement) {
       const range = selection.getRangeAt(0);
-      const start = range.startOffset;
-      const end = range.endOffset;
       const text = selection.toString();
 
       if (text) {
+        const preSelectionRange = range.cloneRange();
+        preSelectionRange.selectNodeContents(contentElement);
+        preSelectionRange.setEnd(range.startContainer, range.startOffset);
+        const start = preSelectionRange.toString().length;
+        const end = start + text.length;
+
         setHighlightedText(text);
-        setHighlightedRanges(prevRanges => [...prevRanges, { start, end }]);
-        selection.removeAllRanges(); // Remove selection after capturing it
+        setHighlightedRanges((prevRanges) => [
+          ...prevRanges,
+          { start, end },
+        ]);
+
+        selection.removeAllRanges();
       }
     }
   };
 
-  const handleSaveNote = (note: string) => {
-    console.log("Highlighted Text:", highlightedText);
-    console.log("Note:", note);
-    setIsHighlightModalOpen(false);
+  const handleSaveNote = async (note: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+  
+      const payload = {
+        targetText: highlightedText,
+        content: note
+      };
+  
+      console.log("Request Payload:", payload);
+  
+      const response = await axiosInstance.post(
+        `/post/memo/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        alert("메모가 저장되었습니다.");
+      } else {
+        alert("메모 저장에 실패했습니다.");
+      }
+  
+      setIsHighlightModalOpen(false);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("메모 저장 중 오류 발생:", error);
+        if (error.response) {
+          console.error("응답 데이터:", error.response.data);
+          console.error("응답 상태 코드:", error.response.status);
+        }
+        alert("메모 저장에 실패했습니다.");
+      } else {
+        console.error("알 수 없는 오류 발생:", error);
+        alert("메모 저장 중 알 수 없는 오류가 발생했습니다.");
+      }
+    }
   };
+  
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
@@ -75,7 +196,7 @@ const Article: React.FC = () => {
 
   const handleSaveArticle = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token");
       if (!token) {
         alert("로그인이 필요합니다.");
         return;
@@ -83,21 +204,38 @@ const Article: React.FC = () => {
       console.log("Access Token:", token);
       console.log("Post ID:", id);
 
-      const response = await axiosInstance.post(
-        `/post/${id}/scrap`,
-        { postId: id },
-        {
+      if (isSaved) {
+        const response = await axiosInstance.post(`/post/${id}/unscrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      console.log("Response:", response);
+        });
+        console.log("Response:", response);
 
-      if (response.data.success) {
-        alert("아티클 저장 완료");
+        if (response.data.isSuccess) {
+          alert("아티클 저장 취소 완료");
+          setIsSaved(false);
+        } else {
+          console.log("아티클 저장 취소 실패");
+        }
       } else {
-        console.log("아티클 저장 실패");
+        const response = await axiosInstance.post(
+          `/post/${id}/scrap`,
+          { postId: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Response:", response);
+
+        if (response.data.isSuccess) {
+          alert("아티클 저장 완료");
+          setIsSaved(true);
+        } else {
+          console.log("아티클 저장 실패");
+        }
       }
     } catch (error) {
       console.error("Error saving article:", error);
@@ -135,24 +273,18 @@ const Article: React.FC = () => {
     return <div>No article found</div>;
   }
 
-  const {
-    title,
-    content,
-    author,
-    createdDate,
-    postCategory,
-    image,
-    recommendPost = [], // Ensure recommendPost is always an array
-  } = article;
+  const { title, content, author, createdDate, postCategory, image } = article;
 
   const date = new Date(createdDate);
-  const formattedDate = date.toISOString().split('T')[0];
+  const formattedDate = date.toISOString().split("T")[0];
+  const translatedCategory =
+    categoryMap[postCategory as CategoryType] || postCategory;
 
   return (
     <>
       <Header />
       <Container>
-        <Category>{postCategory}</Category>
+        <Category>{translatedCategory}</Category>
         <Title>{title}</Title>
         <AuthorBox>
           <Author>{author}</Author>
@@ -161,22 +293,24 @@ const Article: React.FC = () => {
           <LinkIcon src={linkimg} alt="Link icon" />
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
-        <Content onMouseUp={handleTextHighlight}>
+        <Content ref={contentRef} onMouseUp={handleTextHighlight}>
           {renderHighlightedText(content)}
         </Content>
         <Line />
         <QuizSection title={title} id={Number(id)} />
-        <div>
+        <GoodArticleSection>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
           <GoodArticleContainer>
-            {recommendPost.length > 0 ? (
-              recommendPost.map((post) => (
+            {recommendPosts.length > 0 ? (
+              recommendPosts.map((post) => (
                 <div key={post.postId}>
                   <GoodArticleImg
                     src={image?.imageUrl || articleImg}
                     alt="Recommended article"
                   />
-                  <GoodArticleCategory>{postCategory}</GoodArticleCategory>
+                  <GoodArticleCategory>
+                    {categoryMap[postCategory as CategoryType] || postCategory}
+                  </GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
                   <GoodArticleAuthor>
                     {author} | {formattedDate}
@@ -187,7 +321,7 @@ const Article: React.FC = () => {
               <div>추천 아티클이 없습니다.</div>
             )}
           </GoodArticleContainer>
-        </div>
+        </GoodArticleSection>
         {isHighlightModalOpen && (
           <>
             <Overlay isModalOpen={isHighlightModalOpen}>
@@ -202,6 +336,7 @@ const Article: React.FC = () => {
         <FloatingButtons
           onMenuClick={handleMenuClick}
           onSaveClick={handleSaveArticle}
+          isSaved={isSaved}
         />
       </Container>
       <Footer />

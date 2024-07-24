@@ -6,7 +6,7 @@ import axiosInstance from "../api/AxiosInstance";
 export interface Note {
   noteId: number;
   content: string;
-  memoDate: number[]; // [year, month, day, hour, minute, second, nanoseconds]
+  memoDate: string; // [year, month, day, hour, minute, second, nanoseconds]
   postId: number;
   postTitle: string;
   targetText: string;
@@ -23,7 +23,7 @@ const TicleNote = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [answer, setAnswer] = useState(targetText);
-
+  const date = memoDate.split("T")[0];
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -65,15 +65,13 @@ const TicleNote = ({
   console.log(data);
 
   return (
-    <Container onClick={toggleOpen}>
-      <QuestionSection>
+    <Container>
+      <QuestionSection onClick={toggleOpen}>
         <QnD>
           <Question>{postTitle}</Question>
-          <Date>
-            {memoDate[0]}-{memoDate[1]}-{memoDate[2]}
-          </Date>
+          <Date>{date}</Date>
         </QnD>
-        <ToggleIcon isOpen={isOpen}>
+        <ToggleIcon>
           {isOpen ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +190,7 @@ const Content = styled.div`
   letter-spacing: -0.1px;
 `;
 
-const ToggleIcon = styled.div<{ isOpen: boolean }>`
+const ToggleIcon = styled.div`
   width: 32px;
   height: 32px;
 `;
@@ -208,7 +206,7 @@ const Answer = styled.div`
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
+  width: 1000px;
   font-family: Pretendard;
   font-size: 16px;
   padding: 10px;

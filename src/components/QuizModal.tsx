@@ -14,7 +14,9 @@ import {
   ResultImage,
   ResultText,
   HomeButton,
-} from "../styles/QuizModal";
+  LoadingContainer, // 추가
+  LoadingText, // 추가
+} from "../styles/QuizModal"; // styles에 LoadingContainer와 LoadingText 추가 필요
 import StopConfirmationModal from "./StopConfirmationModal";
 import quizimg5 from "../assets/quizimg5.png";
 import quizimg4 from "../assets/quizimg4.png";
@@ -28,13 +30,14 @@ import { QuestionData } from "../types/Quiz";
 interface QuizModalProps {
   onClose: () => void;
   title: string;
-  id: number; 
+  id: number;
 }
 
 const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [isStopConfirmationOpen, setIsStopConfirmationOpen] = useState<boolean>(false);
+  const [isStopConfirmationOpen, setIsStopConfirmationOpen] =
+    useState<boolean>(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
 
@@ -43,7 +46,10 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -53,7 +59,11 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
   }, [onClose]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <LoadingContainer>
+        <LoadingText>~퀴즈를 생성중입니다~</LoadingText>
+      </LoadingContainer>
+    );
   }
 
   if (error) {
@@ -84,7 +94,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
       } else {
         setCurrentStep(currentStep + 1);
       }
-    }, 2000); // 2초 후 다음 질문 또는 결과 화면으로
+    }, 2000);
   };
 
   const handleConfirmStop = () => {
@@ -120,7 +130,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
       <ResultContainer>
         <ResultImage src={imageSrc} alt="Result" />
         <ResultText>{resultText}</ResultText>
-        <HomeButton onClick={onClose}>홈으로 가기</HomeButton>
+        <HomeButton onClick={onClose}>닫기</HomeButton>
       </ResultContainer>
     );
   };
@@ -139,24 +149,24 @@ const QuizModal: React.FC<QuizModalProps> = ({ onClose, title, id }) => {
               <Question>{currentQuestion.quizTitle}</Question>
             </QuestionContainer>
             <AnswersContainer>
-              {Object.entries(currentQuestion.multipleChoice).map(([key, answer]) => (
-                <Answer
-                  key={key}
-                  correct={
-                    selectedAnswer === key &&
-                    key === currentQuestion.answer
-                  }
-                  selected={selectedAnswer === key}
-                  isCorrectAnswer={
-                    showCorrectAnswer &&
-                    key === currentQuestion.answer
-                  }
-                  onClick={() => handleAnswerClick(key)}
-                >
-                  <AnswerNumber>{key}</AnswerNumber>
-                  {answer}
-                </Answer>
-              ))}
+              {Object.entries(currentQuestion.multipleChoice).map(
+                ([key, answer]) => (
+                  <Answer
+                    key={key}
+                    $correct={
+                      selectedAnswer === key && key === currentQuestion.answer
+                    }
+                    $selected={selectedAnswer === key}
+                    $isCorrectAnswer={
+                      showCorrectAnswer && key === currentQuestion.answer
+                    }
+                    onClick={() => handleAnswerClick(key)}
+                  >
+                    <AnswerNumber>{key}</AnswerNumber>
+                    {answer}
+                  </Answer>
+                )
+              )}
             </AnswersContainer>
           </>
         ) : (

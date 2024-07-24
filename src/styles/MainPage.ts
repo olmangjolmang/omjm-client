@@ -169,8 +169,9 @@ export const BannerContainer = styled.div`
   background-color: #333333;
   color: white;
   margin-top: 138px;
-  height: 450px;
+  height: 330px;
 
+  min-width: 1440px;
   max-width: 1440px;
   margin: 0 auto;
   margin-top: 138px;
@@ -179,7 +180,7 @@ export const BannerContainer = styled.div`
 
 export const BannerText = styled.div`
   font-family: Pretendard;
-  font-size: 40px;
+  font-size: 36px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%; /* 72px */
@@ -211,8 +212,8 @@ export const BannerButton = styled.a`
 
 // 구독모달
 
-export const ModalOverlay = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+export const ModalOverlay = styled.div<{ $isOpen: boolean }>`
+  display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   position: fixed;
   top: 0;
   left: 0;
@@ -257,11 +258,13 @@ export const ModalTitle = styled.h2`
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%; /* 36px */
+  line-height: 130%; /* 36px */
   letter-spacing: -0.12px;
   margin-bottom: 46px;
   margin-top: 56px;
   margin-left: 215px;
+  margin-right: 300px;
+  min-width: 100px;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -269,13 +272,25 @@ export const ModalTitle = styled.h2`
 
 export const ModalText = styled.p`
   font-size: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   font-family: Pretendard;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.09px;
+`;
+
+export const ModalTextGrey = styled.p`
+  margin-bottom: 10px;
+  color: var(--Gray-400, #7f7f86);
+  /* Body/2 */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.06px;
 `;
 
 export const Span = styled.span`
@@ -285,7 +300,6 @@ export const Span = styled.span`
 export const ModalTextContainer = styled.div`
   flex-direction: column;
   align-items: center;
-  gap: 6px;
 `;
 
 export const Form = styled.form`
@@ -295,6 +309,7 @@ export const Form = styled.form`
 
 export const FormGroup = styled.div`
   margin-bottom: 15px;
+  margin-top: 22px;
 `;
 
 export const Label = styled.label`
@@ -304,6 +319,7 @@ export const Label = styled.label`
   font-weight: 500;
   line-height: 150%; /* 27px */
   letter-spacing: -0.09px;
+  margin-top: 30px;
 `;
 
 export const Input = styled.input`
@@ -337,7 +353,7 @@ export const Select = styled.select`
 `;
 
 // SubmitButton
-export const SubmitButton = styled.button<{ isSubmitEnabled: boolean }>`
+export const SubmitButton = styled.button<{ $isSubmitEnabled: boolean }>`
   display: flex;
   width: 515px;
   height: 65px;
@@ -345,22 +361,17 @@ export const SubmitButton = styled.button<{ isSubmitEnabled: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  background-color: ${({ isSubmitEnabled }) =>
-    isSubmitEnabled ? "#463efb" : "#f4f4f7"};
-  color: ${({ isSubmitEnabled }) => (isSubmitEnabled ? "#f4f4f7" : "#afafb6")};
+  background-color: ${({ $isSubmitEnabled }) =>
+    $isSubmitEnabled ? "#463efb" : "#f4f4f7"};
+  color: ${({ $isSubmitEnabled }) =>
+    $isSubmitEnabled ? "#f4f4f7" : "#afafb6"};
   font-size: 16px;
   margin-top: 46px;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: ${({ isSubmitEnabled }) =>
-      isSubmitEnabled ? "#362fdd" : "#f4f4f7"};
-    color: ${({ isSubmitEnabled }) =>
-      isSubmitEnabled ? "#e4e4f7" : "#afafb6"};
-  }
 `;
 
-export const CustomCheckbox = styled.div<{ checked: boolean }>`
+export const CustomCheckbox = styled.div`
   width: 26px;
   height: 26px;
   display: flex;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ModalOverlay,
   ModalContent,
@@ -17,8 +17,8 @@ import {
   SubmitButton,
   ModalHeader,
   Span,
+  ModalTextGrey,
 } from "../styles/MainPage";
-import styled from "styled-components";
 import axiosInstance from "../api/AxiosInstance";
 
 interface SubscribtionModalProps {
@@ -38,8 +38,8 @@ const CheckedIcon = () => (
     <path
       d="M7.16602 13.487L11.3327 16.8203L17.166 9.32031"
       stroke="white"
-      stroke-width="2"
-      stroke-linecap="round"
+      strokeWidth="2"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -52,12 +52,12 @@ const UncheckedIcon = () => (
     viewBox="0 0 26 26"
     fill="none"
   >
-    <circle cx="13" cy="13.4873" r="11.5" stroke="#AFAFB6" stroke-width="2" />
+    <circle cx="13" cy="13.4873" r="11.5" stroke="#AFAFB6" strokeWidth="2" />
     <path
       d="M7.16602 13.487L11.3327 16.8203L17.166 9.32031"
       stroke="#AFAFB6"
-      stroke-width="2"
-      stroke-linecap="round"
+      strokeWidth="2"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -73,14 +73,14 @@ const CloseIcon = () => (
     <path
       d="M28.0884 28.576L10.4108 10.8983"
       stroke="#7F7F86"
-      stroke-width="3"
-      stroke-linecap="round"
+      strokeWidth="3"
+      strokeLinecap="round"
     />
     <path
       d="M28.0892 10.8983L10.4116 28.576"
       stroke="#7F7F86"
-      stroke-width="3"
-      stroke-linecap="round"
+      strokeWidth="3"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -104,20 +104,23 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
 
     try {
       const response = await axiosInstance.post("/home/subscription", params);
+      alert("구독 성공!");
       console.log("Subscription successful:", response.data);
 
       onClose();
     } catch (error) {
+      alert("이미 구독중이거나, 서버에 문제가 발생했습니다.");
       console.error("Subscription failed:", error);
+      onClose();
     }
   };
 
   return (
-    <ModalOverlay isOpen={isOpen}>
+    <ModalOverlay data-testid="modal-overlay" $isOpen={isOpen}>
       <ModalContent>
         <ModalHeader>
           <ModalTitle>구독하기</ModalTitle>
-          <CloseButton onClick={onClose}>
+          <CloseButton data-testid="close-button" onClick={onClose}>
             <CloseIcon />
           </CloseButton>
         </ModalHeader>
@@ -129,11 +132,15 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
             매주 원하는 요일,여러분에게 새로운 아<Span>티클</Span>을
             가져다드립니다!
           </ModalText>
+          <ModalTextGrey>
+            아티클은 회원가입 시 입력한 이메일로 전송됩니다.
+          </ModalTextGrey>
         </ModalTextContainer>
         <Form>
           <FormGroup>
-            <Label>요일</Label>
+            <Label htmlFor="select-day">요일</Label>
             <Select
+              id="select-day"
               value={selectedDay}
               onChange={(e) => setSelectedDay(e.target.value)}
             >
@@ -147,12 +154,11 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
               <option value="FRIDAY">금요일</option>
               <option value="SATURDAY">토요일</option>
               <option value="SUNDAY">일요일</option>
-              {/* 요일 옵션 추가 */}
             </Select>
           </FormGroup>
           <CheckboxGroup>
             <CustomCheckbox
-              checked={isRequiredChecked}
+              data-testid="required-checkbox"
               onClick={() => setIsRequiredChecked(!isRequiredChecked)}
             >
               {isRequiredChecked ? <CheckedIcon /> : <UncheckedIcon />}
@@ -164,7 +170,7 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
           </CheckboxGroup>
           <CheckboxGroup>
             <CustomCheckbox
-              checked={isOptionalChecked}
+              data-testid="optional-checkbox"
               onClick={() => setIsOptionalChecked(!isOptionalChecked)}
             >
               {isOptionalChecked ? <CheckedIcon /> : <UncheckedIcon />}
@@ -175,7 +181,8 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
             </CheckboxLabel>
           </CheckboxGroup>
           <SubmitButton
-            isSubmitEnabled={isSubmitEnabled}
+            data-testid="submit-button"
+            $isSubmitEnabled={isSubmitEnabled}
             onClick={handleSubmit}
           >
             구독하기

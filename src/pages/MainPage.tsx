@@ -8,6 +8,7 @@ import PostItemGroup from "../components/PostItemGroup";
 import SubscriptionBanner from "../components/SubscriptionBanner";
 import SubscribtionModal from "../components/SubscriptionModal";
 import { useHomeData } from "../hooks/useHomeData";
+import banner from "../assets/banner.svg";
 
 interface ResponseItem {
   postId: number;
@@ -53,7 +54,8 @@ const MainPage = () => {
       <Header />
       <Container>
         <MainContent>
-          <Intro />
+          <img src={banner} alt="Banner" />
+          {/* <Intro /> */}
           {data?.results?.map((contents: Result) => (
             <PostItemGroup {...contents} />
           ))}

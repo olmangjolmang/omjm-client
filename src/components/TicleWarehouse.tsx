@@ -16,7 +16,7 @@ const orderByOptions: Option[] = [
   { value: "SCRAPPED", label: "스크랩순" },
 ];
 
-const Boards = () => {
+const TicleWarehouse = () => {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [orderBy, setOrderBy] = useState<OrderBy>("LATEST");
@@ -54,4 +54,4 @@ const Boards = () => {
   );
 };
 
-export default Boards;
+export default TicleWarehouse;

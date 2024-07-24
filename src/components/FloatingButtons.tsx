@@ -20,11 +20,11 @@ const FixedButtons = styled.div`
   z-index: 1000;
 `;
 
-const Icon = styled.img<{ src: string; hoverSrc: string; activeSrc?: string }>`
+const Icon = styled.img<{ hoverSrc: string; activeSrc?: string }>`
   width: 44px;
   height: 44px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, content 0.3s;
   background: white;
   border-radius: 50%;
 
@@ -40,11 +40,12 @@ const Icon = styled.img<{ src: string; hoverSrc: string; activeSrc?: string }>`
 
 interface FloatingButtonsProps {
   onMenuClick: () => void;
-  onSaveClick: () => void; // 추가된 prop
+  onSaveClick: () => void;
+  isSaved: boolean; // 추가된 prop
 }
 
 // 컴포넌트 정의
-const FloatingButtons: React.FC<FloatingButtonsProps> = ({ onMenuClick, onSaveClick }) => {
+const FloatingButtons: React.FC<FloatingButtonsProps> = ({ onMenuClick, onSaveClick, isSaved }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -64,10 +65,10 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({ onMenuClick, onSaveCl
         onClick={onMenuClick}
       />
       <Icon
-        src={bookmarkIcon}
+        src={isSaved ? bookmarkIconSelected : bookmarkIcon}
         hoverSrc={bookmarkIconSelected}
         activeSrc={bookmarkIconSelected}
-        onClick={onSaveClick} // 추가된 클릭 핸들러
+        onClick={onSaveClick}
       />
     </FixedButtons>
   );
