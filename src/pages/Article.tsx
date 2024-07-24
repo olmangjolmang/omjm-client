@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -33,26 +33,26 @@ import {
 } from "../styles/Article";
 
 type CategoryType =
-  | 'FRONTEND'
-  | 'BACKEND'
-  | 'NETWORK'
-  | 'APP'
-  | 'SECURITY'
-  | 'AI'
-  | 'VISION'
-  | 'INFRA'
-  | 'ETC';
+  | "FRONTEND"
+  | "BACKEND"
+  | "NETWORK"
+  | "APP"
+  | "SECURITY"
+  | "AI"
+  | "VISION"
+  | "INFRA"
+  | "ETC";
 
 const categoryMap: Record<CategoryType, string> = {
-  FRONTEND: '웹 프론트',
-  BACKEND: '백(서버, CI/CD)',
-  NETWORK: '네트워크/통신',
-  APP: '앱',
-  SECURITY: '보안',
-  AI: '빅데이터/AI',
-  VISION: 'Vision',
-  INFRA: '인프라',
-  ETC: '기타'
+  FRONTEND: "웹 프론트",
+  BACKEND: "백(서버, CI/CD)",
+  NETWORK: "네트워크/통신",
+  APP: "앱",
+  SECURITY: "보안",
+  AI: "빅데이터/AI",
+  VISION: "Vision",
+  INFRA: "인프라",
+  ETC: "기타",
 };
 
 const Article: React.FC = () => {
@@ -62,11 +62,35 @@ const Article: React.FC = () => {
   });
 
   const [isHighlightModalOpen, setIsHighlightModalOpen] =
-    React.useState<boolean>(false);
-  const [highlightedText, setHighlightedText] = React.useState<string>("");
-  const [highlightedRanges, setHighlightedRanges] = React.useState<
+    useState<boolean>(false);
+  const [highlightedText, setHighlightedText] = useState<string>("");
+  const [highlightedRanges, setHighlightedRanges] = useState<
     Array<{ start: number; end: number }>
   >([]);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+
+  useEffect(() => {
+    
+    const checkIfSaved = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axiosInstance.get(`/post/${id}/is-saved`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setIsSaved(response.data.isSaved);
+        }
+      } catch (error) {
+        console.error("Error checking if article is saved:", error);
+      }
+    };
+
+    if (id) {
+      checkIfSaved();
+    }
+  }, [id]);
 
   const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
@@ -79,7 +103,7 @@ const Article: React.FC = () => {
       if (text) {
         setHighlightedText(text);
         setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
-        selection.removeAllRanges(); // Remove selection after capturing it
+        selection.removeAllRanges(); 
       }
     }
   };
@@ -102,7 +126,7 @@ const Article: React.FC = () => {
 
   const handleSaveArticle = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token");
       if (!token) {
         alert("로그인이 필요합니다.");
         return;
@@ -110,21 +134,40 @@ const Article: React.FC = () => {
       console.log("Access Token:", token);
       console.log("Post ID:", id);
 
-      const response = await axiosInstance.post(
-        `/post/${id}/scrap`,
-        { postId: id },
-        {
+      if (isSaved) {
+        // 아티클 저장 취소
+        const response = await axiosInstance.post(`/post/${id}/scrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      console.log("Response:", response);
+        });
+        console.log("Response:", response);
 
-      if (response.data.success) {
-        alert("아티클 저장 완료");
+        if (response.data.isSuccess) {
+          alert("아티클 저장 취소 완료");
+          setIsSaved(false);
+        } else {
+          console.log("아티클 저장 취소 실패");
+        }
       } else {
-        console.log("아티클 저장 실패");
+        // 아티클 저장
+        const response = await axiosInstance.post(
+          `/post/${id}/scrap`,
+          { postId: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Response:", response);
+
+        if (response.data.isSuccess) {
+          alert("아티클 저장 완료");
+          setIsSaved(true);
+        } else {
+          console.log("아티클 저장 실패");
+        }
       }
     } catch (error) {
       console.error("Error saving article:", error);
@@ -169,12 +212,13 @@ const Article: React.FC = () => {
     createdDate,
     postCategory,
     image,
-    recommendPost = [], // Ensure recommendPost is always an array
+    recommendPost = [], 
   } = article;
 
   const date = new Date(createdDate);
   const formattedDate = date.toISOString().split("T")[0];
-  const translatedCategory = categoryMap[postCategory as CategoryType] || postCategory;
+  const translatedCategory =
+    categoryMap[postCategory as CategoryType] || postCategory;
 
   return (
     <>
@@ -204,7 +248,9 @@ const Article: React.FC = () => {
                     src={image?.imageUrl || articleImg}
                     alt="Recommended article"
                   />
-                  <GoodArticleCategory>{translatedCategory}</GoodArticleCategory>
+                  <GoodArticleCategory>
+                    {translatedCategory}
+                  </GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
                   <GoodArticleAuthor>
                     {author} | {formattedDate}
@@ -230,6 +276,7 @@ const Article: React.FC = () => {
         <FloatingButtons
           onMenuClick={handleMenuClick}
           onSaveClick={handleSaveArticle}
+          isSaved={isSaved}
         />
       </Container>
       <Footer />
