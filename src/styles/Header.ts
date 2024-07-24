@@ -7,6 +7,7 @@ export const Container = styled.div`
   padding: 0 120px;
   align-items: center;
   justify-content: space-between;
+  gap: 50px;
 `;
 export const Button = styled(Link)`
   display: flex;
