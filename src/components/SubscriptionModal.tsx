@@ -17,6 +17,7 @@ import {
   SubmitButton,
   ModalHeader,
   Span,
+  ModalTextGrey,
 } from "../styles/MainPage";
 import styled from "styled-components";
 import axiosInstance from "../api/AxiosInstance";
@@ -129,6 +130,9 @@ const SubscribtionModal = ({ isOpen, onClose }: SubscribtionModalProps) => {
             매주 원하는 요일,여러분에게 새로운 아<Span>티클</Span>을
             가져다드립니다!
           </ModalText>
+          <ModalTextGrey>
+            아티클은 회원가입 시 입력한 이메일로 전송됩니다.
+          </ModalTextGrey>
         </ModalTextContainer>
         <Form>
           <FormGroup>
