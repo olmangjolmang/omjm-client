@@ -65,8 +65,8 @@ const TicleNote = ({
   console.log(data);
 
   return (
-    <Container onClick={toggleOpen}>
-      <QuestionSection>
+    <Container>
+      <QuestionSection onClick={toggleOpen}>
         <QnD>
           <Question>{postTitle}</Question>
           <Date>
@@ -208,7 +208,7 @@ const Answer = styled.div`
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
+  width: 1000px;
   font-family: Pretendard;
   font-size: 16px;
   padding: 10px;

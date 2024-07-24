@@ -6,6 +6,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: #f4f4f7;
+  min-width: 1216px;
 `;
 
 export const Text = styled.div`

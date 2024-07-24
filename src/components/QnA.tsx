@@ -74,7 +74,7 @@ const QuizContainer = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 600;
   font-family: Pretendard;
   color: #000;

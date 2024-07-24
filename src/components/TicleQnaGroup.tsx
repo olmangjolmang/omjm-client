@@ -32,11 +32,13 @@ const TicleQnaGroup = () => {
     <Container>
       {data && data.results.map((qna: any) => <TicleQna {...qna} />)}
 
-      {/* <Pagination
-        currentPage={page}
-        totalPages={data.results.pageInfo.totalPages}
-        onPageChange={setPage}
-      /> */}
+      {data && (
+        <Pagination
+          currentPage={page}
+          totalPages={data.results[0].pageInfo.totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </Container>
   );
 };
