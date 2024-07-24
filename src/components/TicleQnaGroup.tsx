@@ -26,18 +26,17 @@ const TicleQnaGroup = () => {
     window.scrollTo(0, 0); // 페이지가 변경될 때마다 화면을 상단으로 스크롤합니다.
   }, [page]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading articles</div>;
+  if (isError) return <div>로그인 정보를 확인해주세요.</div>;
   console.log(data);
   return (
     <Container>
       {data && data.results.map((qna: any) => <TicleQna {...qna} />)}
 
-      <Pagination
+      {/* <Pagination
         currentPage={page}
-        totalPages={data.results.totalPages}
+        totalPages={data.results.pageInfo.totalPages}
         onPageChange={setPage}
-      />
+      /> */}
     </Container>
   );
 };

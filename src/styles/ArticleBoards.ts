@@ -6,7 +6,7 @@ export const PageContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-  min-height: 100vh;
+
   max-width: 1440px;
   min-width: 1000px;
   margin: 0 auto;
@@ -31,7 +31,7 @@ export const SelectContainer = styled.div`
   position: relative;
   display: flex;
   margin: 10px;
-  margin-left: 90vh;
+  margin-left: 1200px;
   font-family: Pretendard;
   font-size: 24px;
   font-style: normal;
