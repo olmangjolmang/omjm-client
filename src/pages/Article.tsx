@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import axios from "axios";
 import axiosInstance from "../api/AxiosInstance";
 import linkimg from "../assets/linkicon.png";
 import articleImg from "../assets/article.png";
@@ -142,29 +143,46 @@ const Article: React.FC = () => {
         alert("로그인이 필요합니다.");
         return;
       }
-
+  
+      const payload = {
+        targetText: highlightedText,
+        content: note
+      };
+  
+      console.log("Request Payload:", payload);
+  
       const response = await axiosInstance.post(
         `/post/memo/${id}`,
-        { note, highlightedText, ranges: highlightedRanges },
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
+  
       if (response.data.isSuccess) {
         alert("메모가 저장되었습니다.");
       } else {
         alert("메모 저장에 실패했습니다.");
       }
-
+  
       setIsHighlightModalOpen(false);
-    } catch (error) {
-      console.error("메모 저장 중 오류 발생:", error);
-      alert("메모 저장에 실패했습니다.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("메모 저장 중 오류 발생:", error);
+        if (error.response) {
+          console.error("응답 데이터:", error.response.data);
+          console.error("응답 상태 코드:", error.response.status);
+        }
+        alert("메모 저장에 실패했습니다.");
+      } else {
+        console.error("알 수 없는 오류 발생:", error);
+        alert("메모 저장 중 알 수 없는 오류가 발생했습니다.");
+      }
     }
   };
+  
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
