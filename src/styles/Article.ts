@@ -29,9 +29,10 @@ export const Category = styled.div`
 
 export const Title = styled.div`
   font-weight: 600;
-  font-size: 28px;
+  font-size: 24px;
   font-family: Pretendard;
-
+  line-height: 150%;
+  letter-spacing: -0.12px;
   margin-bottom: 18px;
   white-space: nowrap;
 `;

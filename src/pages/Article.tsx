@@ -32,6 +32,29 @@ import {
   Overlay,
 } from "../styles/Article";
 
+type CategoryType =
+  | 'FRONTEND'
+  | 'BACKEND'
+  | 'NETWORK'
+  | 'APP'
+  | 'SECURITY'
+  | 'AI'
+  | 'VISION'
+  | 'INFRA'
+  | 'ETC';
+
+const categoryMap: Record<CategoryType, string> = {
+  FRONTEND: '웹 프론트',
+  BACKEND: '백(서버, CI/CD)',
+  NETWORK: '네트워크/통신',
+  APP: '앱',
+  SECURITY: '보안',
+  AI: '빅데이터/AI',
+  VISION: 'Vision',
+  INFRA: '인프라',
+  ETC: '기타'
+};
+
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: article, isLoading } = useArticle(id || "", {
@@ -151,12 +174,13 @@ const Article: React.FC = () => {
 
   const date = new Date(createdDate);
   const formattedDate = date.toISOString().split("T")[0];
+  const translatedCategory = categoryMap[postCategory as CategoryType] || postCategory;
 
   return (
     <>
       <Header />
       <Container>
-        <Category>{postCategory}</Category>
+        <Category>{translatedCategory}</Category>
         <Title>{title}</Title>
         <AuthorBox>
           <Author>{author}</Author>
@@ -180,7 +204,7 @@ const Article: React.FC = () => {
                     src={image?.imageUrl || articleImg}
                     alt="Recommended article"
                   />
-                  <GoodArticleCategory>{postCategory}</GoodArticleCategory>
+                  <GoodArticleCategory>{translatedCategory}</GoodArticleCategory>
                   <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
                   <GoodArticleAuthor>
                     {author} | {formattedDate}
