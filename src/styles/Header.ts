@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const Container = styled.div`
-  height: 120px;
+  height: 78px;
   display: flex;
   padding: 0 120px;
   align-items: center;
@@ -13,12 +13,14 @@ export const Button = styled(Link)`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  height: 55px;
+  height: 50px;
   width: 143px;
   background-color: #463efb;
   border-radius: 10px;
   border: none;
   color: white;
+  font-family: Pretendard;
+  font-size: 16px;
   font-weight: 600;
   white-space: nowrap;
   text-decoration: none;
@@ -37,6 +39,7 @@ export const Logo = styled.img`
 export const MenuContainer = styled.div`
   gap: 74px;
   display: flex;
+  margin-right: 15px;
 `;
 
 export const Menu = styled.div`
@@ -45,6 +48,9 @@ export const Menu = styled.div`
   white-space: nowrap;
   text-decoration: none;
   color: black;
+  font-family: Pretendard;
+  line-height: 150%;
+  letter-spacing: -0.08px;
   cursor: pointer;
   &:hover {
     color: #463efb;
@@ -75,7 +81,7 @@ export const SearchIcon = styled.svg`
 
 export const SearchInput = styled.input`
   width: 350px;
-  height: 55px;
+  height: 50px;
   padding: 0 40px 0 18px;
   background-color: #f4f4f7;
   color: var(--Gray-300, #afafb6);
@@ -83,7 +89,10 @@ export const SearchInput = styled.input`
   line-height: 32px;
   border: none;
   border-radius: 10px;
+  line-height: 150%;
+  letter-spacing: -0.08px;
   font-size: 16px;
+  font-family: Pretendard;
   outline: none;
   box-sizing: border-box;
 `;
