@@ -178,7 +178,7 @@ export const GoodArticleSection = styled.div`
 
 export const GoodArticleContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 41px;
 `;
 
