@@ -47,6 +47,7 @@ const Header: React.FC = () => {
     try {
       await axiosInstance.delete("/users/logout");
       setIsLoggedIn(false);
+      localStorage.removeItem("token");
       console.log("로그아웃 성공");
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
@@ -74,7 +75,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <LeftContainer>
-        <Logo src={logo} alt="로고" />
+        <Logo src={logo} alt="로고" onClick={() => handleMenuClick("/")} />
         <MenuContainer>
           <Menu onClick={() => handleMenuClick("/")}>홈</Menu>
           <Menu onClick={() => handleMenuClick("/articles")}>아티클</Menu>
