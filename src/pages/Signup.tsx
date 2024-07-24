@@ -126,6 +126,7 @@ export const Signup: React.FC = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
+            hasText={email.length > 0}
           />
           {touched.email && errors.email && (
             <ErrorMessage>{errors.email}</ErrorMessage>
@@ -140,6 +141,7 @@ export const Signup: React.FC = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
             onBlur={handleBlur("nickname")}
             hasError={touched.nickname && !!errors.nickname}
+            hasText={nickname.length > 0}
           />
           {touched.nickname && errors.nickname && (
             <ErrorMessage>{errors.nickname}</ErrorMessage>
@@ -154,6 +156,7 @@ export const Signup: React.FC = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
+            hasText={password.length > 0}
           />
           {touched.password && errors.password && (
             <ErrorMessage>{errors.password}</ErrorMessage>
@@ -168,6 +171,7 @@ export const Signup: React.FC = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value)}
             onBlur={handleBlur("passwordConfirm")}
             hasError={touched.passwordConfirm && !!errors.passwordConfirm}
+            hasText={passwordConfirm.length > 0}
           />
           {touched.passwordConfirm && errors.passwordConfirm && (
             <ErrorMessage>{errors.passwordConfirm}</ErrorMessage>
