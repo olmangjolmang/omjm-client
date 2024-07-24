@@ -17,8 +17,8 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72px 112px;
-  width: 800px;
+  padding: 62px 100px;
+  width: 700px;
   height: 600px;
   background-color: #fff;
   border-radius: 10px;
@@ -37,21 +37,24 @@ export const HighlightedTextContainer = styled.div`
   width: 100%;
   padding: 10px;
   color: #272726;
+  font-family: Pretendard;
   margin-bottom: 40px;
+  line-height: 24px; 
   font-size: 18px;
   white-space: pre-wrap;
 `;
 
-export const TextArea = styled.textarea`
+export const TextArea = styled.textarea<{ hasText: boolean }>`
   width: 93%;
-  height: 570px;
+  height: 580px;
   padding: 30px;
   background-color: #f4f4f7;
   border-radius: 20px;
   border: none;
+  font-family: Pretendard;
   resize: none;
   font-size: 16px;
-  color: #afafb6;
+  color: ${(props) => (props.hasText ? "#272726" : "#afafb6")};
   font-weight: 500;
 `;
 
@@ -61,6 +64,7 @@ export const Button = styled.button`
   padding: 7.5px;
   background-color: #463efb;
   color: white;
+  font-family: Pretendard;
   border: none;
   border-radius: 10px;
   cursor: pointer;
