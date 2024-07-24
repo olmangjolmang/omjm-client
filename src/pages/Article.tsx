@@ -33,7 +33,7 @@ import {
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: article, isLoading } = useArticle(id || "", {
+  const { data: article } = useArticle(id || "", {
     enabled: !!id,
   });
 
@@ -158,9 +158,9 @@ const Article: React.FC = () => {
     return elements;
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (!article) {
     return <div>No article found</div>;
