@@ -51,8 +51,8 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
         <CloseButton onClick={handleStop}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="45"
-            height="45"
+            width="33"
+            height="32"
             viewBox="0 0 45 45"
             fill="none"
           >
@@ -65,6 +65,7 @@ const HighlightModal: React.FC<HighlightModalProps> = ({
         <ModalHeader>메모</ModalHeader>
         <HighlightedTextContainer>{highlightedText}</HighlightedTextContainer>
         <TextArea
+          hasText={note.length > 0}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="메모를 작성해주세요."

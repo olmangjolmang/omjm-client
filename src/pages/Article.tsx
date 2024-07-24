@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import axios from "axios";
 import axiosInstance from "../api/AxiosInstance";
 import linkimg from "../assets/linkicon.png";
 import articleImg from "../assets/article.png";
@@ -75,6 +76,8 @@ const Article: React.FC = () => {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const checkIfSaved = async () => {
       try {
@@ -109,25 +112,77 @@ const Article: React.FC = () => {
 
   const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
+    const contentElement = contentRef.current;
+
+    if (selection && selection.rangeCount > 0 && contentElement) {
       const range = selection.getRangeAt(0);
-      const start = range.startOffset;
-      const end = range.endOffset;
       const text = selection.toString();
 
       if (text) {
+        const preSelectionRange = range.cloneRange();
+        preSelectionRange.selectNodeContents(contentElement);
+        preSelectionRange.setEnd(range.startContainer, range.startOffset);
+        const start = preSelectionRange.toString().length;
+        const end = start + text.length;
+
         setHighlightedText(text);
-        setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
+        setHighlightedRanges((prevRanges) => [
+          ...prevRanges,
+          { start, end },
+        ]);
+
         selection.removeAllRanges();
       }
     }
   };
 
-  const handleSaveNote = (note: string) => {
-    console.log("Highlighted Text:", highlightedText);
-    console.log("Note:", note);
-    setIsHighlightModalOpen(false);
+  const handleSaveNote = async (note: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+  
+      const payload = {
+        targetText: highlightedText,
+        content: note
+      };
+  
+      console.log("Request Payload:", payload);
+  
+      const response = await axiosInstance.post(
+        `/post/memo/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        alert("메모가 저장되었습니다.");
+      } else {
+        alert("메모 저장에 실패했습니다.");
+      }
+  
+      setIsHighlightModalOpen(false);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("메모 저장 중 오류 발생:", error);
+        if (error.response) {
+          console.error("응답 데이터:", error.response.data);
+          console.error("응답 상태 코드:", error.response.status);
+        }
+        alert("메모 저장에 실패했습니다.");
+      } else {
+        console.error("알 수 없는 오류 발생:", error);
+        alert("메모 저장 중 알 수 없는 오류가 발생했습니다.");
+      }
+    }
   };
+  
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
@@ -238,7 +293,7 @@ const Article: React.FC = () => {
           <LinkIcon src={linkimg} alt="Link icon" />
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
-        <Content onMouseUp={handleTextHighlight}>
+        <Content ref={contentRef} onMouseUp={handleTextHighlight}>
           {renderHighlightedText(content)}
         </Content>
         <Line />
