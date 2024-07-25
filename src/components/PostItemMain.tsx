@@ -56,6 +56,11 @@ const PostItemMain: React.FC<PostItemProps> = ({
     }
   };
 
+  const stripHtml = (html: string): string => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
   return (
     <Container onClick={handleNavigate}>
       <Image src={image.imageUrl} alt="미리보기 이미지" />
@@ -76,7 +81,7 @@ const PostItemMain: React.FC<PostItemProps> = ({
         )}
       </CategoryRow>
       <Title>{title}</Title>
-      {content && <Summary>{content}</Summary>}
+      {content && <Summary>{stripHtml(content)}</Summary>}
       <Author hasSummary={!!content}>
         {author} | {createdDate}
       </Author>
@@ -89,6 +94,7 @@ export default PostItemMain;
 // 스타일드 컴포넌트 정의
 const Container = styled.div`
   width: 379px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -99,6 +105,7 @@ const Container = styled.div`
 const Image = styled.img`
   width: 379px;
   height: 240px;
+  margin: 0 auto;
   object-fit: cover;
   flex-shrink: 0;
   border-radius: 20px;
@@ -110,6 +117,7 @@ const CategoryRow = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 10px; // Category와 SavedBadge 사이에 공간 추가
+  margin: 0 auto;
   margin-top: 14px;
   margin-bottom: 7px;
 `;
@@ -121,6 +129,7 @@ const Category = styled.div`
   border-radius: 10px;
   gap: 15px;
   display: inline-flex;
+
   padding: 10px 15px;
   background-color: #f4f4f7;
 `;
@@ -137,6 +146,7 @@ const Title = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin: 0 auto;
   margin-left: 10px;
   height: 72px;
 `;
@@ -149,6 +159,7 @@ const Summary = styled.div`
   line-height: 1.5;
   letter-spacing: -0.09px;
   color: #afafb6;
+  margin: 0 auto;
   margin-left: 10px;
   margin-top: 10px;
   overflow: hidden;
@@ -156,6 +167,7 @@ const Summary = styled.div`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  width: 379px;
 `;
 
 const Author = styled.div<{ hasSummary: boolean }>`
