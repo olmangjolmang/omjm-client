@@ -83,11 +83,7 @@ const Article: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axiosInstance.get(`/post/${id}/is-saved`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axiosInstance.get(`/post/${id}/is-saved`, {});
           setIsSaved(response.data.isSaved);
         }
       } catch (error) {
@@ -305,27 +301,30 @@ const Article: React.FC = () => {
         <QuizSection title={title} id={Number(id)} />
         <GoodArticleSection>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
-          <GoodArticleContainer>
-            {recommendPosts.length > 0 ? (
-              recommendPosts.map((post) => (
-                <div key={post.postId}>
-                  <GoodArticleImg
-                    src={image?.imageUrl || articleImg}
-                    alt="Recommended article"
-                  />
-                  <GoodArticleCategory>
-                    {categoryMap[postCategory as CategoryType] || postCategory}
-                  </GoodArticleCategory>
-                  <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
-                  <GoodArticleAuthor>
-                    {author} | {formattedDate}
-                  </GoodArticleAuthor>
-                </div>
-              ))
-            ) : (
-              <div>추천 아티클이 없습니다.</div>
-            )}
-          </GoodArticleContainer>
+          {recommendPosts && (
+            <GoodArticleContainer>
+              {recommendPosts.length > 0 ? (
+                recommendPosts.map((post) => (
+                  <div key={post.postId}>
+                    <GoodArticleImg
+                      src={image?.imageUrl || articleImg}
+                      alt="Recommended article"
+                    />
+                    <GoodArticleCategory>
+                      {categoryMap[postCategory as CategoryType] ||
+                        postCategory}
+                    </GoodArticleCategory>
+                    <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
+                    <GoodArticleAuthor>
+                      {author} | {formattedDate}
+                    </GoodArticleAuthor>
+                  </div>
+                ))
+              ) : (
+                <div>추천 아티클이 없습니다.</div>
+              )}
+            </GoodArticleContainer>
+          )}
         </GoodArticleSection>
         {isHighlightModalOpen && (
           <>
