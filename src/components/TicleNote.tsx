@@ -22,7 +22,7 @@ const TicleNote = ({
 }: Note) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [answer, setAnswer] = useState(targetText);
+  const [answer, setAnswer] = useState(content);
   const date = memoDate.split("T")[0];
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -105,7 +105,7 @@ const TicleNote = ({
           )}
         </ToggleIcon>
       </QuestionSection>
-      <Content>{content}</Content>
+      <Content>{targetText}</Content>
       {isOpen && (
         <AnswerSection>
           {isEditing ? (
@@ -134,12 +134,12 @@ export default TicleNote;
 const Container = styled.div`
   background-color: #f4f4f7;
   border-radius: 10px;
-  margin: 20px 112px;
   padding: 20px;
 
   min-width: 1000px;
   white-space: nowrap;
   margin: 0 auto;
+  margin: 20px 112px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 `;
