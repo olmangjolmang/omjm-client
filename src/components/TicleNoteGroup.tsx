@@ -43,7 +43,7 @@ const TicleNoteGroup = () => {
     <Container>
       {data && data.results.map((note: any) => <TicleNote {...note} />)}
 
-      {data && (
+      {data?.results[0] && (
         <Pagination
           currentPage={page}
           totalPages={data.results[0].pageInfo.totalPages}

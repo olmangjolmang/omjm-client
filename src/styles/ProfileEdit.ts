@@ -35,21 +35,7 @@ export const Input = styled.input`
   margin-bottom: 16px;
 `;
 
-export const EmailInput = styled.div`
-  width: 515px;
-  height: 60px;
-  color: #272726;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-left: 20px;
-  border-radius: 10px;
-  border: 1px solid #dfdfe5;
-  background: #f4f4f7;
-  font-size: 16px;
-  margin-bottom: 36px;
-`;
+
 
 export const Button = styled.button`
   width: 515px;
