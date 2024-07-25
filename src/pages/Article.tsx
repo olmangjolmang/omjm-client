@@ -205,7 +205,7 @@ const Article: React.FC = () => {
       console.log("Post ID:", id);
 
       if (isSaved) {
-        const response = await axiosInstance.post(`/post/${id}/unscrap`, {
+        const response = await axiosInstance.post(`/post/${id}/scrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
