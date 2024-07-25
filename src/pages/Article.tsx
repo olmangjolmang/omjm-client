@@ -125,15 +125,23 @@ const Article: React.FC = () => {
         const start = preSelectionRange.toString().length;
         const end = start + text.length;
 
+        // 기존 하이라이트와 겹치는지 확인 및 제거
+        const updatedRanges = highlightedRanges.filter(
+          (r) => end < r.start || start > r.end
+        );
+
         setHighlightedText(text);
-        setHighlightedRanges((prevRanges) => [
-          ...prevRanges,
-          { start, end },
-        ]);
+        setHighlightedRanges([...updatedRanges, { start, end }]);
 
         selection.removeAllRanges();
       }
     }
+  };
+
+  const handleHighlightClick = (index: number) => {
+    setHighlightedRanges((prevRanges) =>
+      prevRanges.filter((_, i) => i !== index)
+    );
   };
 
   const handleSaveNote = async (note: string) => {
@@ -143,30 +151,26 @@ const Article: React.FC = () => {
         alert("로그인이 필요합니다.");
         return;
       }
-  
+
       const payload = {
         targetText: highlightedText,
-        content: note
+        content: note,
       };
-  
+
       console.log("Request Payload:", payload);
-  
-      const response = await axiosInstance.post(
-        `/post/memo/${id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
+
+      const response = await axiosInstance.post(`/post/memo/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (response.data.isSuccess) {
         alert("메모가 저장되었습니다.");
       } else {
         alert("메모 저장에 실패했습니다.");
       }
-  
+
       setIsHighlightModalOpen(false);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -182,7 +186,6 @@ const Article: React.FC = () => {
       }
     }
   };
-  
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
@@ -257,7 +260,9 @@ const Article: React.FC = () => {
           elements.push(text.slice(lastIndex, start));
         }
         elements.push(
-          <Highlight key={index}>{text.slice(start, end)}</Highlight>
+          <Highlight key={index} onClick={() => handleHighlightClick(index)}>
+            {text.slice(start, end)}
+          </Highlight>
         );
         lastIndex = end;
       });
