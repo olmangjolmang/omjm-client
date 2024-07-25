@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from "react";
+import axiosInstance from "../api/AxiosInstance"; // axiosInstance 사용
+import profileImg from "../assets/headerprofile.png";
+import Header from "./Header";
 import {
   Container,
   ProfileImage,
   Label,
   InputContainer,
   Input,
-  EmailInput,
   Button,
   Divider,
   DeleteButton,
   DeleteButtonContainer,
 } from "../styles/ProfileEdit";
-import axios from "axios";
-import profileImg from "../assets/headerprofile.png";
-import Header from "./Header";
 
 const ProfileEdit: React.FC = () => {
   const [nickname, setNickname] = useState("");
-  const [email] = useState("omjm@example.com");
+  const [email, setEmail] = useState("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+
+  useEffect(() => {
+    // 사용자 정보 가져오기
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axiosInstance.get("/users/profile");
+        const { nickname, email } = response.data.results; // response.data.results에서 가져오기
+        setNickname(nickname);
+        setEmail(email);
+      } catch (error) {
+        console.error("프로필 정보를 가져오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   useEffect(() => {
     setIsButtonEnabled(nickname.trim().length > 0);
@@ -30,11 +45,10 @@ const ProfileEdit: React.FC = () => {
 
   const handleSaveChanges = async () => {
     try {
-      await axios.put(
+      await axiosInstance.put(
         "/users/profile",
         {
-          nickName: nickname,
-          email: email,
+          nickname: nickname, // "nickName" -> "nickname"
         },
         {
           headers: {
@@ -47,9 +61,10 @@ const ProfileEdit: React.FC = () => {
       console.error("프로필 업데이트 중 오류 발생:", error);
     }
   };
+
   const handleDeleteAccount = async () => {
     try {
-      await axios.delete("/users/profile", {
+      await axiosInstance.delete("/users/profile", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -77,7 +92,27 @@ const ProfileEdit: React.FC = () => {
         </InputContainer>
         <InputContainer>
           <Label htmlFor="email">이메일</Label>
-          <EmailInput id="email">{email}</EmailInput>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            style={{
+              width: "515px",
+              height: "60px",
+              color: "#272726",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              paddingLeft: "20px",
+              borderRadius: "10px",
+              border: "1px solid #dfdfe5",
+              background: "#f4f4f7",
+              fontSize: "16px",
+              marginBottom: "36px",
+            }}
+            readOnly
+          />
         </InputContainer>
         <Button
           onClick={handleSaveChanges}
