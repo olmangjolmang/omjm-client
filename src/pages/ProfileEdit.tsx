@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../api/AxiosInstance"; // axiosInstance 사용
+import axiosInstance from "../api/AxiosInstance"; 
 import profileImg from "../assets/headerprofile.png";
 import Header from "./Header";
 import {
@@ -20,11 +20,10 @@ const ProfileEdit: React.FC = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
   useEffect(() => {
-    // 사용자 정보 가져오기
     const fetchUserProfile = async () => {
       try {
         const response = await axiosInstance.get("/users/profile");
-        const { nickname, email } = response.data.results; // response.data.results에서 가져오기
+        const { nickname, email } = response.data.results; 
         setNickname(nickname);
         setEmail(email);
       } catch (error) {
@@ -48,7 +47,7 @@ const ProfileEdit: React.FC = () => {
       await axiosInstance.put(
         "/users/profile",
         {
-          nickname: nickname, // "nickName" -> "nickname"
+          nickName: nickname,
         },
         {
           headers: {
