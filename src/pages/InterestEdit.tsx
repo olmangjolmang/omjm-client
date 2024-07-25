@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../api/AxiosInstance";
 import Header from "./Header";
 import {
@@ -28,6 +28,20 @@ const InterestEdit: React.FC = () => {
     { label: "인프라", value: "INFRA" },
     { label: "기타", value: "OTHER" },
   ];
+
+  useEffect(() => {
+    const fetchUserCategories = async () => {
+      try {
+        const response = await axiosInstance.get("/users/profile");
+        const userCategories = response.data.results.category;
+        setSelectedJobs(userCategories);
+      } catch (error) {
+        console.error("관심 직무 정보를 가져오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchUserCategories();
+  }, []);
 
   const handleJobSelect = (job: string) => {
     setSelectedJobs((prevSelectedJobs) =>
@@ -77,51 +91,51 @@ const InterestEdit: React.FC = () => {
           </DropdownButton>
           {isDropdownOpen && (
             <JobList>
-              {jobs.map((job) => (
-                <JobItem
-                  key={job.value}
-                  onClick={() => handleJobSelect(job.value)}
-                  isSelected={selectedJobs.includes(job.value)}
+            {jobs.map((job) => (
+              <JobItem
+                key={job.value}
+                onClick={() => handleJobSelect(job.value)}
+                isSelected={selectedJobs.includes(job.value)}
+              >
+                <JobItemIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  viewBox="0 0 25 25"
+                  fill="none"
                 >
-                  <JobItemIcon
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="25"
-                    viewBox="0 0 25 25"
-                    fill="none"
-                  >
-                    {selectedJobs.includes(job.value) ? (
-                      <>
-                        <circle cx="12.5" cy="12.5" r="12.5" fill="#463EFB" />
-                        <path
-                          d="M6.66602 12.4999L10.8327 15.8333L16.666 8.33325"
-                          stroke="#E5EFFF"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <circle
-                          cx="12.5"
-                          cy="12.5"
-                          r="11.5"
-                          stroke="#AFAFB6"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M6.66602 12.4999L10.8327 15.8333L16.666 8.33325"
-                          stroke="#AFAFB6"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </>
-                    )}
-                  </JobItemIcon>
-                  {job.label}
-                </JobItem>
-              ))}
-            </JobList>
+                  {selectedJobs.includes(job.value) ? (
+                    <>
+                      <circle cx="12.5" cy="12.5" r="12.5" fill="#463EFB" />
+                      <path
+                        d="M6.66602 12.4999L10.8327 15.8333L16.666 8.33325"
+                        stroke="#E5EFFF"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <circle
+                        cx="12.5"
+                        cy="12.5"
+                        r="11.5"
+                        stroke="#AFAFB6"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M6.66602 12.4999L10.8327 15.8333L16.666 8.33325"
+                        stroke="#AFAFB6"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </>
+                  )}
+                </JobItemIcon>
+                {job.label}
+              </JobItem>
+            ))}
+          </JobList>
           )}
         </DropdownContainer>
         <SubmitButton
