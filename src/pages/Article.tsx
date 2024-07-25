@@ -220,7 +220,7 @@ const Article: React.FC = () => {
         }
       } else {
         const response = await axiosInstance.post(
-          `/post/${id}/scrap`,
+          `/post/is-scrapped/${id}`,
           { postId: id },
           {
             headers: {
