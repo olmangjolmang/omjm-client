@@ -31,11 +31,13 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userInfo, setUserInfo] = useState<{ nickname: string; email: string }>({ nickname: "", email: "" });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
+      fetchUserProfile();
     }
   }, []);
 
@@ -51,6 +53,17 @@ const Header: React.FC = () => {
       console.log("로그아웃 성공");
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
+    }
+  };
+  const fetchUserProfile = async () => {
+    try {
+      const response = await axiosInstance.get("/users/profile");
+      setUserInfo({
+        nickname: response.data.results.nickname,
+        email: response.data.results.email,
+      });
+    } catch (error) {
+      console.error("사용자 정보를 가져오는 중 오류 발생:", error);
     }
   };
 
@@ -118,8 +131,8 @@ const Header: React.FC = () => {
                 <ProfileInfo to="/profile-edit">
                   <ProfileImg src={profileImg} alt="Profile" />
                   <div>
-                    <ProfileName>닉네임</ProfileName>
-                    <ProfileEmail>omjm@example.com</ProfileEmail>
+                    <ProfileName>{userInfo.nickname}</ProfileName>
+                    <ProfileEmail>{userInfo.email}</ProfileEmail>
                   </div>
                 </ProfileInfo>
                 <Divider />

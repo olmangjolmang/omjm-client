@@ -148,6 +148,8 @@ export const ProfileInfo = styled(Link)`
   padding: 10px 0;
   text-decoration: none;
   color: black;
+  align-self: flex-start;
+  margin-left: 32px;
 `;
 
 export const ProfileImg = styled.img`
@@ -160,7 +162,7 @@ export const ProfileName = styled.div`
   font-weight: 600;
   margin-left: 16px;
   font-size: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 `;
 
 export const ProfileEmail = styled.div`
