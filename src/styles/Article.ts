@@ -182,11 +182,13 @@ export const BottomArticleTitle = styled.div`
 
 export const GoodArticleSection = styled.div`
   align-self: flex-start;
-  width: 100%;
+  margin: 0 auto;
+  width: 1000px;
 `;
 
 export const GoodArticleContainer = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: row;
   gap: 41px;
 `;
@@ -202,7 +204,7 @@ export const GoodArticleCategory = styled.div`
   font-size: 16px;
   font-weight: 600;
   font-family: Pretendard;
-  width: 86px;
+  max-width: 120px;
   height: 44px;
   background-color: #f4f4f7;
   border-radius: 10px;
