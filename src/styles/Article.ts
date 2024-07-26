@@ -40,7 +40,7 @@ export const LinkContainer = styled.a`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  text-decoration: none; 
+  text-decoration: none;
   cursor: pointer;
 `;
 
@@ -83,6 +83,7 @@ export const ArticleDate = styled.div`
 export const Img = styled.img`
   width: 1000px;
   height: 500px;
+  margin: 0 auto;
   margin-bottom: 52px;
 `;
 
@@ -91,9 +92,12 @@ export const Content = styled.div`
   font-weight: 500;
   font-family: Pretendard;
   line-height: 32px;
+  margin: 0 auto;
   white-space: pre-wrap;
   margin-bottom: 80px;
   position: relative;
+  width: 1000px;
+  max-width: 1216px;
 `;
 
 export const Highlight = styled.span`
