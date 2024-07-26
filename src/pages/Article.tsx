@@ -83,8 +83,12 @@ const Article: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axiosInstance.get(`/post/${id}/is-saved`, {});
-          setIsSaved(response.data.isSaved);
+          const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setIsSaved(response.data.isSuccess);
         }
       } catch (error) {
         console.error("Error checking if article is saved:", error);
@@ -135,9 +139,7 @@ const Article: React.FC = () => {
   };
 
   const handleHighlightClick = (index: number) => {
-    setHighlightedRanges((prevRanges) =>
-      prevRanges.filter((_, i) => i !== index)
-    );
+    setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
   };
 
   const handleSaveNote = async (note: string) => {
