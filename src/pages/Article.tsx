@@ -14,6 +14,7 @@ import {
   Container,
   Category,
   Title,
+  LinkContainer,
   LinkText,
   LinkIcon,
   AuthorBox,
@@ -74,21 +75,22 @@ const Article: React.FC = () => {
     Array<{ start: number; end: number }>
   >([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
+  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]); // 빈 배열로 기본값 설정
 
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // 아티클 저장 확인
     const checkIfSaved = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axiosInstance.get(`/post/${id}/is-saved`, {
+          const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setIsSaved(response.data.isSaved);
+          setIsSaved(response.data.isSuccess);
         }
       } catch (error) {
         console.error("Error checking if article is saved:", error);
@@ -98,7 +100,9 @@ const Article: React.FC = () => {
     const fetchRecommendPosts = async () => {
       try {
         const response = await axiosInstance.get(`/post/recommend/${id}`);
-        setRecommendPosts(response.data.results.recommendPost);
+        if (response.data.results && response.data.results.recommendPost) {
+          setRecommendPosts(response.data.results.recommendPost);
+        }
       } catch (error) {
         console.error("Error fetching recommend posts:", error);
       }
@@ -126,10 +130,7 @@ const Article: React.FC = () => {
         const end = start + text.length;
 
         setHighlightedText(text);
-        setHighlightedRanges((prevRanges) => [
-          ...prevRanges,
-          { start, end },
-        ]);
+        setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
 
         selection.removeAllRanges();
       }
@@ -143,30 +144,26 @@ const Article: React.FC = () => {
         alert("로그인이 필요합니다.");
         return;
       }
-  
+
       const payload = {
         targetText: highlightedText,
-        content: note
+        content: note,
       };
-  
+
       console.log("Request Payload:", payload);
-  
-      const response = await axiosInstance.post(
-        `/post/memo/${id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
+
+      const response = await axiosInstance.post(`/post/memo/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (response.data.isSuccess) {
         alert("메모가 저장되었습니다.");
       } else {
         alert("메모 저장에 실패했습니다.");
       }
-  
+
       setIsHighlightModalOpen(false);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -182,7 +179,6 @@ const Article: React.FC = () => {
       }
     }
   };
-  
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
@@ -202,7 +198,7 @@ const Article: React.FC = () => {
         return;
       }
       console.log("Access Token:", token);
-      console.log("Post ID:", id);
+      // console.log("Post ID:", id);
 
       if (isSaved) {
         const response = await axiosInstance.post(`/post/${id}/scrap`, {
@@ -220,7 +216,7 @@ const Article: React.FC = () => {
         }
       } else {
         const response = await axiosInstance.post(
-          `/post/is-scrapped/${id}`,
+          `/post/${id}/scrap`,
           { postId: id },
           {
             headers: {
@@ -243,7 +239,7 @@ const Article: React.FC = () => {
     }
   };
 
-  const renderHighlightedText = (text: string) => {
+  const renderHighlightedText = (text: string = "") => {
     if (!highlightedRanges.length) {
       return text;
     }
@@ -273,7 +269,15 @@ const Article: React.FC = () => {
     return <div>No article found</div>;
   }
 
-  const { title, content, author, createdDate, postCategory, image } = article;
+  const {
+    title,
+    content,
+    author,
+    createdDate,
+    postCategory,
+    image,
+    originalUrl,
+  } = article;
 
   const date = new Date(createdDate);
   const formattedDate = date.toISOString().split("T")[0];
@@ -289,8 +293,15 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
-          <LinkIcon src={linkimg} alt="Link icon" />
+          <LinkContainer
+            onClick={() => window.open(originalUrl)}
+            // href={originalUrl}
+            // target="_blank"
+            // rel="noopener noreferrer"
+          >
+            <LinkText>원본 링크 바로가기</LinkText>
+            <LinkIcon src={linkimg} alt="Link icon" />
+          </LinkContainer>
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
         <Content ref={contentRef} onMouseUp={handleTextHighlight}>
