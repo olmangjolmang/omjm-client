@@ -14,6 +14,7 @@ import {
   Container,
   Category,
   Title,
+  LinkContainer,
   LinkText,
   LinkIcon,
   AuthorBox,
@@ -74,11 +75,12 @@ const Article: React.FC = () => {
     Array<{ start: number; end: number }>
   >([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
+  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]); // 빈 배열로 기본값 설정
 
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // 아티클 저장 확인
     const checkIfSaved = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -98,7 +100,9 @@ const Article: React.FC = () => {
     const fetchRecommendPosts = async () => {
       try {
         const response = await axiosInstance.get(`/post/recommend/${id}`);
-        setRecommendPosts(response.data.results.recommendPost);
+        if (response.data.results && response.data.results.recommendPost) {
+          setRecommendPosts(response.data.results.recommendPost);
+        }
       } catch (error) {
         console.error("Error fetching recommend posts:", error);
       }
@@ -125,21 +129,12 @@ const Article: React.FC = () => {
         const start = preSelectionRange.toString().length;
         const end = start + text.length;
 
-        // 기존 하이라이트와 겹치는지 확인 및 제거
-        const updatedRanges = highlightedRanges.filter(
-          (r) => end < r.start || start > r.end
-        );
-
         setHighlightedText(text);
-        setHighlightedRanges([...updatedRanges, { start, end }]);
+        setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
 
         selection.removeAllRanges();
       }
     }
-  };
-
-  const handleHighlightClick = (index: number) => {
-    setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
   };
 
   const handleSaveNote = async (note: string) => {
@@ -203,10 +198,10 @@ const Article: React.FC = () => {
         return;
       }
       console.log("Access Token:", token);
-      console.log("Post ID:", id);
+      // console.log("Post ID:", id);
 
       if (isSaved) {
-        const response = await axiosInstance.post(`/post/${id}/unscrap`, {
+        const response = await axiosInstance.post(`/post/${id}/scrap`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -221,7 +216,7 @@ const Article: React.FC = () => {
         }
       } else {
         const response = await axiosInstance.post(
-          `/post/is-scrapped/${id}`,
+          `/post/${id}/scrap`,
           { postId: id },
           {
             headers: {
@@ -244,7 +239,7 @@ const Article: React.FC = () => {
     }
   };
 
-  const renderHighlightedText = (text: string) => {
+  const renderHighlightedText = (text: string = "") => {
     if (!highlightedRanges.length) {
       return text;
     }
@@ -258,9 +253,7 @@ const Article: React.FC = () => {
           elements.push(text.slice(lastIndex, start));
         }
         elements.push(
-          <Highlight key={index} onClick={() => handleHighlightClick(index)}>
-            {text.slice(start, end)}
-          </Highlight>
+          <Highlight key={index}>{text.slice(start, end)}</Highlight>
         );
         lastIndex = end;
       });
@@ -276,7 +269,15 @@ const Article: React.FC = () => {
     return <div>No article found</div>;
   }
 
-  const { title, content, author, createdDate, postCategory, image } = article;
+  const {
+    title,
+    content,
+    author,
+    createdDate,
+    postCategory,
+    image,
+    originalUrl,
+  } = article;
 
   const date = new Date(createdDate);
   const formattedDate = date.toISOString().split("T")[0];
@@ -292,8 +293,15 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkText href="https://google.com/">원본 링크 바로가기</LinkText>
-          <LinkIcon src={linkimg} alt="Link icon" />
+          <LinkContainer
+            onClick={() => window.open(originalUrl)}
+            // href={originalUrl}
+            // target="_blank"
+            // rel="noopener noreferrer"
+          >
+            <LinkText>원본 링크 바로가기</LinkText>
+            <LinkIcon src={linkimg} alt="Link icon" />
+          </LinkContainer>
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
         <Content ref={contentRef} onMouseUp={handleTextHighlight}>
@@ -303,30 +311,27 @@ const Article: React.FC = () => {
         <QuizSection title={title} id={Number(id)} />
         <GoodArticleSection>
           <BottomArticleTitle>함께 읽으면 좋은 아티클</BottomArticleTitle>
-          {recommendPosts && (
-            <GoodArticleContainer>
-              {recommendPosts.length > 0 ? (
-                recommendPosts.map((post) => (
-                  <div key={post.postId}>
-                    <GoodArticleImg
-                      src={image?.imageUrl || articleImg}
-                      alt="Recommended article"
-                    />
-                    <GoodArticleCategory>
-                      {categoryMap[postCategory as CategoryType] ||
-                        postCategory}
-                    </GoodArticleCategory>
-                    <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
-                    <GoodArticleAuthor>
-                      {author} | {formattedDate}
-                    </GoodArticleAuthor>
-                  </div>
-                ))
-              ) : (
-                <div>추천 아티클이 없습니다.</div>
-              )}
-            </GoodArticleContainer>
-          )}
+          <GoodArticleContainer>
+            {recommendPosts.length > 0 ? (
+              recommendPosts.map((post) => (
+                <div key={post.postId}>
+                  <GoodArticleImg
+                    src={image?.imageUrl || articleImg}
+                    alt="Recommended article"
+                  />
+                  <GoodArticleCategory>
+                    {categoryMap[postCategory as CategoryType] || postCategory}
+                  </GoodArticleCategory>
+                  <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
+                  <GoodArticleAuthor>
+                    {author} | {formattedDate}
+                  </GoodArticleAuthor>
+                </div>
+              ))
+            ) : (
+              <div>추천 아티클이 없습니다.</div>
+            )}
+          </GoodArticleContainer>
         </GoodArticleSection>
         {isHighlightModalOpen && (
           <>
