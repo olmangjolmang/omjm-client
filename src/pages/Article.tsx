@@ -116,8 +116,9 @@ const Article: React.FC = () => {
   const fetchRecommendPosts = async () => {
     try {
       const response = await axiosInstance.get(`/post/recommend/${id}`);
-      if (response.data.results?.recommendPost) {
-        setRecommendPosts(response.data.results.recommendPost);
+      console.log("Recommend posts fetched:", response);
+      if (response.data.results) {
+        setRecommendPosts(response.data.results);
       }
     } catch (error) {
       console.error("Error fetching recommend posts:", error);
