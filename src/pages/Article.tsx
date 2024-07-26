@@ -109,13 +109,13 @@ const Article: React.FC = () => {
   const [highlightedRanges, setHighlightedRanges] = useState<
     Array<{ start: number; end: number }>
   >([]);
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(false); // 초기값을 false로 설정
   const [recommendPosts, setRecommendPosts] = useState<Post[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (id) {
-      // checkIfSaved();
+      checkIfSaved();
       fetchRecommendPosts();
     }
   }, [id]);
