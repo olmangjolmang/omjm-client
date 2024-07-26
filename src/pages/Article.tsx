@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 import Header from "./Header";
 import Footer from "./Footer";
 import axios from "axios";
@@ -62,11 +63,24 @@ interface RecommendPost {
   postTitle: string;
 }
 
+interface TextNode {
+  type: "text";
+  text: string;
+  start: number;
+  end: number;
+}
+
+interface ImageNode {
+  type: "image";
+  src: string;
+  alt: string;
+}
+
+type ContentNode = TextNode | ImageNode;
+
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: article, isLoading } = useArticle(id || "", {
-    enabled: !!id,
-  });
+  const { data: article, isLoading } = useArticle(id || "", { enabled: !!id });
 
   const [isHighlightModalOpen, setIsHighlightModalOpen] =
     useState<boolean>(false);
@@ -75,52 +89,116 @@ const Article: React.FC = () => {
     Array<{ start: number; end: number }>
   >([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]); // 빈 배열로 기본값 설정
-
+  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 아티클 저장 확인
-    const checkIfSaved = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setIsSaved(response.data.isSuccess);
-        }
-      } catch (error) {
-        console.error("Error checking if article is saved:", error);
-      }
-    };
-
-    const fetchRecommendPosts = async () => {
-      try {
-        const response = await axiosInstance.get(`/post/recommend/${id}`);
-        if (response.data.results && response.data.results.recommendPost) {
-          setRecommendPosts(response.data.results.recommendPost);
-        }
-      } catch (error) {
-        console.error("Error fetching recommend posts:", error);
-      }
-    };
-
     if (id) {
       checkIfSaved();
       fetchRecommendPosts();
     }
   }, [id]);
 
+  const checkIfSaved = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsSaved(response.data.isSuccess);
+      }
+    } catch (error) {
+      console.error("Error checking if article is saved:", error);
+    }
+  };
+
+  const fetchRecommendPosts = async () => {
+    try {
+      const response = await axiosInstance.get(`/post/recommend/${id}`);
+      if (response.data.results?.recommendPost) {
+        setRecommendPosts(response.data.results.recommendPost);
+      }
+    } catch (error) {
+      console.error("Error fetching recommend posts:", error);
+    }
+  };
+
+  const sanitizeContent = (html: string) => {
+    const cleanHtml = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ["b", "i", "em", "strong", "a", "img"],
+      ALLOWED_ATTR: ["href", "src", "alt"],
+    });
+    return cleanHtml;
+  };
+
+  const htmlToTextMapping = (html: string) => {
+    const cleanHtml = sanitizeContent(html);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cleanHtml, "text/html");
+    const textNodes: { text: string; start: number; end: number }[] = [];
+    const contentElements: ContentNode[] = [];
+
+    const walker = document.createTreeWalker(
+      doc.body,
+      NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+      null
+    );
+    let node;
+    let index = 0;
+
+    while ((node = walker.nextNode())) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textContent = node.textContent || "";
+        if (
+          contentElements.length > 0 &&
+          contentElements[contentElements.length - 1].type === "text"
+        ) {
+          const lastTextNode = contentElements[
+            contentElements.length - 1
+          ] as TextNode;
+          lastTextNode.text += textContent;
+          lastTextNode.end += textContent.length;
+        } else {
+          contentElements.push({
+            type: "text",
+            text: textContent,
+            start: index,
+            end: index + textContent.length,
+          });
+        }
+        index += textContent.length;
+      } else if (
+        node.nodeType === Node.ELEMENT_NODE &&
+        (node as HTMLElement).tagName === "IMG"
+      ) {
+        const imgElement = node as HTMLImageElement;
+        contentElements.push({
+          type: "image",
+          src: imgElement.src,
+          alt: imgElement.alt,
+        });
+        index += 1; // 이미지도 하나의 요소로 간주하여 인덱스를 증가
+      }
+    }
+    console.log(contentElements);
+    return {
+      text: contentElements
+        .filter((el) => el.type === "text")
+        .map((el) => (el as TextNode).text)
+        .join(""),
+      mapping: textNodes,
+      contentElements,
+    };
+  };
+
   const handleTextHighlight = (e: React.MouseEvent) => {
     const selection = window.getSelection();
     const contentElement = contentRef.current;
 
-    if (selection && selection.rangeCount > 0 && contentElement) {
+    if (selection?.rangeCount && contentElement) {
       const range = selection.getRangeAt(0);
-      const text = selection.toString();
+      const text = range.toString();
 
       if (text) {
         const preSelectionRange = range.cloneRange();
@@ -130,11 +208,25 @@ const Article: React.FC = () => {
         const end = start + text.length;
 
         setHighlightedText(text);
-        setHighlightedRanges((prevRanges) => [...prevRanges, { start, end }]);
-
+        setHighlightedRanges([{ start, end }]);
         selection.removeAllRanges();
       }
     }
+  };
+
+  const renderHighlightedText = (text: string) => {
+    const parts: (string | JSX.Element)[] = text
+      .split(highlightedText)
+      .reduce((acc: (string | JSX.Element)[], part: string, index: number) => {
+        if (index > 0) {
+          acc.push(
+            <Highlight key={`highlight-${index}`}>{highlightedText}</Highlight>
+          );
+        }
+        acc.push(<span key={`part-${index}`}>{part}</span>);
+        return acc;
+      }, []);
+    return parts;
   };
 
   const handleSaveNote = async (note: string) => {
@@ -149,13 +241,8 @@ const Article: React.FC = () => {
         targetText: highlightedText,
         content: note,
       };
-
-      console.log("Request Payload:", payload);
-
       const response = await axiosInstance.post(`/post/memo/${id}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data.isSuccess) {
@@ -163,28 +250,33 @@ const Article: React.FC = () => {
       } else {
         alert("메모 저장에 실패했습니다.");
       }
-
       setIsHighlightModalOpen(false);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error("메모 저장 중 오류 발생:", error);
-        if (error.response) {
-          console.error("응답 데이터:", error.response.data);
-          console.error("응답 상태 코드:", error.response.status);
-        }
-        alert("메모 저장에 실패했습니다.");
-      } else {
-        console.error("알 수 없는 오류 발생:", error);
-        alert("메모 저장 중 알 수 없는 오류가 발생했습니다.");
+      handleError(error, "메모 저장 중 오류 발생");
+    }
+  };
+
+  const handleError = (error: unknown, defaultMessage: string) => {
+    if (axios.isAxiosError(error)) {
+      console.error(defaultMessage, error);
+      if (error.response) {
+        console.error("응답 데이터:", error.response.data);
+        console.error("응답 상태 코드:", error.response.status);
       }
+      alert(
+        `${defaultMessage} - ${
+          error.response?.data?.message || "알 수 없는 오류"
+        }`
+      );
+    } else {
+      console.error(defaultMessage, error);
+      alert(`${defaultMessage} - 알 수 없는 오류`);
     }
   };
 
   const handleMenuClick = () => {
     const combinedText = highlightedRanges
-      .map(({ start, end }) => {
-        return article?.content.slice(start, end) || "";
-      })
+      .map(({ start, end }) => plainTextContent.slice(start, end))
       .join("\n");
     setHighlightedText(combinedText);
     setIsHighlightModalOpen(true);
@@ -197,77 +289,28 @@ const Article: React.FC = () => {
         alert("로그인이 필요합니다.");
         return;
       }
-      console.log("Access Token:", token);
-      // console.log("Post ID:", id);
 
-      if (isSaved) {
-        const response = await axiosInstance.post(`/post/${id}/scrap`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Response:", response);
-
-        if (response.data.isSuccess) {
-          alert("아티클 저장 취소 완료");
-          setIsSaved(false);
-        } else {
-          console.log("아티클 저장 취소 실패");
+      const response = await axiosInstance.post(
+        `/post/${id}/scrap`,
+        { postId: id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
+      );
+
+      if (response.data.isSuccess) {
+        setIsSaved(!isSaved);
+        alert(`아티클 ${isSaved ? "저장 취소" : "저장"} 완료`);
       } else {
-        const response = await axiosInstance.post(
-          `/post/${id}/scrap`,
-          { postId: id },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("Response:", response);
-
-        if (response.data.isSuccess) {
-          alert("아티클 저장 완료");
-          setIsSaved(true);
-        } else {
-          console.log("아티클 저장 실패");
-        }
+        console.error("아티클 저장 실패");
       }
     } catch (error) {
-      console.error("Error saving article:", error);
-      alert("아티클 저장 실패");
+      handleError(error, "아티클 저장 실패");
     }
   };
 
-  const renderHighlightedText = (text: string = "") => {
-    if (!highlightedRanges.length) {
-      return text;
-    }
-
-    let lastIndex = 0;
-    const elements = [];
-    highlightedRanges
-      .sort((a, b) => a.start - b.start)
-      .forEach(({ start, end }, index) => {
-        if (start > lastIndex) {
-          elements.push(text.slice(lastIndex, start));
-        }
-        elements.push(
-          <Highlight key={index}>{text.slice(start, end)}</Highlight>
-        );
-        lastIndex = end;
-      });
-    elements.push(text.slice(lastIndex));
-    return elements;
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!article) {
-    return <div>No article found</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (!article) return <div>No article found</div>;
 
   const {
     title,
@@ -278,11 +321,15 @@ const Article: React.FC = () => {
     image,
     originalUrl,
   } = article;
-
-  const date = new Date(createdDate);
-  const formattedDate = date.toISOString().split("T")[0];
+  const formattedDate = new Date(createdDate).toISOString().split("T")[0];
   const translatedCategory =
     categoryMap[postCategory as CategoryType] || postCategory;
+
+  const {
+    text: plainTextContent,
+    mapping,
+    contentElements,
+  } = htmlToTextMapping(content);
 
   return (
     <>
@@ -293,19 +340,25 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkContainer
-            onClick={() => window.open(originalUrl)}
-            // href={originalUrl}
-            // target="_blank"
-            // rel="noopener noreferrer"
-          >
+          <LinkContainer onClick={() => window.open(originalUrl)}>
             <LinkText>원본 링크 바로가기</LinkText>
             <LinkIcon src={linkimg} alt="Link icon" />
           </LinkContainer>
         </AuthorBox>
         <Img src={image?.imageUrl || articleImg} alt="Article image" />
         <Content ref={contentRef} onMouseUp={handleTextHighlight}>
-          {renderHighlightedText(content)}
+          {contentElements.map((element, index) =>
+            element.type == "text" ? (
+              <span key={index}>{renderHighlightedText(element.text)}</span>
+            ) : (
+              <img
+                key={index}
+                src={element.src}
+                alt={element.alt}
+                style={{ maxWidth: "1000px" }}
+              />
+            )
+          )}
         </Content>
         <Line />
         <QuizSection title={title} id={Number(id)} />
@@ -334,15 +387,13 @@ const Article: React.FC = () => {
           </GoodArticleContainer>
         </GoodArticleSection>
         {isHighlightModalOpen && (
-          <>
-            <Overlay isModalOpen={isHighlightModalOpen}>
-              <HighlightModal
-                highlightedText={highlightedText}
-                onClose={() => setIsHighlightModalOpen(false)}
-                onSave={handleSaveNote}
-              />
-            </Overlay>
-          </>
+          <Overlay isModalOpen={isHighlightModalOpen}>
+            <HighlightModal
+              highlightedText={highlightedText}
+              onClose={() => setIsHighlightModalOpen(false)}
+              onSave={handleSaveNote}
+            />
+          </Overlay>
         )}
         <FloatingButtons
           onMenuClick={handleMenuClick}
