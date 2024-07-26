@@ -36,15 +36,20 @@ export const Title = styled.div`
   margin-bottom: 18px;
   white-space: nowrap;
 `;
+export const LinkContainer = styled.a`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  text-decoration: none; 
+  cursor: pointer;
+`;
 
-export const LinkText = styled.a`
+export const LinkText = styled.div`
   font-size: 16px;
   font-family: Pretendard;
-
   font-weight: 600;
   line-height: 150%;
   color: #463efb;
-  text-decoration: none;
 `;
 
 export const LinkIcon = styled.img`
