@@ -115,7 +115,7 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      checkIfSaved();
+      // checkIfSaved();
       fetchRecommendPosts();
     }
   }, [id]);
