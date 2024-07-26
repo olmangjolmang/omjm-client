@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -60,7 +61,26 @@ const categoryMap: Record<CategoryType, string> = {
 
 interface RecommendPost {
   postId: number;
-  postTitle: string;
+  title: string;
+}
+
+interface Post {
+  postId: number;
+  title: string;
+  content: string;
+  author: string;
+  category: string;
+  createdDate: number;
+  image: Image;
+  originUrl: string;
+  scrapCount: number;
+  scrappeds: any; // Specify appropriate type if known
+}
+
+interface Image {
+  imageFileName: string | null;
+  imageFolderName: string | null;
+  imageUrl: string;
 }
 
 interface TextNode {
@@ -79,6 +99,7 @@ interface ImageNode {
 type ContentNode = TextNode | ImageNode;
 
 const Article: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data: article, isLoading } = useArticle(id || "", { enabled: !!id });
 
@@ -89,7 +110,7 @@ const Article: React.FC = () => {
     Array<{ start: number; end: number }>
   >([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [recommendPosts, setRecommendPosts] = useState<RecommendPost[]>([]);
+  const [recommendPosts, setRecommendPosts] = useState<Post[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -368,17 +389,22 @@ const Article: React.FC = () => {
           <GoodArticleContainer>
             {recommendPosts.length > 0 ? (
               recommendPosts.map((post) => (
-                <div key={post.postId}>
+                <div
+                  key={post.postId}
+                  onClick={() => {
+                    navigate(`/post/${post.postId}`);
+                  }}
+                >
                   <GoodArticleImg
-                    src={image?.imageUrl || articleImg}
+                    src={post.image?.imageUrl || articleImg}
                     alt="Recommended article"
                   />
                   <GoodArticleCategory>
-                    {categoryMap[postCategory as CategoryType] || postCategory}
+                    {categoryMap[post.category as CategoryType] || postCategory}
                   </GoodArticleCategory>
-                  <GoodArticleTitle>{post.postTitle}</GoodArticleTitle>
+                  <GoodArticleTitle>{post.title}</GoodArticleTitle>
                   <GoodArticleAuthor>
-                    {author} | {formattedDate}
+                    {post.author} | {post.createdDate}
                   </GoodArticleAuthor>
                 </div>
               ))
