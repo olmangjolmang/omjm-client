@@ -18,6 +18,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  margin: 0 auto;
   justify-content: center;
 `;
 
@@ -39,6 +40,7 @@ export const NoContent = styled.div`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
   gap: 41px;
 `;
 
