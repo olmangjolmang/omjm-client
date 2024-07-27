@@ -326,8 +326,11 @@ const Article: React.FC = () => {
     createdDate,
     postCategory,
     image,
-    originalUrl,
+    originUrl,
   } = article;
+
+  console.log("originalURL:", originUrl);
+
   const formattedDate = new Date(createdDate).toISOString().split("T")[0];
   const translatedCategory =
     categoryMap[postCategory as CategoryType] || postCategory;
@@ -347,7 +350,8 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkContainer onClick={() => window.open(originalUrl)}>
+
+          <LinkContainer onClick={() => window.open(originUrl)}>
             <LinkText>원본 링크 바로가기</LinkText>
             <LinkIcon src={linkimg} alt="Link icon" />
           </LinkContainer>
