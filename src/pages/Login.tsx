@@ -111,6 +111,7 @@ export const Login: React.FC = () => {
             }
             onBlur={handleBlur("email")}
             hasError={touched.email && !!errors.email}
+            hasText={email.length > 0}
           />
           {touched.email && errors.email && (
             <ErrorMessage>{errors.email}</ErrorMessage>
@@ -127,6 +128,7 @@ export const Login: React.FC = () => {
             }
             onBlur={handleBlur("password")}
             hasError={touched.password && !!errors.password}
+            hasText={email.length > 0}
           />
           {touched.password && errors.password && (
             <ErrorMessage>{errors.password}</ErrorMessage>
