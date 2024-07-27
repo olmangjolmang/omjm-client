@@ -109,30 +109,15 @@ const Article: React.FC = () => {
   const [highlightedRanges, setHighlightedRanges] = useState<
     Array<{ start: number; end: number }>
   >([]);
-  const [isSaved, setIsSaved] = useState<boolean>(false); // 초기값을 false로 설정
+  const [isSaved, setIsSaved] = useState<boolean>(false);
   const [recommendPosts, setRecommendPosts] = useState<Post[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (id) {
-      checkIfSaved();
       fetchRecommendPosts();
     }
   }, [id]);
-
-  const checkIfSaved = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setIsSaved(response.data.isSuccess);
-      }
-    } catch (error) {
-      console.error("Error checking if article is saved:", error);
-    }
-  };
 
   const fetchRecommendPosts = async () => {
     try {
