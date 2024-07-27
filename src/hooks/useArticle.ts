@@ -8,7 +8,7 @@ interface ArticleData {
   author: string;
   createdDate: number;
   postCategory: string;
-  originalUrl: string;
+  originUrl: string;
   image: {
     imageFileName: string;
     imageFolderName: string;

@@ -42,41 +42,51 @@ const ProfileCompletion: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const signupData = JSON.parse(localStorage.getItem("signupData") || "{}");
-  
+
       console.log("Signup Data:", signupData);
       console.log("Selected Jobs:", selectedJobs);
-  
+
       if (!signupData.email || !signupData.password || !signupData.nickname) {
         throw new Error("필수 데이터가 누락되었습니다.");
       }
-  
+
       const requestData = {
         email: signupData.email,
         password: signupData.password,
-        nickName: signupData.nickname, 
-        category: selectedJobs.map(job => {
-          switch(job) {
-            case "웹 프론트엔드": return "WEB_FRONT";
-            case "백 (서버, CI/CD)": return "BACKEND";
-            case "네트워크/통신": return "NETWORK";
-            case "앱": return "APP";
-            case "보안": return "SECURITY";
-            case "빅데이터/AI": return "AI";
-            case "Vision": return "VISION";
-            case "인프라": return "INFRA";
-            case "기타": return "ETC";
-            default: return "ETC";
+        nickName: signupData.nickname,
+        category: selectedJobs.map((job) => {
+          switch (job) {
+            case "웹 프론트엔드":
+              return "WEB_FRONT";
+            case "백 (서버, CI/CD)":
+              return "BACKEND";
+            case "네트워크/통신":
+              return "NETWORK";
+            case "앱":
+              return "APP";
+            case "보안":
+              return "SECURITY";
+            case "빅데이터/AI":
+              return "AI";
+            case "Vision":
+              return "VISION";
+            case "인프라":
+              return "INFRA";
+            case "기타":
+              return "ETC";
+            default:
+              return "ETC";
           }
         }),
-        agreeTerms: true, 
+        agreeTerms: true,
       };
-  
+
       const response = await axiosInstance.post("/users/sign-up", requestData, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
-  
+
       console.log("직무 설정 완료:", response.data);
       localStorage.removeItem("signupData");
       navigate("/");
@@ -89,7 +99,6 @@ const ProfileCompletion: React.FC = () => {
       }
     }
   };
-  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);

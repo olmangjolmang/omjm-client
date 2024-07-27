@@ -115,24 +115,9 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      checkIfSaved();
       fetchRecommendPosts();
     }
   }, [id]);
-
-  const checkIfSaved = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const response = await axiosInstance.get(`/post/is-scrapped/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setIsSaved(response.data.isSuccess);
-      }
-    } catch (error) {
-      console.error("Error checking if article is saved:", error);
-    }
-  };
 
   const fetchRecommendPosts = async () => {
     try {
@@ -341,8 +326,11 @@ const Article: React.FC = () => {
     createdDate,
     postCategory,
     image,
-    originalUrl,
+    originUrl,
   } = article;
+
+  console.log("originalURL:", originUrl);
+
   const formattedDate = new Date(createdDate).toISOString().split("T")[0];
   const translatedCategory =
     categoryMap[postCategory as CategoryType] || postCategory;
@@ -362,7 +350,8 @@ const Article: React.FC = () => {
         <AuthorBox>
           <Author>{author}</Author>
           <ArticleDate>{formattedDate}</ArticleDate>
-          <LinkContainer onClick={() => window.open(originalUrl)}>
+
+          <LinkContainer onClick={() => window.open(originUrl)}>
             <LinkText>원본 링크 바로가기</LinkText>
             <LinkIcon src={linkimg} alt="Link icon" />
           </LinkContainer>
