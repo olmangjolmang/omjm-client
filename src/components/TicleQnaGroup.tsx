@@ -28,11 +28,13 @@ const TicleQnaGroup = () => {
 
   if (isError) return <div>로그인 정보를 확인해주세요.</div>;
   console.log(data);
+  const results = data?.results || [];
+  const totalPages = results.length > 0 ? results[0].pageInfo?.totalPages : 1;
   return (
     <Container>
       {data && data.results.map((qna: any) => <TicleQna {...qna} />)}
 
-      {data && (
+      {results.length > 0 && (
         <Pagination
           currentPage={page}
           totalPages={data.results[0].pageInfo.totalPages}
